@@ -36,9 +36,7 @@ void eae6320::Graphics::Mesh::DrawGeometry(ID3D11DeviceContext* const direct3dIm
 		}
 		// Render triangles from the currently-bound vertex buffer
 		{
-			// As of this comment only a single triangle is drawn
-			// (you will have to update this code in future assignments!)
-			constexpr unsigned int triangleCount = 1;
+			constexpr unsigned int triangleCount = 3;
 			constexpr unsigned int vertexCountPerTriangle = 3;
 			constexpr auto vertexCountToRender = triangleCount * vertexCountPerTriangle;
 			// It's possible to start rendering primitives in the middle of the stream
@@ -66,24 +64,50 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry()
 	}
 	// Vertex Buffer
 	{
-		constexpr unsigned int triangleCount = 1;
+		constexpr unsigned int triangleCount = 3;
 		constexpr unsigned int vertexCountPerTriangle = 3;
 		constexpr auto vertexCount = triangleCount * vertexCountPerTriangle;
 		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[vertexCount];
 		{
 			// Direct3D is left-handed
 
-			vertexData[0].x = 0.0f;
-			vertexData[0].y = 0.0f;
+			// Draw a house shape using three triangles:
+			//   Triangle 1: Lower left
+			vertexData[0].x = -0.5f;
+			vertexData[0].y = -0.5f;
 			vertexData[0].z = 0.0f;
-
-			vertexData[1].x = 1.0f;
-			vertexData[1].y = 1.0f;
+			//   Triangle 1: Upper left
+			vertexData[1].x = -0.5f;
+			vertexData[1].y = 0.5f;
 			vertexData[1].z = 0.0f;
-
-			vertexData[2].x = 1.0f;
-			vertexData[2].y = 0.0f;
+			//   Triangle 1: Upper right
+			vertexData[2].x = 0.5f;
+			vertexData[2].y = 0.5f;
 			vertexData[2].z = 0.0f;
+			//   Triangle 2: Lower left
+			vertexData[3].x = -0.5f;
+			vertexData[3].y = -0.5f;
+			vertexData[3].z = 0.0f;
+			//   Triangle 2: Upper right
+			vertexData[4].x = 0.5f;
+			vertexData[4].y = 0.5f;
+			vertexData[4].z = 0.0f;
+			//   Triangle 2: Lower right
+			vertexData[5].x = 0.5f;
+			vertexData[5].y = -0.5f;
+			vertexData[5].z = 0.0f;
+			//   Triangle 3: Roof left
+			vertexData[6].x = -0.5f;
+			vertexData[6].y = 0.5f;
+			vertexData[6].z = 0.0f;
+			//   Triangle 3: Roof top
+			vertexData[7].x = 0.0f;
+			vertexData[7].y = 1.0f;
+			vertexData[7].z = 0.0f;
+			//   Triangle 3: Roof right
+			vertexData[8].x = 0.5f;
+			vertexData[8].y = 0.5f;
+			vertexData[8].z = 0.0f;
 		}
 		constexpr auto bufferSize = sizeof(vertexData[0]) * vertexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
