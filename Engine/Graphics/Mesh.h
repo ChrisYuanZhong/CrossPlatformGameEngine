@@ -16,22 +16,31 @@ namespace eae6320
 		class Mesh
 		{
 		public:
+		#if defined( EAE6320_PLATFORM_D3D )
 			void DrawGeometry(ID3D11DeviceContext* const direct3dImmediateContext);
-
-			// Initialize / Clean Up
-			//----------------------
+			void CleanUp();
+		#elif defined( EAE6320_PLATFORM_GL )
+			void DrawGeometry();
+			void CleanUp(eae6320::cResult& result);
+		#endif
 
 			eae6320::cResult InitializeGeometry();
-			void CleanUp();
 
 		private:
 			// Geometry Data
 			//--------------
 
+		#if defined( EAE6320_PLATFORM_D3D )
 			eae6320::Graphics::cVertexFormat* s_vertexFormat = nullptr;
 
 			// A vertex buffer holds the data for each vertex
 			ID3D11Buffer* s_vertexBuffer = nullptr;
+		#elif defined( EAE6320_PLATFORM_GL )
+			// A vertex buffer holds the data for each vertex
+			GLuint s_vertexBufferId = 0;
+			// A vertex array encapsulates the vertex data as well as the vertex input layout
+			GLuint s_vertexArrayId = 0;
+		#endif
 		};
 	}
 }
