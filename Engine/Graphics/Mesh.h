@@ -5,7 +5,12 @@
 
 #include "Graphics.h"
 
-#include "Includes.h"
+#if defined( EAE6320_PLATFORM_D3D )
+	#include "Direct3D/Includes.h"
+#elif defined( EAE6320_PLATFORM_GL )
+	#include "OpenGL/Includes.h"
+#endif
+
 #include "cVertexFormat.h"
 #include "VertexFormats.h"
 

@@ -48,9 +48,6 @@ void eae6320::Graphics::Mesh::DrawGeometry(ID3D11DeviceContext* const direct3dIm
 	}
 }
 
-// Initialize / Clean Up
-//----------------------
-
 eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry()
 {
 	auto result = eae6320::Results::Success;
