@@ -3,6 +3,20 @@
 
 #include "Effect.h"
 
+void eae6320::Graphics::Effect::CleanUp()
+{
+	if (s_vertexShader)
+	{
+		s_vertexShader->DecrementReferenceCount();
+		s_vertexShader = nullptr;
+	}
+	if (s_fragmentShader)
+	{
+		s_fragmentShader->DecrementReferenceCount();
+		s_fragmentShader = nullptr;
+	}
+}
+
 eae6320::cResult eae6320::Graphics::Effect::InitializeShadingData()
 {
 	auto result = eae6320::Results::Success;

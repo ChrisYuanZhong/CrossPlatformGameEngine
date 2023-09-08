@@ -259,7 +259,8 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 	s_mesh.CleanUp(result);
 
-	s_effect.CleanUp(result);
+	s_effect.CleanUpProgram(result);
+	s_effect.CleanUp();
 
 	{
 		const auto result_constantBuffer_frame = s_constantBuffer_frame.CleanUp();

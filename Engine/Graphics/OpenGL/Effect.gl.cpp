@@ -25,7 +25,7 @@ void eae6320::Graphics::Effect::BindShadingData()
 	}
 }
 
-void eae6320::Graphics::Effect::CleanUp(eae6320::cResult& result)
+void eae6320::Graphics::Effect::CleanUpProgram(eae6320::cResult& result)
 {
 	if (s_programId != 0)
 	{
@@ -42,16 +42,6 @@ void eae6320::Graphics::Effect::CleanUp(eae6320::cResult& result)
 				reinterpret_cast<const char*>(gluErrorString(errorCode)));
 		}
 		s_programId = 0;
-	}
-	if (s_vertexShader)
-	{
-		s_vertexShader->DecrementReferenceCount();
-		s_vertexShader = nullptr;
-	}
-	if (s_fragmentShader)
-	{
-		s_fragmentShader->DecrementReferenceCount();
-		s_fragmentShader = nullptr;
 	}
 }
 

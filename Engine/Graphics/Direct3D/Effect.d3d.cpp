@@ -27,17 +27,3 @@ void eae6320::Graphics::Effect::BindShadingData(ID3D11DeviceContext* const direc
 		}
 	}
 }
-
-void eae6320::Graphics::Effect::CleanUp()
-{
-	if (s_vertexShader)
-	{
-		s_vertexShader->DecrementReferenceCount();
-		s_vertexShader = nullptr;
-	}
-	if (s_fragmentShader)
-	{
-		s_fragmentShader->DecrementReferenceCount();
-		s_fragmentShader = nullptr;
-	}
-}
