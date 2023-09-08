@@ -53,6 +53,9 @@
     <ClCompile Include="cVertexFormat.cpp" />
     <ClCompile Include="sContext.cpp" />
     <ClCompile Include="cConstantBuffer.cpp" />
+    <ClCompile Include="Direct3D\Mesh.d3d.cpp">
+      <Filter>Direct3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direct3D\Includes.h">
@@ -73,6 +76,7 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="sContext.h" />
     <ClInclude Include="VertexFormats.h" />
+    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cRenderState.inl" />
