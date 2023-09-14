@@ -24,9 +24,6 @@
     <ClCompile Include="Direct3D\cVertexFormat.d3d.cpp">
       <Filter>Direct3D</Filter>
     </ClCompile>
-    <ClCompile Include="Direct3D\Graphics.d3d.cpp">
-      <Filter>Direct3D</Filter>
-    </ClCompile>
     <ClCompile Include="Direct3D\sContext.d3d.cpp">
       <Filter>Direct3D</Filter>
     </ClCompile>
@@ -40,9 +37,6 @@
       <Filter>OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="OpenGL\cVertexFormat.gl.cpp">
-      <Filter>OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenGL\Graphics.gl.cpp">
       <Filter>OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="OpenGL\sContext.gl.cpp">
@@ -66,6 +60,13 @@
     <ClCompile Include="Direct3D\Effect.d3d.cpp">
       <Filter>Direct3D</Filter>
     </ClCompile>
+    <ClCompile Include="Direct3D\Renderer.d3d.cpp">
+      <Filter>Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL\Renderer.gl.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direct3D\Includes.h">
@@ -88,6 +89,7 @@
     <ClInclude Include="VertexFormats.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cRenderState.inl" />

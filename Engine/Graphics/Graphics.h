@@ -10,6 +10,8 @@
 
 #include "Configuration.h"
 
+#include "ConstantBufferFormats.h"
+
 #include <cstdint>
 #include <Engine/Results/Results.h>
 
@@ -26,6 +28,16 @@ namespace eae6320
 	{
 		// Submission
 		//-----------
+
+		// Submission Data
+		//----------------
+
+		// This struct's data is populated at submission time;
+		// it must cache whatever is necessary in order to render a frame
+		struct sDataRequiredToRenderAFrame
+		{
+			eae6320::Graphics::ConstantBufferFormats::sFrame constantData_frame;
+		};
 
 		// These functions should be called from the application (on the application loop thread)
 
