@@ -25,7 +25,7 @@ namespace eae6320
 #if defined( EAE6320_PLATFORM_D3D )
 			eae6320::cResult InitializeViews(const unsigned int i_resolutionWidth, const unsigned int i_resolutionHeight);
 #elif defined( EAE6320_PLATFORM_GL )
-			eae6320::cResult InitializeShadingData();
+			eae6320::cResult InitializeShadingData(const char* const vertexShaderPath, const char* const fragmentShaderPath);
 #endif
 
 			void RenderFrame(sDataRequiredToRenderAFrame* s_dataBeingRenderedByRenderThread, eae6320::Graphics::cConstantBuffer& s_constantBuffer_frame);

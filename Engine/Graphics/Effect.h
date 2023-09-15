@@ -30,23 +30,23 @@ namespace eae6320
 #endif
 
 			void CleanUp();
-			eae6320::cResult InitializeShadingData();
+			eae6320::cResult InitializeShadingData(const char* const vertexShaderPath, const char* const fragmentShaderPath);
 
 		private:
 			// Shading Data
 			//-------------
 
 #if defined( EAE6320_PLATFORM_D3D )
-			eae6320::Graphics::cShader* s_vertexShader = nullptr;
-			eae6320::Graphics::cShader* s_fragmentShader = nullptr;
+			eae6320::Graphics::cShader* vertexShader = nullptr;
+			eae6320::Graphics::cShader* fragmentShader = nullptr;
 
-			eae6320::Graphics::cRenderState s_renderState;
+			eae6320::Graphics::cRenderState renderState;
 #elif defined( EAE6320_PLATFORM_GL )
-			eae6320::Graphics::cShader* s_vertexShader = nullptr;
-			eae6320::Graphics::cShader* s_fragmentShader = nullptr;
-			static GLuint s_programId;
+			eae6320::Graphics::cShader* vertexShader = nullptr;
+			eae6320::Graphics::cShader* fragmentShader = nullptr;
+			static GLuint programId;
 
-			eae6320::Graphics::cRenderState s_renderState;
+			eae6320::Graphics::cRenderState renderState;
 #endif
 		};
 	}

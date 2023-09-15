@@ -60,7 +60,7 @@ void eae6320::Graphics::Mesh::DrawGeometry(ID3D11DeviceContext* const direct3dIm
 	}
 }
 
-eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry()
+eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVertex_mesh* const i_vertexData, uint16_t* const i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount)
 {
 	auto result = eae6320::Results::Success;
 
@@ -78,37 +78,36 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry()
 	}
 	// Vertex Buffer
 	{
-		constexpr unsigned int triangleCount = 3;
-		constexpr unsigned int vertexCountPerTriangle = 3;
-		constexpr auto vertexCount = triangleCount * vertexCountPerTriangle;
-		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[vertexCount];
-		{
-			// Direct3D is left-handed
+		//constexpr unsigned int triangleCount = 3;
+		//constexpr auto vertexCount = triangleCount * vertexCountPerTriangle;
+		//eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[vertexCount];
+		//{
+		//	// Direct3D is left-handed
 
-			// Draw a house shape using three triangles:
-			vertexData[0].x = -0.5f;
-			vertexData[0].y = -0.5f;
-			vertexData[0].z = 0.0f;
+		//	// Draw a house shape using three triangles:
+		//	i_vertexData[0].x = -0.5f;
+		//	i_vertexData[0].y = -0.5f;
+		//	i_vertexData[0].z = 0.0f;
 
-			vertexData[1].x = -0.5f;
-			vertexData[1].y = 0.5f;
-			vertexData[1].z = 0.0f;
+		//	i_vertexData[1].x = -0.5f;
+		//	i_vertexData[1].y = 0.5f;
+		//	i_vertexData[1].z = 0.0f;
 
-			vertexData[2].x = 0.5f;
-			vertexData[2].y = 0.5f;
-			vertexData[2].z = 0.0f;
+		//	i_vertexData[2].x = 0.5f;
+		//	i_vertexData[2].y = 0.5f;
+		//	i_vertexData[2].z = 0.0f;
 
-			vertexData[3].x = 0.5f;
-			vertexData[3].y = -0.5f;
-			vertexData[3].z = 0.0f;
+		//	i_vertexData[3].x = 0.5f;
+		//	i_vertexData[3].y = -0.5f;
+		//	i_vertexData[3].z = 0.0f;
 
-			vertexData[4].x = 0.0f;
-			vertexData[4].y = 1.0f;
-			vertexData[4].z = 0.0f;
-		}
-		constexpr auto bufferSize = sizeof(vertexData[0]) * vertexCount;
+		//	i_vertexData[4].x = 0.0f;
+		//	i_vertexData[4].y = 1.0f;
+		//	i_vertexData[4].z = 0.0f;
+		//}
+		const auto bufferSize = sizeof(i_vertexData[0]) * i_vertexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
-		constexpr auto bufferDescription = [bufferSize]
+		const auto bufferDescription = [bufferSize]
 		{
 			D3D11_BUFFER_DESC bufferDescription{};
 
@@ -122,11 +121,11 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry()
 			return bufferDescription;
 		}();
 
-		const auto initialData = [vertexData]
+		const auto initialData = [i_vertexData]
 		{
 			D3D11_SUBRESOURCE_DATA initialData{};
 
-			initialData.pSysMem = vertexData;
+			initialData.pSysMem = i_vertexData;
 			// (The other data members are ignored for non-texture buffers)
 
 			return initialData;
@@ -143,24 +142,25 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry()
 	}
 	// Create Index Buffer
 	{
-		constexpr unsigned int triangleCount = 3;
-		constexpr unsigned int vertexCountPerTriangle = 3;
-		constexpr auto vertexCount = triangleCount * vertexCountPerTriangle;
-		uint16_t indexData[vertexCount];
-		{
-			indexData[0] = 0;
-			indexData[1] = 1;
-			indexData[2] = 2;
-			indexData[3] = 0;
-			indexData[4] = 2;
-			indexData[5] = 3;
-			indexData[6] = 1;
-			indexData[7] = 4;
-			indexData[8] = 2;
-		}
-		constexpr auto bufferSize = sizeof(indexData[0]) * vertexCount;
+		//constexpr auto indexCount = sizeof(i_indexData) / sizeof(i_vertexData[0]);
+		//constexpr unsigned int triangleCount = 3;
+		//constexpr unsigned int vertexCountPerTriangle = 3;
+		//constexpr auto vertexCount = triangleCount * vertexCountPerTriangle;
+		//uint16_t indexData[vertexCount];
+		//{
+		//	indexData[0] = 0;
+		//	indexData[1] = 1;
+		//	indexData[2] = 2;
+		//	indexData[3] = 0;
+		//	indexData[4] = 2;
+		//	indexData[5] = 3;
+		//	indexData[6] = 1;
+		//	indexData[7] = 4;
+		//	indexData[8] = 2;
+		//}
+		const auto bufferSize = sizeof(i_indexData[0]) * i_indexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
-		constexpr auto bufferDescription = [bufferSize]
+		const auto bufferDescription = [bufferSize]
 		{
 			D3D11_BUFFER_DESC bufferDescription{};
 
@@ -174,11 +174,11 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry()
 			return bufferDescription;
 		}();
 
-		const auto initialData = [indexData]
+		const auto initialData = [i_indexData]
 		{
 			D3D11_SUBRESOURCE_DATA initialData{};
 
-			initialData.pSysMem = indexData;
+			initialData.pSysMem = i_indexData;
 			// (The other data members are ignored for non-texture buffers)
 
 			return initialData;

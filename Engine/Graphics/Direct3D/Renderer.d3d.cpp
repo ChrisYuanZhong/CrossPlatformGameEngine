@@ -80,6 +80,27 @@ void eae6320::Graphics::Renderer::RenderFrame(sDataRequiredToRenderAFrame* s_dat
 
 eae6320::cResult eae6320::Graphics::Renderer::Initialize(eae6320::cResult& result, const sInitializationParameters& i_initializationParameters)
 {
+	// Static Data Initialization
+	eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[3];
+	{
+		// Direct3D is left-handed
+
+		// Draw a house shape using three triangles:
+		vertexData[0].x = -0.5f;
+		vertexData[0].y = -0.5f;
+		vertexData[0].z = 0.0f;
+
+		vertexData[1].x = -0.5f;
+		vertexData[1].y = 0.5f;
+		vertexData[1].z = 0.0f;
+
+		vertexData[2].x = 0.5f;
+		vertexData[2].y = 0.5f;
+		vertexData[2].z = 0.0f;
+
+	}
+
+	uint16_t indexData[3] = { 0, 1, 2 };
 	// Initialize the views
 	{
 		if (!(result = InitializeViews(i_initializationParameters.resolutionWidth, i_initializationParameters.resolutionHeight)))
@@ -90,7 +111,7 @@ eae6320::cResult eae6320::Graphics::Renderer::Initialize(eae6320::cResult& resul
 	}
 	// Initialize the shading data
 	{
-		if (!(result = s_effect.InitializeShadingData()))
+		if (!(result = s_effect.InitializeShadingData("data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor.shader")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
 			return result;
@@ -98,7 +119,7 @@ eae6320::cResult eae6320::Graphics::Renderer::Initialize(eae6320::cResult& resul
 	}
 	// Initialize the geometry
 	{
-		if (!(result = s_mesh.InitializeGeometry()))
+		if (!(result = s_mesh.InitializeGeometry(vertexData, indexData, 3, 3)))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;
