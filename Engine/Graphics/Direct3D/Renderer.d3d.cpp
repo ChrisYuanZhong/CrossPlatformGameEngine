@@ -10,14 +10,6 @@
 #include <Engine/Logging/Logging.h>
 #include <Engine/ScopeGuard/cScopeGuard.h>
 
-// Helper Declarations
-//====================
-
-namespace
-{
-	eae6320::cResult InitializeViews(const unsigned int i_resolutionWidth, const unsigned int i_resolutionHeight);
-}
-
 void eae6320::Graphics::Renderer::RenderFrame()
 {
 	auto* const direct3dImmediateContext = sContext::g_context.direct3dImmediateContext;
