@@ -25,6 +25,8 @@
 
 namespace
 {
+	eae6320::Graphics::Mesh s_mesh;
+	eae6320::Graphics::Effect s_effect;
 	eae6320::Graphics::Renderer s_renderer;
 	// Constant buffer object
 	eae6320::Graphics::cConstantBuffer s_constantBuffer_frame(eae6320::Graphics::ConstantBufferTypes::Frame);
@@ -104,7 +106,22 @@ void eae6320::Graphics::RenderFrame()
 		}
 	}
 
-	s_renderer.RenderFrame(s_dataBeingRenderedByRenderThread, s_constantBuffer_frame);
+	s_renderer.RenderFrame();
+
+	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
+	auto* const dataRequiredToRenderFrame = s_dataBeingRenderedByRenderThread;
+
+	// Update the frame constant buffer
+	{
+		// Copy the data from the system memory that the application owns to GPU memory
+		auto& constantData_frame = dataRequiredToRenderFrame->constantData_frame;
+		s_constantBuffer_frame.Update(&constantData_frame);
+	}
+
+	s_effect.BindShadingData();
+	s_mesh.DrawGeometry();
+
+	s_renderer.SwapBuffer();
 
 	// After all of the data that was submitted for this frame has been used
 	// you must make sure that it is all cleaned up and cleared out
@@ -155,8 +172,53 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 			return result;
 		}
 	}
+	// Initialize the views
+	{
+		if (!(result = s_renderer.InitializeViews(i_initializationParameters)))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without the views");
+			return result;
+		}
+	}
+	// Initialize the shading data
+	{
+		if (!(result = s_effect.InitializeShadingData("data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor.shader")))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
+			return result;
+		}
+	}
+	// Initialize the geometry
+	{
+		// Static Data Initialization
+		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[3];
+		{
+			// Direct3D is left-handed
 
-	result = s_renderer.Initialize(result, i_initializationParameters);
+			// Draw a house shape using three triangles:
+			vertexData[0].x = -0.5f;
+			vertexData[0].y = -0.5f;
+			vertexData[0].z = 0.0f;
+
+			vertexData[1].x = -0.5f;
+			vertexData[1].y = 0.5f;
+			vertexData[1].z = 0.0f;
+
+			vertexData[2].x = 0.5f;
+			vertexData[2].y = 0.5f;
+			vertexData[2].z = 0.0f;
+
+		}
+
+		uint16_t indexData[3] = { 0, 1, 2 };
+
+		if (!(result = s_mesh.InitializeGeometry(vertexData, indexData, 3, 3)))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
+			return result;
+		}
+	}
+
 
 	return result;
 }
@@ -166,6 +228,10 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 	auto result = Results::Success;
 
 	s_renderer.CleanUp(result);
+
+	s_mesh.CleanUp(result);
+
+	s_effect.CleanUp(result);
 
 	{
 		const auto result_constantBuffer_frame = s_constantBuffer_frame.CleanUp();

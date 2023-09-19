@@ -22,14 +22,12 @@ namespace eae6320
 		{
 		public:
 		#if defined( EAE6320_PLATFORM_D3D )
-			void DrawGeometry(ID3D11DeviceContext* const direct3dImmediateContext);
-			void CleanUp();
 		#elif defined( EAE6320_PLATFORM_GL )
-			void DrawGeometry();
-			void CleanUp(eae6320::cResult& result);
 		#endif
 
 			eae6320::cResult InitializeGeometry(VertexFormats::sVertex_mesh* const i_vertexData, uint16_t* const i_indexData, const unsigned int vertexCount, const unsigned int indexCount);
+			void DrawGeometry();
+			void CleanUp(eae6320::cResult& result);
 
 		private:
 			unsigned int indexCount = 0;

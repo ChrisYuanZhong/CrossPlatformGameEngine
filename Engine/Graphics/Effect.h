@@ -22,14 +22,12 @@ namespace eae6320
 		{
 		public:
 #if defined( EAE6320_PLATFORM_D3D )
-			void BindShadingData(ID3D11DeviceContext* const direct3dImmediateContext);
 #elif defined( EAE6320_PLATFORM_GL )
-			void BindShadingData();
 			void CleanUpProgram(eae6320::cResult& result);
 			eae6320::cResult CreateProgram(eae6320::cResult& result);
 #endif
-
-			void CleanUp();
+			void BindShadingData();
+			void CleanUp(eae6320::cResult& result);
 			eae6320::cResult InitializeShadingData(const char* const vertexShaderPath, const char* const fragmentShaderPath);
 
 		private:

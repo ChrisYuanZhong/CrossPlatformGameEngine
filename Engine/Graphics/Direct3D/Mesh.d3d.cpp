@@ -7,8 +7,11 @@
 
 #include <Engine/Logging/Logging.h>
 
-void eae6320::Graphics::Mesh::DrawGeometry(ID3D11DeviceContext* const direct3dImmediateContext)
+void eae6320::Graphics::Mesh::DrawGeometry()
 {
+	auto* const direct3dImmediateContext = eae6320::Graphics::sContext::g_context.direct3dImmediateContext;
+	EAE6320_ASSERT(direct3dImmediateContext);
+
 	// Draw the geometry
 	{
 		// Bind a specific vertex buffer to the device as a data source
@@ -199,7 +202,7 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 	return result;
 }
 
-void eae6320::Graphics::Mesh::CleanUp()
+void eae6320::Graphics::Mesh::CleanUp(eae6320::cResult& result)
 {
 	
 	if (vertexBuffer)

@@ -3,8 +3,12 @@
 
 #include "Effect.h"
 
-void eae6320::Graphics::Effect::CleanUp()
+void eae6320::Graphics::Effect::CleanUp(eae6320::cResult& result)
 {
+#if defined( EAE6320_PLATFORM_GL )
+	CleanUpProgram(result);
+#endif
+
 	if (vertexShader)
 	{
 		vertexShader->DecrementReferenceCount();
@@ -51,6 +55,10 @@ eae6320::cResult eae6320::Graphics::Effect::InitializeShadingData(const char* co
 			return result;
 		}
 	}
+
+#if defined( EAE6320_PLATFORM_GL )
+	return CreateProgram(result);
+#endif
 
 	return result;
 }

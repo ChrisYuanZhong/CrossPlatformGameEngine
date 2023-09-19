@@ -23,19 +23,15 @@ namespace eae6320
 		{
 		public:
 #if defined( EAE6320_PLATFORM_D3D )
-			eae6320::cResult InitializeViews(const unsigned int i_resolutionWidth, const unsigned int i_resolutionHeight);
 #elif defined( EAE6320_PLATFORM_GL )
-			eae6320::cResult InitializeShadingData(const char* const vertexShaderPath, const char* const fragmentShaderPath);
 #endif
 
-			void RenderFrame(sDataRequiredToRenderAFrame* s_dataBeingRenderedByRenderThread, eae6320::Graphics::cConstantBuffer& s_constantBuffer_frame);
-			eae6320::cResult Initialize(eae6320::cResult& result, const sInitializationParameters& i_initializationParameters);
+			void RenderFrame();
+			void SwapBuffer();
+			eae6320::cResult InitializeViews(const sInitializationParameters& i_initializationParameters);
 			void CleanUp(eae6320::cResult& result);
 
 		private:
-			eae6320::Graphics::Mesh s_mesh;
-			eae6320::Graphics::Effect s_effect;
-
 			// Static Data
 			//============
 

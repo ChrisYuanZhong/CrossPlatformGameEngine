@@ -2,12 +2,16 @@
 //=========
 
 #include "../Effect.h"
+#include "../sContext.h"
 
-void eae6320::Graphics::Effect::BindShadingData(ID3D11DeviceContext* const direct3dImmediateContext)
+void eae6320::Graphics::Effect::BindShadingData()
 {
 	// Bind the shading data
 	{
 		{
+			auto* const direct3dImmediateContext = sContext::g_context.direct3dImmediateContext;
+			EAE6320_ASSERT(direct3dImmediateContext);
+
 			constexpr ID3D11ClassInstance* const* noInterfaces = nullptr;
 			constexpr unsigned int interfaceCount = 0;
 			// Vertex shader
