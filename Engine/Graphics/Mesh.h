@@ -32,6 +32,7 @@ namespace eae6320
 			eae6320::cResult InitializeGeometry(VertexFormats::sVertex_mesh* const i_vertexData, uint16_t* const i_indexData, const unsigned int vertexCount, const unsigned int indexCount);
 
 		private:
+			unsigned int indexCount = 0;
 
 			// Geometry Data
 			//--------------
@@ -44,7 +45,6 @@ namespace eae6320
 			// An index buffer holds the indices for each triangle that needs to be drawn
 			ID3D11Buffer* indexBuffer = nullptr;
 		#elif defined( EAE6320_PLATFORM_GL )
-			unsigned int indexCount;
 			// A vertex buffer holds the data for each vertex
 			GLuint vertexBufferId = 0;
 			// A vertex array encapsulates the vertex data as well as the vertex input layout

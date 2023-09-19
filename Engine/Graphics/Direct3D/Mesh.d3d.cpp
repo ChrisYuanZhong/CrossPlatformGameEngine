@@ -46,7 +46,7 @@ void eae6320::Graphics::Mesh::DrawGeometry(ID3D11DeviceContext* const direct3dIm
 		constexpr unsigned int offsetToAddToEachIndex = 0;
 		D3D11_BUFFER_DESC desc;
 		indexBuffer->GetDesc(&desc);
-		direct3dImmediateContext->DrawIndexed(static_cast<unsigned int>(desc.ByteWidth / sizeof(uint16_t)), indexOfFirstIndexToUse, offsetToAddToEachIndex);
+		direct3dImmediateContext->DrawIndexed(static_cast<unsigned int>(indexCount), indexOfFirstIndexToUse, offsetToAddToEachIndex);
 
 		//// Render triangles from the currently-bound vertex buffer
 		//{
@@ -62,6 +62,8 @@ void eae6320::Graphics::Mesh::DrawGeometry(ID3D11DeviceContext* const direct3dIm
 
 eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVertex_mesh* const i_vertexData, uint16_t* const i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount)
 {
+	indexCount = i_indexCount;
+
 	auto result = eae6320::Results::Success;
 
 	auto* const direct3dDevice = eae6320::Graphics::sContext::g_context.direct3dDevice;

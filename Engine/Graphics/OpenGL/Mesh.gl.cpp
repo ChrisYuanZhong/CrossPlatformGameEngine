@@ -21,10 +21,7 @@ void eae6320::Graphics::Mesh::DrawGeometry()
 		constexpr GLenum mode = GL_TRIANGLES;
 		// It's possible to start rendering primitives in the middle of the stream
 		const GLvoid* const offset = 0;
-
-
-		
-		glDrawElements(mode, static_cast<GLsizei>(9), GL_UNSIGNED_SHORT, offset);
+		glDrawElements(mode, static_cast<GLsizei>(indexCount), GL_UNSIGNED_SHORT, offset);
 		EAE6320_ASSERT(glGetError() == GL_NO_ERROR);
 		//// Render triangles from the currently-bound vertex buffer
 		//{
