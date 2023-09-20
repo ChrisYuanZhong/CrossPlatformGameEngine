@@ -80,7 +80,7 @@ void main()
 	// Output solid white
 	o_color = vec4(
 		// RGB (color)
-		(sin( g_elapsedSecondCount_simulationTime ) + 1) / 2, (cos( g_elapsedSecondCount_simulationTime ) + 1) / 2, 1.0,
+		(cos( g_elapsedSecondCount_simulationTime ) + 1) / 2, (sin( g_elapsedSecondCount_simulationTime ) + 1) / 2, 1.0,
 		// Alpha (opacity)
 		1.0 );
 }

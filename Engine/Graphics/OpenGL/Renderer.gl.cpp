@@ -9,14 +9,6 @@
 
 #include <new>
 
-// Helper Declarations
-//====================
-
-namespace
-{
-	eae6320::cResult InitializeShadingData();
-}
-
 void eae6320::Graphics::Renderer::RenderFrame(const float red, const float green, const float blue, const float alpha)
 {
 	// Every frame an entirely new image will be created.

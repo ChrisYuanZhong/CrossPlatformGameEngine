@@ -26,7 +26,7 @@
 namespace
 {
 	// Clear color: black is usually used
-	const float clearColor[4] = { 0.2f, 0.0f, 0.2f, 1.0f };
+	const float clearColor[4] = { 0.1f, 0.5f, 0.9f, 1.0f };
 
 	constexpr int numMeshes = 2;
 	constexpr int numEffects = 2;
@@ -111,7 +111,7 @@ void eae6320::Graphics::RenderFrame()
 		}
 	}
 
-	s_renderer.RenderFrame(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+	s_renderer.RenderFrame(clearColor[0], clearColor[1], clearColor[2]);
 
 	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
 	auto* const dataRequiredToRenderFrame = s_dataBeingRenderedByRenderThread;
@@ -308,7 +308,7 @@ void eae6320::Graphics::CleanUpMeshesEffects(cResult& result)
 {
 	for (int i = 0; i < numMeshes; i++)
 	{
-		s_effect[i].CleanUp(result);
 		s_mesh[i].CleanUp(result);
+		s_effect[i].CleanUp(result);
 	}
 }
