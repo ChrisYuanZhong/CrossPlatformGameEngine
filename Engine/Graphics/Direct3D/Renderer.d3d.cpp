@@ -10,7 +10,7 @@
 #include <Engine/Logging/Logging.h>
 #include <Engine/ScopeGuard/cScopeGuard.h>
 
-void eae6320::Graphics::Renderer::RenderFrame()
+void eae6320::Graphics::Renderer::RenderFrame(const float red, const float green, const float blue, const float alpha)
 {
 	auto* const direct3dImmediateContext = sContext::g_context.direct3dImmediateContext;
 	EAE6320_ASSERT(direct3dImmediateContext);
@@ -21,8 +21,7 @@ void eae6320::Graphics::Renderer::RenderFrame()
 	{
 		EAE6320_ASSERT(s_renderTargetView);
 
-		// Black is usually used
-		constexpr float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		const float clearColor[4] = { red, green, blue, alpha };
 		direct3dImmediateContext->ClearRenderTargetView(s_renderTargetView, clearColor);
 	}
 	// In addition to the color buffer there is also a hidden image called the "depth buffer"

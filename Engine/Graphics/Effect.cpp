@@ -25,13 +25,13 @@ eae6320::cResult eae6320::Graphics::Effect::InitializeShadingData(const char* co
 {
 	auto result = eae6320::Results::Success;
 
-	if (!(result = eae6320::Graphics::cShader::Load("data/Shaders/Vertex/standard.shader",
+	if (!(result = eae6320::Graphics::cShader::Load(vertexShaderPath,
 		vertexShader, eae6320::Graphics::eShaderType::Vertex)))
 	{
 		EAE6320_ASSERTF(false, "Can't initialize shading data without vertex shader");
 		return result;
 	}
-	if (!(result = eae6320::Graphics::cShader::Load("data/Shaders/Fragment/animatedcolor.shader",
+	if (!(result = eae6320::Graphics::cShader::Load(fragmentShaderPath,
 		fragmentShader, eae6320::Graphics::eShaderType::Fragment)))
 	{
 		EAE6320_ASSERTF(false, "Can't initialize shading data without fragment shader");

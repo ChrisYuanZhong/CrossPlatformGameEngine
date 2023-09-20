@@ -6,9 +6,6 @@
 #include <Engine/Logging/Logging.h>
 #include <Engine/ScopeGuard/cScopeGuard.h>
 
-
-GLuint eae6320::Graphics::Effect::programId = 0;
-
 void eae6320::Graphics::Effect::BindShadingData()
 {
 	// Bind the shading data
@@ -48,7 +45,7 @@ void eae6320::Graphics::Effect::CleanUpProgram(eae6320::cResult& result)
 eae6320::cResult eae6320::Graphics::Effect::CreateProgram(eae6320::cResult& result)
 {
 	// Create a program
-	eae6320::cScopeGuard scopeGuard_program([&result]
+	eae6320::cScopeGuard scopeGuard_program([&result, &programId = this->programId]
 		{
 			if (!result)
 			{

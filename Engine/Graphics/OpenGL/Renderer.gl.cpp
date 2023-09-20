@@ -17,7 +17,7 @@ namespace
 	eae6320::cResult InitializeShadingData();
 }
 
-void eae6320::Graphics::Renderer::RenderFrame()
+void eae6320::Graphics::Renderer::RenderFrame(const float red, const float green, const float blue, const float alpha)
 {
 	// Every frame an entirely new image will be created.
 	// Before drawing anything, then, the previous image will be erased
@@ -25,7 +25,7 @@ void eae6320::Graphics::Renderer::RenderFrame()
 	{
 		// Black is usually used
 		{
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClearColor(red, green, blue, alpha);
 			EAE6320_ASSERT(glGetError() == GL_NO_ERROR);
 		}
 		{

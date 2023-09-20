@@ -42,7 +42,7 @@ namespace eae6320
 #elif defined( EAE6320_PLATFORM_GL )
 			eae6320::Graphics::cShader* vertexShader = nullptr;
 			eae6320::Graphics::cShader* fragmentShader = nullptr;
-			static GLuint programId;
+			GLuint programId = 0;
 
 			eae6320::Graphics::cRenderState renderState;
 #endif

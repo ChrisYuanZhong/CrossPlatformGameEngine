@@ -25,8 +25,13 @@
 
 namespace
 {
-	eae6320::Graphics::Mesh s_mesh;
-	eae6320::Graphics::Effect s_effect;
+	// Clear color: black is usually used
+	const float clearColor[4] = { 0.2f, 0.0f, 0.2f, 1.0f };
+
+	constexpr int numMeshes = 2;
+	constexpr int numEffects = 2;
+	eae6320::Graphics::Mesh s_mesh[numMeshes];
+	eae6320::Graphics::Effect s_effect[numEffects];
 	eae6320::Graphics::Renderer s_renderer;
 	// Constant buffer object
 	eae6320::Graphics::cConstantBuffer s_constantBuffer_frame(eae6320::Graphics::ConstantBufferTypes::Frame);
@@ -106,7 +111,7 @@ void eae6320::Graphics::RenderFrame()
 		}
 	}
 
-	s_renderer.RenderFrame();
+	s_renderer.RenderFrame(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
 
 	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
 	auto* const dataRequiredToRenderFrame = s_dataBeingRenderedByRenderThread;
@@ -118,8 +123,7 @@ void eae6320::Graphics::RenderFrame()
 		s_constantBuffer_frame.Update(&constantData_frame);
 	}
 
-	s_effect.BindShadingData();
-	s_mesh.DrawGeometry();
+	RenderMesh();
 
 	s_renderer.SwapBuffer();
 
@@ -182,7 +186,12 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 	}
 	// Initialize the shading data
 	{
-		if (!(result = s_effect.InitializeShadingData("data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor.shader")))
+		if (!(result = s_effect[0].InitializeShadingData("data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader")))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
+			return result;
+		}
+		if (!(result = s_effect[1].InitializeShadingData("data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor2.shader")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
 			return result;
@@ -191,28 +200,56 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 	// Initialize the geometry
 	{
 		// Static Data Initialization
-		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[3];
+		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData1[3];
 		{
 			// Direct3D is left-handed
 
 			// Draw a house shape using three triangles:
-			vertexData[0].x = -0.5f;
-			vertexData[0].y = -0.5f;
-			vertexData[0].z = 0.0f;
+			vertexData1[0].x = -0.5f;
+			vertexData1[0].y = -0.5f;
+			vertexData1[0].z = 0.0f;
 
-			vertexData[1].x = -0.5f;
-			vertexData[1].y = 0.5f;
-			vertexData[1].z = 0.0f;
+			vertexData1[1].x = -0.5f;
+			vertexData1[1].y = 0.5f;
+			vertexData1[1].z = 0.0f;
 
-			vertexData[2].x = 0.5f;
-			vertexData[2].y = 0.5f;
-			vertexData[2].z = 0.0f;
+			vertexData1[2].x = 0.5f;
+			vertexData1[2].y = 0.5f;
+			vertexData1[2].z = 0.0f;
 
 		}
 
-		uint16_t indexData[3] = { 0, 1, 2 };
+		uint16_t indexData1[3] = { 0, 1, 2 };
 
-		if (!(result = s_mesh.InitializeGeometry(vertexData, indexData, 3, 3)))
+		if (!(result = s_mesh[0].InitializeGeometry(vertexData1, indexData1, 3, 3)))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
+			return result;
+		}
+
+		// Static Data Initialization
+		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData2[3];
+		{
+			// Direct3D is left-handed
+
+			// Draw a house shape using three triangles:
+			vertexData2[0].x = -0.5f;
+			vertexData2[0].y = -0.5f;
+			vertexData2[0].z = 0.0f;
+
+			vertexData2[1].x = 0.5f;
+			vertexData2[1].y = 0.5f;
+			vertexData2[1].z = 0.0f;
+
+			vertexData2[2].x = 0.5f;
+			vertexData2[2].y = -0.5f;
+			vertexData2[2].z = 0.0f;
+
+		}
+
+		uint16_t indexData2[3] = { 0, 1, 2 };
+
+		if (!(result = s_mesh[1].InitializeGeometry(vertexData2, indexData2, 3, 3)))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;
@@ -229,9 +266,7 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 	s_renderer.CleanUp(result);
 
-	s_mesh.CleanUp(result);
-
-	s_effect.CleanUp(result);
+	CleanUpMeshesEffects(result);
 
 	{
 		const auto result_constantBuffer_frame = s_constantBuffer_frame.CleanUp();
@@ -258,4 +293,22 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 	}
 
 	return result;
+}
+
+void eae6320::Graphics::RenderMesh()
+{
+	for (int i = 0; i < numMeshes; i++)
+	{
+		s_effect[i].BindShadingData();
+		s_mesh[i].DrawGeometry();
+	}
+}
+
+void eae6320::Graphics::CleanUpMeshesEffects(cResult& result)
+{
+	for (int i = 0; i < numMeshes; i++)
+	{
+		s_effect[i].CleanUp(result);
+		s_mesh[i].CleanUp(result);
+	}
 }
