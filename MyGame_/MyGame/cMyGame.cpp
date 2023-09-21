@@ -40,3 +40,8 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 	eae6320::Logging::OutputMessage("Cleaning up Chris Yuan Zhong's EAE6320 Example Game");
 	return Results::Success;
 }
+
+void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate)
+{
+	Graphics::SetClearColor(0x3f82f7ff);
+}

@@ -35,6 +35,7 @@ namespace eae6320
 			eae6320::Graphics::cShader* fragmentShader = nullptr;
 
 			eae6320::Graphics::cRenderState renderState;
+
 			// Shading Data
 			//-------------
 

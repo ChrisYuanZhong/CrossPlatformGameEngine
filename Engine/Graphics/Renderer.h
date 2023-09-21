@@ -9,6 +9,8 @@
 
 #include "cConstantBuffer.h"
 
+#include <Engine/Graphics/Color.h>
+
 #if defined( EAE6320_PLATFORM_D3D )
 #include "Direct3D/Includes.h"
 #elif defined( EAE6320_PLATFORM_GL )
@@ -26,7 +28,7 @@ namespace eae6320
 #elif defined( EAE6320_PLATFORM_GL )
 #endif
 
-			void RenderFrame(const float red, const float green, const float blue, const float alpha = 1.0f);
+			void RenderFrame(unsigned int i_clearColor);
 			void SwapBuffer();
 			eae6320::cResult InitializeViews(const sInitializationParameters& i_initializationParameters);
 			void CleanUp(eae6320::cResult& result);

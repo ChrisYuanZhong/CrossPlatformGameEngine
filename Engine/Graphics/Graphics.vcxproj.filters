@@ -67,6 +67,7 @@
       <Filter>OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Color.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direct3D\Includes.h">
@@ -90,6 +91,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Color.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cRenderState.inl" />

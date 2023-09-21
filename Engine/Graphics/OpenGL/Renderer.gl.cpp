@@ -9,15 +9,16 @@
 
 #include <new>
 
-void eae6320::Graphics::Renderer::RenderFrame(const float red, const float green, const float blue, const float alpha)
+void eae6320::Graphics::Renderer::RenderFrame(unsigned int i_clearColor)
 {
 	// Every frame an entirely new image will be created.
 	// Before drawing anything, then, the previous image will be erased
 	// by "clearing" the image buffer (filling it with a solid color)
 	{
-		// Black is usually used
 		{
-			glClearColor(red, green, blue, alpha);
+			RGBA s_clearColor = convertHexToRGBA(i_clearColor);
+
+			glClearColor(s_clearColor.R, s_clearColor.G, s_clearColor.B, s_clearColor.A);
 			EAE6320_ASSERT(glGetError() == GL_NO_ERROR);
 		}
 		{

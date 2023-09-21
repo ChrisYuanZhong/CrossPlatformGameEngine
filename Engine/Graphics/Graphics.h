@@ -37,6 +37,8 @@ namespace eae6320
 		struct sDataRequiredToRenderAFrame
 		{
 			eae6320::Graphics::ConstantBufferFormats::sFrame constantData_frame;
+
+			unsigned int hexColor;
 		};
 
 		// These functions should be called from the application (on the application loop thread)
@@ -83,6 +85,8 @@ namespace eae6320
 		cResult Initialize( const sInitializationParameters& i_initializationParameters );
 		cResult CleanUp();
 		void CleanUpMeshesEffects(cResult& result);
+
+		void SetClearColor(unsigned int i_hexColor);
 	}
 }
 
