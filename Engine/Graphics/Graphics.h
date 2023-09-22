@@ -11,6 +11,8 @@
 #include "Configuration.h"
 
 #include "ConstantBufferFormats.h"
+#include "Mesh.h"
+#include "Effect.h"
 
 #include <cstdint>
 #include <Engine/Results/Results.h>
@@ -26,20 +28,14 @@ namespace eae6320
 {
 	namespace Graphics
 	{
+		struct MeshEffectPair
+		{
+			Mesh* mesh = nullptr;
+			Effect* effect = nullptr;
+		};
+
 		// Submission
 		//-----------
-
-		// Submission Data
-		//----------------
-
-		// This struct's data is populated at submission time;
-		// it must cache whatever is necessary in order to render a frame
-		struct sDataRequiredToRenderAFrame
-		{
-			eae6320::Graphics::ConstantBufferFormats::sFrame constantData_frame;
-
-			unsigned int hexColor;
-		};
 
 		// These functions should be called from the application (on the application loop thread)
 
@@ -84,9 +80,9 @@ namespace eae6320
 
 		cResult Initialize( const sInitializationParameters& i_initializationParameters );
 		cResult CleanUp();
-		void CleanUpMeshesEffects(cResult& result);
 
 		void SetClearColor(unsigned int i_hexColor);
+		void SubmitMeshEffectPair(MeshEffectPair i_meshEffectPair[], const unsigned int numPairs);
 	}
 }
 

@@ -113,7 +113,7 @@ void eae6320::Graphics::Mesh::CleanUp(eae6320::cResult& result)
 	}
 }
 
-eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVertex_mesh* const i_vertexData, uint16_t* const i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount)
+eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVertex_mesh* i_vertexData, uint16_t* i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount)
 {
 	indexCount = i_indexCount;
 
@@ -175,33 +175,6 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 	}
 	// Assign the data to the buffer
 	{
-		//constexpr unsigned int triangleCount = 3;
-		//constexpr auto vertexCount = triangleCount * vertexCountPerTriangle;
-		//eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[vertexCount];
-		//{
-		//	// Direct3D is left-handed
-
-		//	// Draw a house shape using three triangles:
-		//	i_vertexData[0].x = -0.5f;
-		//	i_vertexData[0].y = -0.5f;
-		//	i_vertexData[0].z = 0.0f;
-
-		//	i_vertexData[1].x = -0.5f;
-		//	i_vertexData[1].y = 0.5f;
-		//	i_vertexData[1].z = 0.0f;
-
-		//	i_vertexData[2].x = 0.5f;
-		//	i_vertexData[2].y = 0.5f;
-		//	i_vertexData[2].z = 0.0f;
-
-		//	i_vertexData[3].x = 0.5f;
-		//	i_vertexData[3].y = -0.5f;
-		//	i_vertexData[3].z = 0.0f;
-
-		//	i_vertexData[4].x = 0.0f;
-		//	i_vertexData[4].y = 1.0f;
-		//	i_vertexData[4].z = 0.0f;
-		//}
 		const unsigned int bufferSize = sizeof(i_vertexData[0]) * i_vertexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<unsigned int>::max());
 		glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(bufferSize), reinterpret_cast<GLvoid*>(i_vertexData),
@@ -250,27 +223,7 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 			return result;
 		}
 
-		//constexpr unsigned int triangleCount = 3;
-		//constexpr unsigned int vertexCountPerTriangle = 3;
-		//const auto vertexCount = triangleCount * vertexCountPerTriangle;
-		//uint16_t indexData[vertexCount];
-		//{
-		//	indexData[0] = 0;
-		//	indexData[1] = 2;
-		//	indexData[2] = 1;
-		//	indexData[3] = 0;
-		//	indexData[4] = 3;
-		//	indexData[5] = 2;
-		//	indexData[6] = 1;
-		//	indexData[7] = 2;
-		//	indexData[8] = 4;
-		//}
-
-		// Convert left-handed to right-handed
-		for (unsigned int i = 0; i + 2 < indexCount; i += 3)
-		{
-			std::swap(i_indexData[i + 1], i_indexData[i + 2]);
-		}
+		ConvertLeftHandedToRight(i_indexData);
 
 		const unsigned int bufferSize = sizeof(i_indexData[0]) * indexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<unsigned int>::max());
@@ -328,4 +281,13 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 	}
 
 	return result;
+}
+
+void eae6320::Graphics::Mesh::ConvertLeftHandedToRight(uint16_t* const& i_indexData)
+{
+	// Convert left-handed to right-handed
+	for (unsigned int i = 0; i + 2 < indexCount; i += 3)
+	{
+		std::swap(i_indexData[i + 1], i_indexData[i + 2]);
+	}
 }

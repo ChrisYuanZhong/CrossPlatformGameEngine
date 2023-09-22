@@ -3,8 +3,6 @@
 // Includes
 //=========
 
-#include "Graphics.h"
-
 #if defined( EAE6320_PLATFORM_D3D )
 	#include "Direct3D/Includes.h"
 #elif defined( EAE6320_PLATFORM_GL )
@@ -14,22 +12,37 @@
 #include "cVertexFormat.h"
 #include "VertexFormats.h"
 
+#include <Engine/Assets/ReferenceCountedAssets.h>
+
 namespace eae6320
 {
 	namespace Graphics
 	{
 		class Mesh
 		{
+
+			EAE6320_ASSETS_DECLAREDELETEDREFERENCECOUNTEDFUNCTIONS(Mesh)
+
 		public:
+			EAE6320_ASSETS_DECLAREREFERENCECOUNTINGFUNCTIONS()
+
+				static cResult Load(Mesh*& o_mesh, VertexFormats::sVertex_mesh* i_vertexData, uint16_t* i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount);
+
 		#if defined( EAE6320_PLATFORM_D3D )
 		#elif defined( EAE6320_PLATFORM_GL )
+				void ConvertLeftHandedToRight(uint16_t* const& i_indexData);
 		#endif
 
-			eae6320::cResult InitializeGeometry(VertexFormats::sVertex_mesh* const i_vertexData, uint16_t* const i_indexData, const unsigned int vertexCount, const unsigned int indexCount);
 			void DrawGeometry();
-			void CleanUp(eae6320::cResult& result);
 
 		private:
+			Mesh() = default;
+			~Mesh();
+			eae6320::cResult InitializeGeometry(VertexFormats::sVertex_mesh* i_vertexData, uint16_t* i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount);
+			void CleanUp(eae6320::cResult& result);
+
+			EAE6320_ASSETS_DECLAREREFERENCECOUNT()
+
 			unsigned int indexCount = 0;
 
 			// Geometry Data

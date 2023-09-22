@@ -73,6 +73,14 @@ namespace eae6320
 
 		void UpdateBasedOnInput() final;
 
+		// Inputs
+		//-------
+		
+		bool isLeftDown = false;
+		bool isRightDown = false;
+		bool isUpDown = false;
+		bool isDownDown = false;
+
 		// Initialize / Clean Up
 		//----------------------
 
@@ -80,6 +88,10 @@ namespace eae6320
 		cResult CleanUp() final;
 
 		virtual void SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate) override;
+
+		static constexpr unsigned int numPairs = 2;
+		eae6320::Graphics::MeshEffectPair originalMeshEffectPairs[numPairs]{};
+		eae6320::Graphics::MeshEffectPair meshEffectPairs[numPairs]{};
 	};
 }
 

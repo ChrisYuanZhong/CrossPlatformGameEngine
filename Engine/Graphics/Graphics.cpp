@@ -20,6 +20,24 @@
 #include <Engine/UserOutput/UserOutput.h>
 #include <utility>
 
+// Submission Data
+	//----------------
+
+	// This struct's data is populated at submission time;
+	// it must cache whatever is necessary in order to render a frame
+struct sDataRequiredToRenderAFrame
+{
+	static constexpr unsigned int budget = 10;
+
+	eae6320::Graphics::ConstantBufferFormats::sFrame constantData_frame;
+
+	eae6320::Graphics::MeshEffectPair meshEffectPairs[budget]{};
+
+	unsigned int hexColor = 0x000000FF;
+};
+
+void CleanUpRenderData(sDataRequiredToRenderAFrame* renderData);
+
 // Static Data
 //============
 
@@ -28,10 +46,10 @@ namespace
 	// Clear color: black is usually used
 	//const float clearColor[4] = { 0.1f, 0.5f, 0.9f, 1.0f };
 
-	constexpr int numMeshes = 2;
-	constexpr int numEffects = 2;
-	eae6320::Graphics::Mesh s_mesh[numMeshes];
-	eae6320::Graphics::Effect s_effect[numEffects];
+	//constexpr int numMeshes = 2;
+	//constexpr int numEffects = 2;
+	//eae6320::Graphics::Mesh* s_mesh[numMeshes];
+	//eae6320::Graphics::Effect s_effect[numEffects];
 	eae6320::Graphics::Renderer s_renderer;
 	// Constant buffer object
 	eae6320::Graphics::cConstantBuffer s_constantBuffer_frame(eae6320::Graphics::ConstantBufferTypes::Frame);
@@ -40,7 +58,7 @@ namespace
 	//	* One of them will be in the process of being populated by the data currently being submitted by the application loop thread
 	//	* One of them will be fully populated and in the process of being rendered from in the render thread
 	// (In other words, one is being produced while the other is being consumed)
-	eae6320::Graphics::sDataRequiredToRenderAFrame s_dataRequiredToRenderAFrame[2];
+	sDataRequiredToRenderAFrame s_dataRequiredToRenderAFrame[2];
 	auto* s_dataBeingSubmittedByApplicationThread = &s_dataRequiredToRenderAFrame[0];
 	auto* s_dataBeingRenderedByRenderThread = &s_dataRequiredToRenderAFrame[1];
 	// The following two events work together to make sure that
@@ -131,8 +149,7 @@ void eae6320::Graphics::RenderFrame()
 	// you must make sure that it is all cleaned up and cleared out
 	// so that the struct can be re-used (i.e. so that data for a new frame can be submitted to it)
 	{
-		// (At this point in the class there isn't anything that needs to be cleaned up)
-		//dataRequiredToRenderFrame	// TODO
+		CleanUpRenderData(dataRequiredToRenderFrame);
 	}
 }
 
@@ -184,78 +201,6 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 			return result;
 		}
 	}
-	// Initialize the shading data
-	{
-		if (!(result = s_effect[0].InitializeShadingData("data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader")))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
-			return result;
-		}
-		if (!(result = s_effect[1].InitializeShadingData("data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor2.shader")))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
-			return result;
-		}
-	}
-	// Initialize the geometry
-	{
-		// Static Data Initialization
-		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData1[3];
-		{
-			// Direct3D is left-handed
-
-			// Draw a house shape using three triangles:
-			vertexData1[0].x = -0.5f;
-			vertexData1[0].y = -0.5f;
-			vertexData1[0].z = 0.0f;
-
-			vertexData1[1].x = -0.5f;
-			vertexData1[1].y = 0.5f;
-			vertexData1[1].z = 0.0f;
-
-			vertexData1[2].x = 0.5f;
-			vertexData1[2].y = 0.5f;
-			vertexData1[2].z = 0.0f;
-
-		}
-
-		uint16_t indexData1[3] = { 0, 1, 2 };
-
-		if (!(result = s_mesh[0].InitializeGeometry(vertexData1, indexData1, 3, 3)))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
-			return result;
-		}
-
-		// Static Data Initialization
-		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData2[3];
-		{
-			// Direct3D is left-handed
-
-			// Draw a house shape using three triangles:
-			vertexData2[0].x = -0.5f;
-			vertexData2[0].y = -0.5f;
-			vertexData2[0].z = 0.0f;
-
-			vertexData2[1].x = 0.5f;
-			vertexData2[1].y = 0.5f;
-			vertexData2[1].z = 0.0f;
-
-			vertexData2[2].x = 0.5f;
-			vertexData2[2].y = -0.5f;
-			vertexData2[2].z = 0.0f;
-
-		}
-
-		uint16_t indexData2[3] = { 0, 1, 2 };
-
-		if (!(result = s_mesh[1].InitializeGeometry(vertexData2, indexData2, 3, 3)))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
-			return result;
-		}
-	}
-
 
 	return result;
 }
@@ -266,7 +211,7 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 	s_renderer.CleanUp(result);
 
-	CleanUpMeshesEffects(result);
+	CleanUpRenderData(s_dataBeingSubmittedByApplicationThread);
 
 	{
 		const auto result_constantBuffer_frame = s_constantBuffer_frame.CleanUp();
@@ -297,19 +242,14 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 void eae6320::Graphics::RenderMesh()
 {
-	for (int i = 0; i < numMeshes; i++)
-	{
-		s_effect[i].BindShadingData();
-		s_mesh[i].DrawGeometry();
-	}
-}
+	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
 
-void eae6320::Graphics::CleanUpMeshesEffects(cResult& result)
-{
-	for (int i = 0; i < numMeshes; i++)
+	unsigned int numPairs = sizeof(s_dataBeingRenderedByRenderThread->meshEffectPairs) / sizeof(MeshEffectPair);
+
+	for (unsigned int i = 0; i < numPairs && s_dataBeingRenderedByRenderThread->meshEffectPairs[i].mesh; i++)
 	{
-		s_mesh[i].CleanUp(result);
-		s_effect[i].CleanUp(result);
+		s_dataBeingRenderedByRenderThread->meshEffectPairs[i].effect->BindShadingData();
+		s_dataBeingRenderedByRenderThread->meshEffectPairs[i].mesh->DrawGeometry();
 	}
 }
 
@@ -317,4 +257,34 @@ void eae6320::Graphics::SetClearColor(unsigned int i_hexColor)
 {
 	EAE6320_ASSERT(s_dataBeingSubmittedByApplicationThread);
 	s_dataBeingSubmittedByApplicationThread->hexColor = i_hexColor;
+}
+
+void eae6320::Graphics::SubmitMeshEffectPair(MeshEffectPair i_meshEffectPair[], const unsigned int numToDraw)
+{
+	EAE6320_ASSERT(s_dataBeingSubmittedByApplicationThread);
+
+	for (unsigned int i = 0; i < numToDraw; i++)
+	{
+		s_dataBeingSubmittedByApplicationThread->meshEffectPairs[i] = i_meshEffectPair[i];
+
+		s_dataBeingSubmittedByApplicationThread->meshEffectPairs[i].mesh->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectPairs[i].effect->IncrementReferenceCount();
+	}
+}
+
+void CleanUpRenderData(sDataRequiredToRenderAFrame* renderData)
+{
+	for (int i = 0; i < renderData->budget; i++)
+	{
+		if (renderData->meshEffectPairs[i].mesh)
+		{
+			renderData->meshEffectPairs[i].mesh->DecrementReferenceCount();
+			renderData->meshEffectPairs[i].mesh = nullptr;
+		}
+		if (renderData->meshEffectPairs[i].effect)
+		{
+			renderData->meshEffectPairs[i].effect->DecrementReferenceCount();
+			renderData->meshEffectPairs[i].effect = nullptr;
+		}
+	}
 }

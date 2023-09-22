@@ -3,6 +3,10 @@
 
 #include "Effect.h"
 
+#include <Engine/Asserts/Asserts.h>
+#include <Engine/ScopeGuard/cScopeGuard.h>
+#include <Engine/Logging/Logging.h>
+
 void eae6320::Graphics::Effect::CleanUp(eae6320::cResult& result)
 {
 #if defined( EAE6320_PLATFORM_GL )
@@ -61,4 +65,58 @@ eae6320::cResult eae6320::Graphics::Effect::InitializeShadingData(const char* co
 #endif
 
 	return result;
+}
+
+eae6320::cResult eae6320::Graphics::Effect::Load(Effect*& o_effect, const char* const vertexShaderPath, const char* const fragmentShaderPath)
+{
+	auto result = Results::Success;
+
+	Effect* newEffect = nullptr;
+	cScopeGuard cScopeGuard([&o_effect, &result, &newEffect]
+		{
+			if (result)
+			{
+				EAE6320_ASSERT(newEffect != nullptr);
+				o_effect = newEffect;
+			}
+			else
+			{
+				if (newEffect)
+				{
+					newEffect->DecrementReferenceCount();
+					newEffect = nullptr;
+				}
+				o_effect = nullptr;
+			}
+		});
+
+	// Allocate a new effect
+	{
+		newEffect = new (std::nothrow) Effect();
+		if (!newEffect)
+		{
+			result = Results::OutOfMemory;
+			EAE6320_ASSERTF(false, "Couldn't allocate memory for the effect");
+			Logging::OutputError("Failed to allocate memory for effect");
+			return result;
+		}
+	}
+
+	// Initialize the new effect
+	{
+		if (!(result = newEffect->InitializeShadingData(vertexShaderPath, fragmentShaderPath)))
+		{
+			EAE6320_ASSERTF(false, "Initialization of new effect failed");
+			return result;
+		}
+	}
+
+	return result;
+}
+
+eae6320::Graphics::Effect::~Effect()
+{
+	cResult result = Results::Success;
+	CleanUp(result);
+	EAE6320_ASSERT(result);
 }
