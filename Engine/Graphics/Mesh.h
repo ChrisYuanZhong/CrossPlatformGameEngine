@@ -9,6 +9,7 @@
 	#include "OpenGL/Includes.h"
 #endif
 
+#include <string>
 #include "cVertexFormat.h"
 #include "VertexFormats.h"
 

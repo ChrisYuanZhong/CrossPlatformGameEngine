@@ -12,6 +12,8 @@
 #include "cRenderState.h"
 #include "cShader.h"
 
+#include <Engine/Assets/ReferenceCountedAssets.h>
+
 namespace eae6320
 {
 	namespace Graphics

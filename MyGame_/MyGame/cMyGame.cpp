@@ -158,7 +158,6 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 	
 	if (!(isLeftDown || isRightDown || isUpDown || isDownDown))
 	{
-		eae6320::Logging::OutputMessage("Left Key Released!!!!!!!!!!!!!!!");
 		numToDraw = 2;
 		for (unsigned int i = 0; i < numPairs; i++)
 		{
