@@ -20,6 +20,8 @@
 #include <Engine/UserOutput/UserOutput.h>
 #include <utility>
 
+#define BUDGET 10
+
 // Submission Data
 	//----------------
 
@@ -27,11 +29,9 @@
 	// it must cache whatever is necessary in order to render a frame
 struct sDataRequiredToRenderAFrame
 {
-	static constexpr unsigned int budget = 10;
-
 	eae6320::Graphics::ConstantBufferFormats::sFrame constantData_frame;
 
-	eae6320::Graphics::MeshEffectPair meshEffectPairs[budget]{};
+	eae6320::Graphics::MeshEffectPair meshEffectPairs[BUDGET]{};
 
 	unsigned int hexColor = 0x000000FF;
 };
@@ -274,7 +274,7 @@ void eae6320::Graphics::SubmitMeshEffectPair(MeshEffectPair i_meshEffectPair[], 
 
 void CleanUpRenderData(sDataRequiredToRenderAFrame* renderData)
 {
-	for (int i = 0; i < renderData->budget; i++)
+	for (int i = 0; i < BUDGET; i++)
 	{
 		if (renderData->meshEffectPairs[i].mesh)
 		{
