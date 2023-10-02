@@ -47,8 +47,7 @@ void eae6320::Graphics::Mesh::DrawGeometry()
 		// It's possible to start rendering primitives in the middle of the stream
 		constexpr unsigned int indexOfFirstIndexToUse = 0;
 		constexpr unsigned int offsetToAddToEachIndex = 0;
-		D3D11_BUFFER_DESC desc;
-		indexBuffer->GetDesc(&desc);
+
 		direct3dImmediateContext->DrawIndexed(static_cast<unsigned int>(indexCount), indexOfFirstIndexToUse, offsetToAddToEachIndex);
 
 		//// Render triangles from the currently-bound vertex buffer

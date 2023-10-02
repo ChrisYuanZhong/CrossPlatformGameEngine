@@ -5,6 +5,7 @@
 
 #include <Engine/Graphics/Mesh.h>
 #include <Engine/Graphics/Effect.h>
+#include <Engine/Physics/sRigidBodyState.h>
 
 namespace eae6320
 {
@@ -21,6 +22,7 @@ namespace eae6320
 		private:
 			Graphics::Mesh* m_mesh;
 			Graphics::Effect* m_effect;
+			Physics::sRigidBodyState m_rigidBodyState;
 		};
 	}
 }
