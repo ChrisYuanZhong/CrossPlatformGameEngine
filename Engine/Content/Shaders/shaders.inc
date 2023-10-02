@@ -21,18 +21,20 @@
 
 #if defined( EAE6320_PLATFORM_D3D )
 
-	#define DeclareConstantBuffer( i_name, i_id ) cbuffer i_name : register( b##i_id )
+	#define DeclareConstantBufferFrame( i_name, i_id ) cbuffer i_name : register( b##i_id )
+	#define DeclareConstantBufferDrawCall( i_name, i_id ) cbuffer i_name : register( b##i_id )
 	#define mat4 float4x4
 
 #elif defined( EAE6320_PLATFORM_GL )
 
-	#define DeclareConstantBuffer( i_name, i_id ) layout( std140, binding = i_id ) uniform i_name
+	#define DeclareConstantBufferFrame( i_name, i_id ) layout( std140, binding = i_id ) uniform i_name
+	#define DeclareConstantBufferDrawCall( i_name, i_id ) layout( std140, binding = i_id ) uniform i_name
 	#define float4x4 mat4
 	#define float2 vec2
 
 #endif
 
-DeclareConstantBuffer( g_constantBuffer_frame, 0 )
+DeclareConstantBufferFrame( g_constantBuffer_frame, 0 )
 {
 	float4x4 g_transform_worldToCamera;
 	float4x4 g_transform_cameraToProjected;
@@ -41,4 +43,9 @@ DeclareConstantBuffer( g_constantBuffer_frame, 0 )
 	float g_elapsedSecondCount_simulationTime;
 	// For float4 alignment
 	float2 g_padding;
+};
+
+DeclareConstantBufferDrawCall( g_constantBuffer_drawCall, 2 )
+{
+	float4x4 g_transform_localToWorld;
 };

@@ -31,6 +31,8 @@ struct sDataRequiredToRenderAFrame
 {
 	eae6320::Graphics::ConstantBufferFormats::sFrame constantData_frame;
 
+	eae6320::Graphics::ConstantBufferFormats::sDrawCall constantData_drawCall;
+
 	eae6320::Graphics::MeshEffectPair meshEffectPairs[BUDGET]{};
 
 	unsigned int hexColor = 0x000000FF;
@@ -53,6 +55,7 @@ namespace
 	eae6320::Graphics::Renderer s_renderer;
 	// Constant buffer object
 	eae6320::Graphics::cConstantBuffer s_constantBuffer_frame(eae6320::Graphics::ConstantBufferTypes::Frame);
+	eae6320::Graphics::cConstantBuffer s_constantBuffer_drawCall(eae6320::Graphics::ConstantBufferTypes::DrawCall);
 
 	// In our class there will be two copies of the data required to render a frame:
 	//	* One of them will be in the process of being populated by the data currently being submitted by the application loop thread
@@ -141,6 +144,13 @@ void eae6320::Graphics::RenderFrame()
 		s_constantBuffer_frame.Update(&constantData_frame);
 	}
 
+	// Update the draw call constant buffer
+	{
+		// Copy the data from the system memory that the application owns to GPU memory
+		auto& constantData_drawCall = dataRequiredToRenderFrame->constantData_drawCall;
+		s_constantBuffer_drawCall.Update(&constantData_drawCall);
+	}
+
 	RenderMesh();
 
 	s_renderer.SwapBuffer();
@@ -176,6 +186,20 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 		else
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without frame constant buffer");
+			return result;
+		}
+
+		if (result = s_constantBuffer_drawCall.Initialize())
+		{
+			// There is only a single draw call constant buffer that is reused
+			// and so it can be bound at initialization time and never unbound
+			s_constantBuffer_drawCall.Bind(
+				// In our class both vertex and fragment shaders use per-draw-call constant data
+				static_cast<uint_fast8_t>(eShaderType::Vertex) | static_cast<uint_fast8_t>(eShaderType::Fragment));
+		}
+		else
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without draw call constant buffer");
 			return result;
 		}
 	}
@@ -221,6 +245,18 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 			if (result)
 			{
 				result = result_constantBuffer_frame;
+			}
+		}
+	}
+
+	{
+		const auto result_constantBuffer_drawCall = s_constantBuffer_drawCall.CleanUp();
+		if (!result_constantBuffer_drawCall)
+		{
+			EAE6320_ASSERT(false);
+			if (result)
+			{
+				result = result_constantBuffer_drawCall;
 			}
 		}
 	}
