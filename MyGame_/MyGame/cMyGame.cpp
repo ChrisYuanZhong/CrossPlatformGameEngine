@@ -5,6 +5,7 @@
 
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/UserInput/UserInput.h>
+#include <Engine/Math/cQuaternion.h>
 
 #include <Engine/Logging/Logging.h>
 
@@ -67,11 +68,13 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
 			return result;
 		}
+		gameObjects[0].SetEffect(originalMeshEffectPairs[0].effect);
 		if (!(result = eae6320::Graphics::Effect::Load(originalMeshEffectPairs[1].effect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor2.shader")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
 			return result;
 		}
+		gameObjects[1].SetEffect(originalMeshEffectPairs[1].effect);
 	}
 	// Initialize the geometry
 	{
@@ -102,6 +105,7 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;
 		}
+		gameObjects[0].SetMesh(originalMeshEffectPairs[0].mesh);
 
 		// Static Data Initialization
 		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData2[3];
@@ -130,6 +134,7 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;
 		}
+		gameObjects[1].SetMesh(originalMeshEffectPairs[1].mesh);
 	}
 
 	return Results::Success;
@@ -143,8 +148,10 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 
 	for (unsigned int i = 0; i < numPairs; i++)
 	{
-		meshEffectPairs[i].mesh->DecrementReferenceCount();
-		meshEffectPairs[i].effect->DecrementReferenceCount();
+		//meshEffectPairs[i].mesh->DecrementReferenceCount();
+		//meshEffectPairs[i].effect->DecrementReferenceCount();
+		//gameObjects[i].GetMesh()->DecrementReferenceCount();
+		//gameObjects[i].GetEffect()->DecrementReferenceCount();
 	}
 
 	return result;
@@ -156,47 +163,59 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 
 	unsigned int numToDraw = numPairs;
 	
-	if (!(isLeftDown || isRightDown || isUpDown || isDownDown))
+	//if (!(isLeftDown || isRightDown || isUpDown || isDownDown))
+	//{
+	//	numToDraw = 2;
+	//	for (unsigned int i = 0; i < numPairs; i++)
+	//	{
+	//		meshEffectPairs[i].mesh = originalMeshEffectPairs[i].mesh;
+	//		meshEffectPairs[i].effect = originalMeshEffectPairs[i].effect;
+	//	}
+	//}
+	//// While Left is down, only draw the first mesh
+	//else if (isLeftDown)
+	//{
+	//	numToDraw = 1;
+	//	meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
+	//	meshEffectPairs[0].effect = originalMeshEffectPairs[0].effect;
+	//}
+	//// While Right is down, only draw the second mesh
+	//else if (isRightDown)
+	//{
+	//	numToDraw = 1;
+	//	meshEffectPairs[0].mesh = originalMeshEffectPairs[1].mesh;
+	//	meshEffectPairs[0].effect = originalMeshEffectPairs[1].effect;
+	//}
+	//// While Up is down, change the effect of the first mesh to be the second effect
+	//else if (isUpDown)
+	//{
+	//	numToDraw = 2;
+	//	meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
+	//	meshEffectPairs[0].effect = originalMeshEffectPairs[1].effect;
+	//	meshEffectPairs[1].mesh = originalMeshEffectPairs[1].mesh;
+	//	meshEffectPairs[1].effect = originalMeshEffectPairs[1].effect;
+	//}
+	//// While Down is down, change the effect of the second mesh to be the first effect
+	//else if (isDownDown)
+	//{
+	//	numToDraw = 2;
+	//	meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
+	//	meshEffectPairs[0].effect = originalMeshEffectPairs[0].effect;
+	//	meshEffectPairs[1].mesh = originalMeshEffectPairs[1].mesh;
+	//	meshEffectPairs[1].effect = originalMeshEffectPairs[0].effect;
+	//}
+
+	//gameObjects[0].SetPosition(Math::sVector(0.0f, 0.0f, 0.0f));
+	//gameObjects[0].SetOrientation(Math::cQuaternion(1.0f, Math::sVector(0.0f, 0.0f, 1.0f)));
+
+	eae6320::Graphics::MeshEffectLocationTrio meshEffectLocationTrios[numPairs]{};
+
+	for (unsigned int i = 0; i < numToDraw; i++)
 	{
-		numToDraw = 2;
-		for (unsigned int i = 0; i < numPairs; i++)
-		{
-			meshEffectPairs[i].mesh = originalMeshEffectPairs[i].mesh;
-			meshEffectPairs[i].effect = originalMeshEffectPairs[i].effect;
-		}
-	}
-	// While Left is down, only draw the first mesh
-	else if (isLeftDown)
-	{
-		numToDraw = 1;
-		meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
-		meshEffectPairs[0].effect = originalMeshEffectPairs[0].effect;
-	}
-	// While Right is down, only draw the second mesh
-	else if (isRightDown)
-	{
-		numToDraw = 1;
-		meshEffectPairs[0].mesh = originalMeshEffectPairs[1].mesh;
-		meshEffectPairs[0].effect = originalMeshEffectPairs[1].effect;
-	}
-	// While Up is down, change the effect of the first mesh to be the second effect
-	else if (isUpDown)
-	{
-		numToDraw = 2;
-		meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
-		meshEffectPairs[0].effect = originalMeshEffectPairs[1].effect;
-		meshEffectPairs[1].mesh = originalMeshEffectPairs[1].mesh;
-		meshEffectPairs[1].effect = originalMeshEffectPairs[1].effect;
-	}
-	// While Down is down, change the effect of the second mesh to be the first effect
-	else if (isDownDown)
-	{
-		numToDraw = 2;
-		meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
-		meshEffectPairs[0].effect = originalMeshEffectPairs[0].effect;
-		meshEffectPairs[1].mesh = originalMeshEffectPairs[1].mesh;
-		meshEffectPairs[1].effect = originalMeshEffectPairs[0].effect;
+		meshEffectLocationTrios[i].mesh = gameObjects[i].GetMesh();
+		meshEffectLocationTrios[i].effect = gameObjects[i].GetEffect();
+		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = Math::cMatrix_transformation::cMatrix_transformation(gameObjects[i].GetOrientation(), gameObjects[i].GetPosition());
 	}
 
-	Graphics::SubmitMeshEffectLocationTrios(meshEffectPairs, numToDraw);
+	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numToDraw);
 }

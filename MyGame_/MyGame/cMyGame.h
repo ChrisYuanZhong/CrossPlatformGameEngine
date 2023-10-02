@@ -11,6 +11,7 @@
 #include <Engine/Application/iApplication.h>
 #include <Engine/Results/Results.h>
 #include <Engine/Graphics/Graphics.h>
+#include <Engine/Assets/GameObject.h>
 
 #if defined( EAE6320_PLATFORM_WINDOWS )
 	#include "Resource Files/Resource.h"
@@ -91,7 +92,8 @@ namespace eae6320
 
 		static constexpr unsigned int numPairs = 2;
 		eae6320::Graphics::MeshEffectLocationTrio originalMeshEffectPairs[numPairs]{};
-		eae6320::Graphics::MeshEffectLocationTrio meshEffectPairs[numPairs]{};
+		//eae6320::Graphics::MeshEffectLocationTrio meshEffectPairs[numPairs]{};
+		eae6320::Assets::GameObject gameObjects[numPairs];
 	};
 }
 
