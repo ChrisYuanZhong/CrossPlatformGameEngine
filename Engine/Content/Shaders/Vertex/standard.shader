@@ -10,13 +10,6 @@
 
 #include <Shaders/shaders.inc>
 
-#if defined( EAE6320_PLATFORM_GL )
-	#define float4 vec4
-	#define mul( a, b ) ( a * b )
-	#define o_vertexPosition_projected gl_Position
-#endif
-
-
 #if defined( EAE6320_PLATFORM_D3D )
 
 // Entry Point

@@ -10,6 +10,10 @@
 	// GLSL shaders require the version to be #defined before anything else in the shader
 	#version 420
 
+	#define float4 vec4
+	#define mul( a, b ) ( a * b )
+	#define o_vertexPosition_projected gl_Position
+
 #endif
 
 // Constant Buffers

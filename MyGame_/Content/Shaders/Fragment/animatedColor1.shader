@@ -26,14 +26,6 @@ void main(
 	out float4 o_color : SV_TARGET
 
 )
-{
-	// Output solid white
-	o_color = float4(
-		// RGB (color)
-		(sin( g_elapsedSecondCount_simulationTime ) + 1) / 2, (cos( g_elapsedSecondCount_simulationTime ) + 1) / 2, 1.0,
-		// Alpha (opacity)
-		1.0 );
-}
 
 #elif defined( EAE6320_PLATFORM_GL )
 
@@ -48,13 +40,14 @@ out vec4 o_color;
 //============
 
 void main()
+
+#endif
+
 {
 	// Output solid white
-	o_color = vec4(
+	o_color = float4(
 		// RGB (color)
 		(sin( g_elapsedSecondCount_simulationTime ) + 1) / 2, (cos( g_elapsedSecondCount_simulationTime ) + 1) / 2, 1.0,
 		// Alpha (opacity)
 		1.0 );
 }
-
-#endif
