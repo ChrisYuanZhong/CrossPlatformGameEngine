@@ -198,5 +198,5 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 		meshEffectPairs[1].effect = originalMeshEffectPairs[0].effect;
 	}
 
-	Graphics::SubmitMeshEffectPair(meshEffectPairs, numToDraw);
+	Graphics::SubmitMeshEffectLocationTrios(meshEffectPairs, numToDraw);
 }

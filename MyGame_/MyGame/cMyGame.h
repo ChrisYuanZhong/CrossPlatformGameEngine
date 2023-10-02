@@ -90,8 +90,8 @@ namespace eae6320
 		virtual void SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate) override;
 
 		static constexpr unsigned int numPairs = 2;
-		eae6320::Graphics::MeshEffectPair originalMeshEffectPairs[numPairs]{};
-		eae6320::Graphics::MeshEffectPair meshEffectPairs[numPairs]{};
+		eae6320::Graphics::MeshEffectLocationTrio originalMeshEffectPairs[numPairs]{};
+		eae6320::Graphics::MeshEffectLocationTrio meshEffectPairs[numPairs]{};
 	};
 }
 

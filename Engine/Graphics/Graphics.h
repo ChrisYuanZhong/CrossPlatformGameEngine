@@ -28,10 +28,11 @@ namespace eae6320
 {
 	namespace Graphics
 	{
-		struct MeshEffectPair
+		struct MeshEffectLocationTrio
 		{
 			Mesh* mesh = nullptr;
 			Effect* effect = nullptr;
+			ConstantBufferFormats::sDrawCall constantData_drawCall;
 		};
 
 		// Submission
@@ -82,7 +83,7 @@ namespace eae6320
 		cResult CleanUp();
 
 		void SetClearColor(unsigned int i_hexColor);
-		void SubmitMeshEffectPair(MeshEffectPair i_meshEffectPair[], const unsigned int numPairs);
+		void SubmitMeshEffectLocationTrios(MeshEffectLocationTrio i_meshEffectLocationTrios[], const unsigned int numPairs);
 	}
 }
 

@@ -31,9 +31,7 @@ struct sDataRequiredToRenderAFrame
 {
 	eae6320::Graphics::ConstantBufferFormats::sFrame constantData_frame;
 
-	eae6320::Graphics::ConstantBufferFormats::sDrawCall constantData_drawCall;
-
-	eae6320::Graphics::MeshEffectPair meshEffectPairs[BUDGET]{};
+	eae6320::Graphics::MeshEffectLocationTrio meshEffectLocationTrios[BUDGET]{};
 
 	unsigned int hexColor = 0x000000FF;
 };
@@ -142,13 +140,6 @@ void eae6320::Graphics::RenderFrame()
 		// Copy the data from the system memory that the application owns to GPU memory
 		auto& constantData_frame = dataRequiredToRenderFrame->constantData_frame;
 		s_constantBuffer_frame.Update(&constantData_frame);
-	}
-
-	// Update the draw call constant buffer
-	{
-		// Copy the data from the system memory that the application owns to GPU memory
-		auto& constantData_drawCall = dataRequiredToRenderFrame->constantData_drawCall;
-		s_constantBuffer_drawCall.Update(&constantData_drawCall);
 	}
 
 	RenderMesh();
@@ -280,12 +271,19 @@ void eae6320::Graphics::RenderMesh()
 {
 	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
 
-	unsigned int numPairs = sizeof(s_dataBeingRenderedByRenderThread->meshEffectPairs) / sizeof(MeshEffectPair);
+	unsigned int numPairs = sizeof(s_dataBeingRenderedByRenderThread->meshEffectLocationTrios) / sizeof(MeshEffectLocationTrio);
 
-	for (unsigned int i = 0; i < numPairs && s_dataBeingRenderedByRenderThread->meshEffectPairs[i].mesh; i++)
+	for (unsigned int i = 0; i < numPairs && s_dataBeingRenderedByRenderThread->meshEffectLocationTrios[i].mesh; i++)
 	{
-		s_dataBeingRenderedByRenderThread->meshEffectPairs[i].effect->BindShadingData();
-		s_dataBeingRenderedByRenderThread->meshEffectPairs[i].mesh->DrawGeometry();
+		// Update the draw call constant buffer
+		{
+			// Copy the data from the system memory that the application owns to GPU memory
+			auto& constantData_drawCall = s_dataBeingRenderedByRenderThread->meshEffectLocationTrios[i].constantData_drawCall;
+			s_constantBuffer_drawCall.Update(&constantData_drawCall);
+		}
+
+		s_dataBeingRenderedByRenderThread->meshEffectLocationTrios[i].effect->BindShadingData();
+		s_dataBeingRenderedByRenderThread->meshEffectLocationTrios[i].mesh->DrawGeometry();
 	}
 }
 
@@ -295,16 +293,16 @@ void eae6320::Graphics::SetClearColor(unsigned int i_hexColor)
 	s_dataBeingSubmittedByApplicationThread->hexColor = i_hexColor;
 }
 
-void eae6320::Graphics::SubmitMeshEffectPair(MeshEffectPair i_meshEffectPair[], const unsigned int numToDraw)
+void eae6320::Graphics::SubmitMeshEffectLocationTrios(MeshEffectLocationTrio i_meshEffectLocationTrios[], const unsigned int numToDraw)
 {
 	EAE6320_ASSERT(s_dataBeingSubmittedByApplicationThread);
 
 	for (unsigned int i = 0; i < numToDraw; i++)
 	{
-		s_dataBeingSubmittedByApplicationThread->meshEffectPairs[i] = i_meshEffectPair[i];
+		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[i] = i_meshEffectLocationTrios[i];
 
-		s_dataBeingSubmittedByApplicationThread->meshEffectPairs[i].mesh->IncrementReferenceCount();
-		s_dataBeingSubmittedByApplicationThread->meshEffectPairs[i].effect->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[i].mesh->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[i].effect->IncrementReferenceCount();
 	}
 }
 
@@ -312,15 +310,15 @@ void CleanUpRenderData(sDataRequiredToRenderAFrame* renderData)
 {
 	for (int i = 0; i < BUDGET; i++)
 	{
-		if (renderData->meshEffectPairs[i].mesh)
+		if (renderData->meshEffectLocationTrios[i].mesh)
 		{
-			renderData->meshEffectPairs[i].mesh->DecrementReferenceCount();
-			renderData->meshEffectPairs[i].mesh = nullptr;
+			renderData->meshEffectLocationTrios[i].mesh->DecrementReferenceCount();
+			renderData->meshEffectLocationTrios[i].mesh = nullptr;
 		}
-		if (renderData->meshEffectPairs[i].effect)
+		if (renderData->meshEffectLocationTrios[i].effect)
 		{
-			renderData->meshEffectPairs[i].effect->DecrementReferenceCount();
-			renderData->meshEffectPairs[i].effect = nullptr;
+			renderData->meshEffectLocationTrios[i].effect->DecrementReferenceCount();
+			renderData->meshEffectLocationTrios[i].effect = nullptr;
 		}
 	}
 }
