@@ -84,6 +84,7 @@ namespace eae6320
 
 		void SetClearColor(unsigned int i_hexColor);
 		void SubmitMeshEffectLocationTrios(MeshEffectLocationTrio i_meshEffectLocationTrios[], const unsigned int numPairs);
+		void SubmitCameraData(Math::cMatrix_transformation i_worldToCamera, Math::cMatrix_transformation i_cameraToProjected);
 	}
 }
 

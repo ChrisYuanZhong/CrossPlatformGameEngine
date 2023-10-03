@@ -51,6 +51,22 @@ void eae6320::cMyGame::UpdateBasedOnInput()
 	{
 		gameInputs.is2Down = true;
 	}
+	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Up))
+	{
+		gameInputs.isUpArrowDown = true;
+	}
+	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Down))
+	{
+		gameInputs.isDownArrowDown = true;
+	}
+	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Left))
+	{
+		gameInputs.isLeftArrowDown = true;
+	}
+	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Right))
+	{
+		gameInputs.isRightArrowDown = true;
+	}
 }
 
 // Initialize / Clean Up
@@ -200,6 +216,22 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
 	}
 
+	if (gameInputs.isUpArrowDown)
+	{
+		mainCamera.SetVelocity(mainCamera.GetVelocity() + Math::sVector(0.0f, 0.0f, -velocity));
+	}
+	if (gameInputs.isDownArrowDown)
+	{
+		mainCamera.SetVelocity(mainCamera.GetVelocity() + Math::sVector(0.0f, 0.0f, velocity));
+	}
+	if (gameInputs.isLeftArrowDown)
+	{
+		mainCamera.SetVelocity(mainCamera.GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
+	}
+	if (gameInputs.isRightArrowDown)
+	{
+		mainCamera.SetVelocity(mainCamera.GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
+	}
 }
 
 void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
@@ -209,6 +241,8 @@ void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCo
 	{
 		gameObjects[i].Update(i_elapsedSecondCount_sinceLastUpdate);
 	}
+
+	mainCamera.Update(i_elapsedSecondCount_sinceLastUpdate);
 }
 
 void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate)
@@ -224,9 +258,9 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 	{
 		meshEffectLocationTrios[i].mesh = gameObjects[i].GetMesh();
 		meshEffectLocationTrios[i].effect = gameObjects[i].GetEffect();
-		//meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = Math::cMatrix_transformation(gameObjects[i].GetOrientation(), gameObjects[i].GetPosition());
-		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = gameObjects[i].GetRigidBodyState().PredictFutureTransform(i_elapsedSecondCount_sinceLastSimulationUpdate);
+		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = gameObjects[i].GetLocalToWorldTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate);
 	}
 
 	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numGameObjects);
+	Graphics::SubmitCameraData(mainCamera.GetWorldToCameraTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate), mainCamera.GetCameraToProjectedTransform());
 }

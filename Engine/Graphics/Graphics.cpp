@@ -306,6 +306,14 @@ void eae6320::Graphics::SubmitMeshEffectLocationTrios(MeshEffectLocationTrio i_m
 	}
 }
 
+void eae6320::Graphics::SubmitCameraData(Math::cMatrix_transformation i_worldToCamera, Math::cMatrix_transformation i_cameraToProjected)
+{
+	EAE6320_ASSERT(s_dataBeingSubmittedByApplicationThread);
+
+	s_dataBeingSubmittedByApplicationThread->constantData_frame.g_transform_worldToCamera = i_worldToCamera;
+	s_dataBeingSubmittedByApplicationThread->constantData_frame.g_transform_cameraToProjected = i_cameraToProjected;
+}
+
 void CleanUpRenderData(sDataRequiredToRenderAFrame* renderData)
 {
 	for (int i = 0; i < BUDGET; i++)

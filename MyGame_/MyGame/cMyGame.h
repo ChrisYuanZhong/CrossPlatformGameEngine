@@ -12,6 +12,7 @@
 #include <Engine/Results/Results.h>
 #include <Engine/Graphics/Graphics.h>
 #include <Engine/Assets/GameObject.h>
+#include <Engine/Assets/Camera.h>
 
 #if defined( EAE6320_PLATFORM_WINDOWS )
 	#include "Resource Files/Resource.h"
@@ -31,6 +32,12 @@ namespace eae6320
 		bool is1Down = false;
 		bool is2Down = false;
 
+		// For Camera
+		bool isUpArrowDown = false;
+		bool isDownArrowDown = false;
+		bool isLeftArrowDown = false;
+		bool isRightArrowDown = false;
+
 		void Reset()
 		{
 			isWDown = false;
@@ -39,6 +46,11 @@ namespace eae6320
 			isDDown = false;
 			is1Down = false;
 			is2Down = false;
+
+			isUpArrowDown = false;
+			isDownArrowDown = false;
+			isLeftArrowDown = false;
+			isRightArrowDown = false;
 		}
 	};
 
@@ -118,6 +130,7 @@ namespace eae6320
 		eae6320::Graphics::Mesh* meshes[numPairs]{}; // 0: original, 1: modified
 		eae6320::Graphics::Effect* effects[numPairs]{}; // 0: original, 1: modified
 		eae6320::Assets::GameObject gameObjects[numGameObjects];
+		eae6320::Assets::Camera mainCamera;
 
 		// Gameplay Variables
 		//-------------------

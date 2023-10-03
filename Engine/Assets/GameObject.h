@@ -3,6 +3,7 @@
 // Includes
 //=========
 
+#include <Engine/Math/cMatrix_transformation.h>
 #include <Engine/Graphics/Mesh.h>
 #include <Engine/Graphics/Effect.h>
 #include <Engine/Physics/sRigidBodyState.h>
@@ -22,8 +23,8 @@ namespace eae6320
 			inline void SetMesh(Graphics::Mesh* i_mesh) { m_mesh = i_mesh; }
 			inline Graphics::Effect* GetEffect() const { return m_effect; }
 			inline void SetEffect(Graphics::Effect* i_effect) { m_effect = i_effect; }
-			inline Physics::sRigidBodyState GetRigidBodyState() const { return m_rigidBodyState; }
 
+			// Rigid Body State
 			inline Math::sVector GetPosition() const { return m_rigidBodyState.position; }
 			inline void SetPosition(Math::sVector i_position) { m_rigidBodyState.position = i_position; }
 			inline Math::cQuaternion GetOrientation() const { return m_rigidBodyState.orientation; }
@@ -32,6 +33,8 @@ namespace eae6320
 			inline void SetVelocity(Math::sVector i_velocity) { m_rigidBodyState.velocity = i_velocity; }
 			inline Math::sVector GetAcceleration() const { return m_rigidBodyState.acceleration; }
 			inline void SetAcceleration(Math::sVector i_acceleration) { m_rigidBodyState.acceleration = i_acceleration; }
+
+			inline Math::cMatrix_transformation GetLocalToWorldTransformPrediction(const float i_secondCountToExtrapolate) const { return m_rigidBodyState.PredictFutureTransform(i_secondCountToExtrapolate); }
 
 			inline void Update(const float i_secondCountToIntegrate) { m_rigidBodyState.Update(i_secondCountToIntegrate); }
 
