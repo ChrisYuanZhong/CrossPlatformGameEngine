@@ -166,18 +166,15 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 
 	auto result = Results::Success;
 
-	for (unsigned int i = 0; i < numPairs; i++)
+	if (isMeshModified)
 	{
-		if (meshes[i])
-		{
-			meshes[i]->DecrementReferenceCount();
-			meshes[i] = nullptr;
-		}
-		if (effects[i])
-		{
-			effects[i]->DecrementReferenceCount();
-			effects[i] = nullptr;
-		}
+		meshes[0]->DecrementReferenceCount();
+		effects[0]->DecrementReferenceCount();
+	}
+	else
+	{
+		meshes[1]->DecrementReferenceCount();
+		effects[1]->DecrementReferenceCount();
 	}
 
 	return result;
@@ -187,11 +184,13 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 {
 	if (gameInputs.is1Down)
 	{
+		isMeshModified = false;
 		gameObjects[0].SetMesh(meshes[0]);
 		gameObjects[0].SetEffect(effects[0]);
 	}
 	if (gameInputs.is2Down)
 	{
+		isMeshModified = true;
 		gameObjects[0].SetMesh(meshes[1]);
 		gameObjects[0].SetEffect(effects[1]);
 	}
