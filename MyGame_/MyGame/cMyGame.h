@@ -22,6 +22,26 @@
 
 namespace eae6320
 {
+	struct GameInputs
+	{
+		bool isWDown = false;
+		bool isADown = false;
+		bool isSDown = false;
+		bool isDDown = false;
+		bool is1Down = false;
+		bool is2Down = false;
+
+		void Reset()
+		{
+			isWDown = false;
+			isADown = false;
+			isSDown = false;
+			isDDown = false;
+			is1Down = false;
+			is2Down = false;
+		}
+	};
+
 	class cMyGame final : public Application::iApplication
 	{
 		// Inherited Implementation
@@ -77,10 +97,7 @@ namespace eae6320
 		// Inputs
 		//-------
 		
-		bool isLeftDown = false;
-		bool isRightDown = false;
-		bool isUpDown = false;
-		bool isDownDown = false;
+		GameInputs gameInputs;
 
 		// Initialize / Clean Up
 		//----------------------
@@ -90,10 +107,19 @@ namespace eae6320
 
 		virtual void SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate) override;
 
-		static constexpr unsigned int numPairs = 2;
-		eae6320::Graphics::MeshEffectLocationTrio originalMeshEffectPairs[numPairs]{};
+		static constexpr unsigned int numGameObjects = 1;
+		//eae6320::Graphics::MeshEffectLocationTrio originalMeshEffectPairs[numPairs]{};
 		//eae6320::Graphics::MeshEffectLocationTrio meshEffectPairs[numPairs]{};
-		eae6320::Assets::GameObject gameObjects[numPairs];
+
+		static constexpr unsigned int numPairs = 2;
+		eae6320::Graphics::Mesh* meshes[numPairs]{}; // 0: original, 1: modified
+		eae6320::Graphics::Effect* effects[numPairs]{}; // 0: original, 1: modified
+		eae6320::Assets::GameObject gameObjects[numGameObjects];
+
+		// Gameplay Variables
+		//-------------------
+
+		float velocity = 0.00001f;
 	};
 }
 

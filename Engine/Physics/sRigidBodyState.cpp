@@ -17,6 +17,7 @@ void eae6320::Physics::sRigidBodyState::Update( const float i_secondCountToInteg
 	// Update velocity
 	{
 		velocity += acceleration * i_secondCountToIntegrate;
+		velocity -= velocity * dragCoefficient * i_secondCountToIntegrate;
 	}
 	// Update orientation
 	{

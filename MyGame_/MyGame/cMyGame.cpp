@@ -17,10 +17,7 @@
 
 void eae6320::cMyGame::UpdateBasedOnInput()
 {
-	isLeftDown = false;
-	isRightDown = false;
-	isUpDown = false;
-	isDownDown = false;
+	gameInputs.Reset();
 
 	// Is the user pressing the ESC key?
 	if ( UserInput::IsKeyPressed( UserInput::KeyCodes::Escape ) )
@@ -30,25 +27,29 @@ void eae6320::cMyGame::UpdateBasedOnInput()
 		const auto result = Exit( EXIT_SUCCESS );
 		EAE6320_ASSERT( result );
 	}
-	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Left))
+	if (UserInput::IsKeyPressed('W'))
 	{
-		eae6320::Logging::OutputMessage("Left Key Pressed");
-		isLeftDown = true;
+		gameInputs.isWDown = true;
 	}
-	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Right))
+	if (UserInput::IsKeyPressed('A'))
 	{
-		eae6320::Logging::OutputMessage("Right Key Pressed");
-		isRightDown = true;
+		gameInputs.isADown = true;
 	}
-	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Up))
+	if (UserInput::IsKeyPressed('S'))
 	{
-		eae6320::Logging::OutputMessage("Up Key Pressed");
-		isUpDown = true;
+		gameInputs.isSDown = true;
 	}
-	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Down))
+	if (UserInput::IsKeyPressed('D'))
 	{
-		eae6320::Logging::OutputMessage("Down Key Pressed");
-		isDownDown = true;
+		gameInputs.isDDown = true;
+	}
+	if (UserInput::IsKeyPressed('1'))
+	{
+		gameInputs.is1Down = true;
+	}
+	if (UserInput::IsKeyPressed('2'))
+	{
+		gameInputs.is2Down = true;
 	}
 }
 
@@ -63,23 +64,21 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 
 	// Initialize the shading data
 	{
-		if (!(result = eae6320::Graphics::Effect::Load(originalMeshEffectPairs[0].effect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader")))
+		if (!(result = eae6320::Graphics::Effect::Load(effects[0], "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
 			return result;
 		}
-		gameObjects[0].SetEffect(originalMeshEffectPairs[0].effect);
-		if (!(result = eae6320::Graphics::Effect::Load(originalMeshEffectPairs[1].effect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor2.shader")))
+		if (!(result = eae6320::Graphics::Effect::Load(effects[1], "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor2.shader")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
 			return result;
 		}
-		gameObjects[1].SetEffect(originalMeshEffectPairs[1].effect);
 	}
 	// Initialize the geometry
 	{
 		// Static Data Initialization
-		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData1[3];
+		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData1[4];
 		{
 			// Direct3D is left-handed
 
@@ -96,16 +95,19 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			vertexData1[2].y = 0.5f;
 			vertexData1[2].z = 0.0f;
 
+			vertexData1[3].x = 0.5f;
+			vertexData1[3].y = -0.5f;
+			vertexData1[3].z = 0.0f;
+
 		}
 
-		uint16_t indexData1[3] = { 0, 1, 2 };
+		uint16_t indexData1[6] = { 0, 1, 2, 0, 2, 3 };
 
-		if (!(result = eae6320::Graphics::Mesh::Load(originalMeshEffectPairs[0].mesh, vertexData1, indexData1, 3, 3)))
+		if (!(result = eae6320::Graphics::Mesh::Load(meshes[0], vertexData1, indexData1, 4, 6)))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;
 		}
-		gameObjects[0].SetMesh(originalMeshEffectPairs[0].mesh);
 
 		// Static Data Initialization
 		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData2[3];
@@ -117,7 +119,7 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			vertexData2[0].y = -0.5f;
 			vertexData2[0].z = 0.0f;
 
-			vertexData2[1].x = 0.5f;
+			vertexData2[1].x = 0.0f;
 			vertexData2[1].y = 0.5f;
 			vertexData2[1].z = 0.0f;
 
@@ -129,12 +131,14 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 
 		uint16_t indexData2[3] = { 0, 1, 2 };
 
-		if (!(result = eae6320::Graphics::Mesh::Load(originalMeshEffectPairs[1].mesh, vertexData2, indexData2, 3, 3)))
+		if (!(result = eae6320::Graphics::Mesh::Load(meshes[1], vertexData2, indexData2, 3, 3)))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;
 		}
-		gameObjects[1].SetMesh(originalMeshEffectPairs[1].mesh);
+
+		gameObjects[0].SetMesh(meshes[0]);
+		gameObjects[0].SetEffect(effects[0]);
 	}
 
 	return Results::Success;
@@ -148,10 +152,16 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 
 	for (unsigned int i = 0; i < numPairs; i++)
 	{
-		//meshEffectPairs[i].mesh->DecrementReferenceCount();
-		//meshEffectPairs[i].effect->DecrementReferenceCount();
-		//gameObjects[i].GetMesh()->DecrementReferenceCount();
-		//gameObjects[i].GetEffect()->DecrementReferenceCount();
+		if (meshes[i])
+		{
+			meshes[i]->DecrementReferenceCount();
+			meshes[i] = nullptr;
+		}
+		if (effects[i])
+		{
+			effects[i]->DecrementReferenceCount();
+			effects[i] = nullptr;
+		}
 	}
 
 	return result;
@@ -159,63 +169,56 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 
 void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
+	// Print the i_elapsedSecondCount_sinceLastSimulationUpdate
+	eae6320::Logging::OutputMessage("i_elapsedSecondCount_sinceLastSimulationUpdate: %f", i_elapsedSecondCount_sinceLastSimulationUpdate);
+
 	Graphics::SetClearColor(0x3f82f7ff);
 
-	unsigned int numToDraw = numPairs;
-	
-	//if (!(isLeftDown || isRightDown || isUpDown || isDownDown))
-	//{
-	//	numToDraw = 2;
-	//	for (unsigned int i = 0; i < numPairs; i++)
-	//	{
-	//		meshEffectPairs[i].mesh = originalMeshEffectPairs[i].mesh;
-	//		meshEffectPairs[i].effect = originalMeshEffectPairs[i].effect;
-	//	}
-	//}
-	//// While Left is down, only draw the first mesh
-	//else if (isLeftDown)
-	//{
-	//	numToDraw = 1;
-	//	meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
-	//	meshEffectPairs[0].effect = originalMeshEffectPairs[0].effect;
-	//}
-	//// While Right is down, only draw the second mesh
-	//else if (isRightDown)
-	//{
-	//	numToDraw = 1;
-	//	meshEffectPairs[0].mesh = originalMeshEffectPairs[1].mesh;
-	//	meshEffectPairs[0].effect = originalMeshEffectPairs[1].effect;
-	//}
-	//// While Up is down, change the effect of the first mesh to be the second effect
-	//else if (isUpDown)
-	//{
-	//	numToDraw = 2;
-	//	meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
-	//	meshEffectPairs[0].effect = originalMeshEffectPairs[1].effect;
-	//	meshEffectPairs[1].mesh = originalMeshEffectPairs[1].mesh;
-	//	meshEffectPairs[1].effect = originalMeshEffectPairs[1].effect;
-	//}
-	//// While Down is down, change the effect of the second mesh to be the first effect
-	//else if (isDownDown)
-	//{
-	//	numToDraw = 2;
-	//	meshEffectPairs[0].mesh = originalMeshEffectPairs[0].mesh;
-	//	meshEffectPairs[0].effect = originalMeshEffectPairs[0].effect;
-	//	meshEffectPairs[1].mesh = originalMeshEffectPairs[1].mesh;
-	//	meshEffectPairs[1].effect = originalMeshEffectPairs[0].effect;
-	//}
+	if (gameInputs.is1Down)
+	{
+		gameObjects[0].SetMesh(meshes[0]);
+		gameObjects[0].SetEffect(effects[0]);
+	}
+	if (gameInputs.is2Down)
+	{
+		gameObjects[0].SetMesh(meshes[1]);
+		gameObjects[0].SetEffect(effects[1]);
+	}
 
 	//gameObjects[0].SetPosition(Math::sVector(0.0f, 0.0f, 0.0f));
 	//gameObjects[0].SetOrientation(Math::cQuaternion(1.0f, Math::sVector(0.0f, 0.0f, 1.0f)));
 
-	eae6320::Graphics::MeshEffectLocationTrio meshEffectLocationTrios[numPairs]{};
+	if (gameInputs.isWDown)
+	{
+		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
+	}
+	if (gameInputs.isADown)
+	{
+		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
+	}
+	if (gameInputs.isSDown)
+	{
+		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
+	}
+	if (gameInputs.isDDown)
+	{
+		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
+	}
 
-	for (unsigned int i = 0; i < numToDraw; i++)
+	// Update the game objects
+	for (unsigned int i = 0; i < numGameObjects; i++)
+	{
+		gameObjects[i].Update(i_elapsedSecondCount_sinceLastSimulationUpdate);
+	}
+
+	eae6320::Graphics::MeshEffectLocationTrio meshEffectLocationTrios[numGameObjects]{};
+
+	for (unsigned int i = 0; i < numGameObjects; i++)
 	{
 		meshEffectLocationTrios[i].mesh = gameObjects[i].GetMesh();
 		meshEffectLocationTrios[i].effect = gameObjects[i].GetEffect();
-		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = Math::cMatrix_transformation::cMatrix_transformation(gameObjects[i].GetOrientation(), gameObjects[i].GetPosition());
+		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = gameObjects[i].GetRigidBodyState().PredictFutureTransform(20.0f);
 	}
 
-	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numToDraw);
+	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numGameObjects);
 }

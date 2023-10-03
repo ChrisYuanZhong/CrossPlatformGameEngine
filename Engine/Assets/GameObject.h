@@ -22,6 +22,8 @@ namespace eae6320
 			inline void SetMesh(Graphics::Mesh* i_mesh) { m_mesh = i_mesh; }
 			inline Graphics::Effect* GetEffect() const { return m_effect; }
 			inline void SetEffect(Graphics::Effect* i_effect) { m_effect = i_effect; }
+			inline Physics::sRigidBodyState GetRigidBodyState() const { return m_rigidBodyState; }
+
 			inline Math::sVector GetPosition() const { return m_rigidBodyState.position; }
 			inline void SetPosition(Math::sVector i_position) { m_rigidBodyState.position = i_position; }
 			inline Math::cQuaternion GetOrientation() const { return m_rigidBodyState.orientation; }
