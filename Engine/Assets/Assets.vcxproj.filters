@@ -8,6 +8,7 @@
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Windows">
@@ -17,6 +18,7 @@
   <ItemGroup>
     <ClCompile Include="Empty.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cManager.inl" />

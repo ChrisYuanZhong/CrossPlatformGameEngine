@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="cHandle.h" />
     <ClInclude Include="cManager.h" />
     <ClInclude Include="GameObject.h" />
@@ -46,6 +47,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Empty.cpp" />
     <ClCompile Include="GameObject.cpp" />
   </ItemGroup>
