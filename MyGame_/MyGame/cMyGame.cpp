@@ -167,13 +167,8 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 	return result;
 }
 
-void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate)
+void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 {
-	// Print the i_elapsedSecondCount_sinceLastSimulationUpdate
-	eae6320::Logging::OutputMessage("i_elapsedSecondCount_sinceLastSimulationUpdate: %f", i_elapsedSecondCount_sinceLastSimulationUpdate);
-
-	Graphics::SetClearColor(0x3f82f7ff);
-
 	if (gameInputs.is1Down)
 	{
 		gameObjects[0].SetMesh(meshes[0]);
@@ -205,11 +200,23 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
 	}
 
+}
+
+void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
+{
 	// Update the game objects
 	for (unsigned int i = 0; i < numGameObjects; i++)
 	{
-		gameObjects[i].Update(i_elapsedSecondCount_sinceLastSimulationUpdate);
+		gameObjects[i].Update(i_elapsedSecondCount_sinceLastUpdate);
 	}
+}
+
+void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate)
+{
+	// Print the i_elapsedSecondCount_sinceLastSimulationUpdate
+	eae6320::Logging::OutputMessage("i_elapsedSecondCount_sinceLastSimulationUpdate: %f", i_elapsedSecondCount_sinceLastSimulationUpdate);
+
+	Graphics::SetClearColor(0x3f82f7ff);
 
 	eae6320::Graphics::MeshEffectLocationTrio meshEffectLocationTrios[numGameObjects]{};
 
@@ -217,7 +224,8 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 	{
 		meshEffectLocationTrios[i].mesh = gameObjects[i].GetMesh();
 		meshEffectLocationTrios[i].effect = gameObjects[i].GetEffect();
-		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = gameObjects[i].GetRigidBodyState().PredictFutureTransform(20.0f);
+		//meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = Math::cMatrix_transformation(gameObjects[i].GetOrientation(), gameObjects[i].GetPosition());
+		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = gameObjects[i].GetRigidBodyState().PredictFutureTransform(i_elapsedSecondCount_sinceLastSimulationUpdate);
 	}
 
 	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numGameObjects);

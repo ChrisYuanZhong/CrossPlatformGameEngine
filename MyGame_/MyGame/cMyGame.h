@@ -105,6 +105,9 @@ namespace eae6320
 		cResult Initialize() final;
 		cResult CleanUp() final;
 
+		virtual void UpdateSimulationBasedOnInput() override;
+		virtual void UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate) override;
+
 		virtual void SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate) override;
 
 		static constexpr unsigned int numGameObjects = 1;
@@ -119,7 +122,7 @@ namespace eae6320
 		// Gameplay Variables
 		//-------------------
 
-		float velocity = 0.00001f;
+		float velocity = 0.2f;
 	};
 }
 

@@ -41,7 +41,7 @@ namespace eae6320
 			Math::cQuaternion orientation;
 			Math::sVector angularVelocity_axis_local = Math::sVector( 0.0f, 1.0f, 0.0f );	// In local space (not world space)
 			float angularSpeed = 0.0f;	// Radians per second (positive values rotate right-handed, negative rotate left-handed)
-			float dragCoefficient = 0.04f;	// Drag is the force that resists movement through a fluid
+			float dragCoefficient = 2.0f;	// Drag is the force that resists movement through a fluid
 
 			// Interface
 			//==========
