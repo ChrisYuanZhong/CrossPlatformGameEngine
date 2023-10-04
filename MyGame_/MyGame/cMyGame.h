@@ -130,7 +130,9 @@ namespace eae6320
 		eae6320::Graphics::Mesh* meshes[numPairs]{}; // 0: original, 1: modified
 		eae6320::Graphics::Effect* effects[numPairs]{}; // 0: original, 1: modified
 		eae6320::Assets::GameObject gameObjects[numGameObjects];
-		eae6320::Assets::Camera mainCamera;
+		eae6320::Assets::Camera* mainCamera;
+
+		eae6320::Assets::Camera camera;
 
 		// Gameplay Variables
 		//-------------------

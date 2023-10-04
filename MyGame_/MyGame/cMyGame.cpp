@@ -157,6 +157,9 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 		gameObjects[0].SetEffect(effects[0]);
 	}
 
+	// Set the main camera here
+	mainCamera = &camera;
+
 	return Results::Success;
 }
 
@@ -217,19 +220,19 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 
 	if (gameInputs.isUpArrowDown)
 	{
-		mainCamera.SetVelocity(mainCamera.GetVelocity() + Math::sVector(0.0f, 0.0f, -velocity));
+		mainCamera->SetVelocity(mainCamera->GetVelocity() + Math::sVector(0.0f, 0.0f, -velocity));
 	}
 	if (gameInputs.isDownArrowDown)
 	{
-		mainCamera.SetVelocity(mainCamera.GetVelocity() + Math::sVector(0.0f, 0.0f, velocity));
+		mainCamera->SetVelocity(mainCamera->GetVelocity() + Math::sVector(0.0f, 0.0f, velocity));
 	}
 	if (gameInputs.isLeftArrowDown)
 	{
-		mainCamera.SetVelocity(mainCamera.GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
+		mainCamera->SetVelocity(mainCamera->GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
 	}
 	if (gameInputs.isRightArrowDown)
 	{
-		mainCamera.SetVelocity(mainCamera.GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
+		mainCamera->SetVelocity(mainCamera->GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
 	}
 }
 
@@ -241,17 +244,14 @@ void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCo
 		gameObjects[i].Update(i_elapsedSecondCount_sinceLastUpdate);
 	}
 
-	mainCamera.Update(i_elapsedSecondCount_sinceLastUpdate);
+	mainCamera->Update(i_elapsedSecondCount_sinceLastUpdate);
 }
 
 void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
-	// Print the i_elapsedSecondCount_sinceLastSimulationUpdate
-	eae6320::Logging::OutputMessage("i_elapsedSecondCount_sinceLastSimulationUpdate: %f", i_elapsedSecondCount_sinceLastSimulationUpdate);
-
 	Graphics::SetClearColor(0x3f82f7ff);
 
-	eae6320::Graphics::MeshEffectLocationTrio meshEffectLocationTrios[numGameObjects]{};
+	Graphics::MeshEffectLocationTrio meshEffectLocationTrios[numGameObjects]{};
 
 	for (unsigned int i = 0; i < numGameObjects; i++)
 	{
@@ -261,5 +261,5 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 	}
 
 	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numGameObjects);
-	Graphics::SubmitCameraData(mainCamera.GetWorldToCameraTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate), mainCamera.GetCameraToProjectedTransform());
+	Graphics::SubmitCameraData(mainCamera->GetWorldToCameraTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate), mainCamera->GetCameraToProjectedTransform());
 }
