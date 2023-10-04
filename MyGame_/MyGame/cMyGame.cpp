@@ -153,8 +153,8 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			return result;
 		}
 
-		gameObjects[0].SetMesh(meshes[0]);
-		gameObjects[0].SetEffect(effects[0]);
+		gameObjectsToBeRendered[0].SetMesh(meshes[0]);
+		gameObjectsToBeRendered[0].SetEffect(effects[0]);
 	}
 
 	// Set the main camera here
@@ -188,14 +188,14 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	if (gameInputs.is1Down)
 	{
 		isMeshModified = false;
-		gameObjects[0].SetMesh(meshes[0]);
-		gameObjects[0].SetEffect(effects[0]);
+		gameObjectsToBeRendered[0].SetMesh(meshes[0]);
+		gameObjectsToBeRendered[0].SetEffect(effects[0]);
 	}
 	if (gameInputs.is2Down)
 	{
 		isMeshModified = true;
-		gameObjects[0].SetMesh(meshes[1]);
-		gameObjects[0].SetEffect(effects[1]);
+		gameObjectsToBeRendered[0].SetMesh(meshes[1]);
+		gameObjectsToBeRendered[0].SetEffect(effects[1]);
 	}
 
 	//gameObjects[0].SetPosition(Math::sVector(0.0f, 0.0f, 0.0f));
@@ -203,19 +203,19 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 
 	if (gameInputs.isWDown)
 	{
-		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
+		gameObjectsToBeRendered[0].SetVelocity(gameObjectsToBeRendered[0].GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
 	}
 	if (gameInputs.isADown)
 	{
-		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
+		gameObjectsToBeRendered[0].SetVelocity(gameObjectsToBeRendered[0].GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
 	}
 	if (gameInputs.isSDown)
 	{
-		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
+		gameObjectsToBeRendered[0].SetVelocity(gameObjectsToBeRendered[0].GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
 	}
 	if (gameInputs.isDDown)
 	{
-		gameObjects[0].SetVelocity(gameObjects[0].GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
+		gameObjectsToBeRendered[0].SetVelocity(gameObjectsToBeRendered[0].GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
 	}
 
 	if (gameInputs.isUpArrowDown)
@@ -239,9 +239,9 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
 {
 	// Update the game objects
-	for (unsigned int i = 0; i < numGameObjects; i++)
+	for (unsigned int i = 0; i < numGameObjectsToBeRendered; i++)
 	{
-		gameObjects[i].Update(i_elapsedSecondCount_sinceLastUpdate);
+		gameObjectsToBeRendered[i].Update(i_elapsedSecondCount_sinceLastUpdate);
 	}
 
 	mainCamera->Update(i_elapsedSecondCount_sinceLastUpdate);
@@ -251,15 +251,17 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 {
 	Graphics::SetClearColor(0x3f82f7ff);
 
-	Graphics::MeshEffectLocationTrio meshEffectLocationTrios[numGameObjects]{};
+	Graphics::MeshEffectLocationTrio meshEffectLocationTrios[numGameObjectsToBeRendered]{};
 
-	for (unsigned int i = 0; i < numGameObjects; i++)
+	for (unsigned int i = 0; i < numGameObjectsToBeRendered; i++)
 	{
-		meshEffectLocationTrios[i].mesh = gameObjects[i].GetMesh();
-		meshEffectLocationTrios[i].effect = gameObjects[i].GetEffect();
-		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld = gameObjects[i].GetLocalToWorldTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate);
+		meshEffectLocationTrios[i].mesh = gameObjectsToBeRendered[i].GetMesh();
+		meshEffectLocationTrios[i].effect = gameObjectsToBeRendered[i].GetEffect();
+		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld =
+			gameObjectsToBeRendered[i].GetLocalToWorldTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate);
 	}
 
-	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numGameObjects);
+	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numGameObjectsToBeRendered);
+
 	Graphics::SubmitCameraData(mainCamera->GetWorldToCameraTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate), mainCamera->GetCameraToProjectedTransform());
 }
