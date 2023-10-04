@@ -132,6 +132,7 @@ namespace eae6320
 		eae6320::Assets::GameObject gameObjects[numGameObjects];
 		eae6320::Assets::Camera* mainCamera;
 
+		// Camera Objects
 		eae6320::Assets::Camera camera;
 
 		// Gameplay Variables
