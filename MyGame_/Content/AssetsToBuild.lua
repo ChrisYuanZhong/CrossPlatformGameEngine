@@ -13,4 +13,9 @@ return
 
 		{ path = "Shaders/Vertex/vertexInputLayout_mesh.shader", arguments = { "vertex" } },
 	},
+
+	meshes =
+	{
+		"Meshes/triangle.mesh",
+	},
 }
