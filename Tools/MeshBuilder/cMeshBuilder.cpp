@@ -17,7 +17,7 @@ eae6320::cResult eae6320::Assets::cMeshBuilder::Build(const std::vector<std::str
 	//Copy the source file to the target file
 	{
 		std::string errorMessage;
-		if (!Platform::CopyFile(m_path_source, m_path_target, &errorMessage))
+		if (!Platform::CopyFile(m_path_source, m_path_target, false, true, &errorMessage))
 		{
 			OutputErrorMessageWithFileInfo(m_path_source, errorMessage.c_str());
 			return Results::Failure;

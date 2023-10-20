@@ -1,0 +1,16 @@
+return
+{
+	-- This table contains data for a triangle shape.
+
+	vertices =
+	{
+		{	-0.5,	-0.5,	0.0	},
+		{	0.0,	0.5,	0.0 },
+		{	0.5,	-0.5,	0.0 },
+	},
+
+	indices =
+	{
+		0, 1, 2,
+	},
+}
