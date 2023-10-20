@@ -197,22 +197,22 @@ eae6320::cResult eae6320::Graphics::cShader::CleanUp()
 {
 	auto result = Results::Success;
 
-	if ( m_shaderId != 0 )
-	{
-		glDeleteShader( m_shaderId );
-		const auto errorCode = glGetError();
-		if ( errorCode != GL_NO_ERROR )
-		{
-			if ( result )
-			{
-				result = Results::Failure;
-			}
-			EAE6320_ASSERTF( false, reinterpret_cast<const char*>( gluErrorString( errorCode ) ) );
-			eae6320::Logging::OutputError( "OpenGL failed to delete the shader ID %u: %s",
-				m_shaderId, reinterpret_cast<const char*>( gluErrorString( errorCode ) ) );
-		}
-		m_shaderId = 0;
-	}
+	//if ( m_shaderId != 0 )
+	//{
+	//	glDeleteShader( m_shaderId );
+	//	const auto errorCode = glGetError();
+	//	if ( errorCode != GL_NO_ERROR )
+	//	{
+	//		if ( result )
+	//		{
+	//			result = Results::Failure;
+	//		}
+	//		EAE6320_ASSERTF( false, reinterpret_cast<const char*>( gluErrorString( errorCode ) ) );
+	//		eae6320::Logging::OutputError( "OpenGL failed to delete the shader ID %u: %s",
+	//			m_shaderId, reinterpret_cast<const char*>( gluErrorString( errorCode ) ) );
+	//	}
+	//	m_shaderId = 0;
+	//}
 
 	return result;
 }

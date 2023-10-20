@@ -44,73 +44,73 @@ void eae6320::Graphics::Mesh::DrawGeometry()
 
 void eae6320::Graphics::Mesh::CleanUp(eae6320::cResult& result)
 {
-	if (vertexArrayId != 0)
-	{
-		// Make sure that the vertex array isn't bound
-		{
-			// Unbind the vertex array
-			glBindVertexArray(0);
-			const auto errorCode = glGetError();
-			if (errorCode != GL_NO_ERROR)
-			{
-				if (result)
-				{
-					result = Results::Failure;
-				}
-				EAE6320_ASSERTF(false, reinterpret_cast<const char*>(gluErrorString(errorCode)));
-				Logging::OutputError("OpenGL failed to unbind all vertex arrays before cleaning up geometry: %s",
-					reinterpret_cast<const char*>(gluErrorString(errorCode)));
-			}
-		}
-		constexpr GLsizei arrayCount = 1;
-		glDeleteVertexArrays(arrayCount, &vertexArrayId);
-		const auto errorCode = glGetError();
-		if (errorCode != GL_NO_ERROR)
-		{
-			if (result)
-			{
-				result = Results::Failure;
-			}
-			EAE6320_ASSERTF(false, reinterpret_cast<const char*>(gluErrorString(errorCode)));
-			Logging::OutputError("OpenGL failed to delete the vertex array: %s",
-				reinterpret_cast<const char*>(gluErrorString(errorCode)));
-		}
-		vertexArrayId = 0;
-	}
-	if (vertexBufferId != 0)
-	{
-		constexpr GLsizei bufferCount = 1;
-		glDeleteBuffers(bufferCount, &vertexBufferId);
-		const auto errorCode = glGetError();
-		if (errorCode != GL_NO_ERROR)
-		{
-			if (result)
-			{
-				result = Results::Failure;
-			}
-			EAE6320_ASSERTF(false, reinterpret_cast<const char*>(gluErrorString(errorCode)));
-			Logging::OutputError("OpenGL failed to delete the vertex buffer: %s",
-				reinterpret_cast<const char*>(gluErrorString(errorCode)));
-		}
-		vertexBufferId = 0;
-	}
-	if (indexBufferId != 0)
-	{
-		constexpr GLsizei bufferCount = 1;
-		glDeleteBuffers(bufferCount, &indexBufferId);
-		const auto errorCode = glGetError();
-		if (errorCode != GL_NO_ERROR)
-		{
-			if (result)
-			{
-				result = Results::Failure;
-			}
-			EAE6320_ASSERTF(false, reinterpret_cast<const char*>(gluErrorString(errorCode)));
-			Logging::OutputError("OpenGL failed to delete the index buffer: %s",
-								reinterpret_cast<const char*>(gluErrorString(errorCode)));
-		}
-		indexBufferId = 0;
-	}
+	//if (vertexArrayId != 0)
+	//{
+	//	// Make sure that the vertex array isn't bound
+	//	{
+	//		// Unbind the vertex array
+	//		glBindVertexArray(0);
+	//		const auto errorCode = glGetError();
+	//		if (errorCode != GL_NO_ERROR)
+	//		{
+	//			if (result)
+	//			{
+	//				result = Results::Failure;
+	//			}
+	//			EAE6320_ASSERTF(false, reinterpret_cast<const char*>(gluErrorString(errorCode)));
+	//			Logging::OutputError("OpenGL failed to unbind all vertex arrays before cleaning up geometry: %s",
+	//				reinterpret_cast<const char*>(gluErrorString(errorCode)));
+	//		}
+	//	}
+	//	constexpr GLsizei arrayCount = 1;
+	//	glDeleteVertexArrays(arrayCount, &vertexArrayId);
+	//	const auto errorCode = glGetError();
+	//	if (errorCode != GL_NO_ERROR)
+	//	{
+	//		if (result)
+	//		{
+	//			result = Results::Failure;
+	//		}
+	//		EAE6320_ASSERTF(false, reinterpret_cast<const char*>(gluErrorString(errorCode)));
+	//		Logging::OutputError("OpenGL failed to delete the vertex array: %s",
+	//			reinterpret_cast<const char*>(gluErrorString(errorCode)));
+	//	}
+	//	vertexArrayId = 0;
+	//}
+	//if (vertexBufferId != 0)
+	//{
+	//	constexpr GLsizei bufferCount = 1;
+	//	glDeleteBuffers(bufferCount, &vertexBufferId);
+	//	const auto errorCode = glGetError();
+	//	if (errorCode != GL_NO_ERROR)
+	//	{
+	//		if (result)
+	//		{
+	//			result = Results::Failure;
+	//		}
+	//		EAE6320_ASSERTF(false, reinterpret_cast<const char*>(gluErrorString(errorCode)));
+	//		Logging::OutputError("OpenGL failed to delete the vertex buffer: %s",
+	//			reinterpret_cast<const char*>(gluErrorString(errorCode)));
+	//	}
+	//	vertexBufferId = 0;
+	//}
+	//if (indexBufferId != 0)
+	//{
+	//	constexpr GLsizei bufferCount = 1;
+	//	glDeleteBuffers(bufferCount, &indexBufferId);
+	//	const auto errorCode = glGetError();
+	//	if (errorCode != GL_NO_ERROR)
+	//	{
+	//		if (result)
+	//		{
+	//			result = Results::Failure;
+	//		}
+	//		EAE6320_ASSERTF(false, reinterpret_cast<const char*>(gluErrorString(errorCode)));
+	//		Logging::OutputError("OpenGL failed to delete the index buffer: %s",
+	//							reinterpret_cast<const char*>(gluErrorString(errorCode)));
+	//	}
+	//	indexBufferId = 0;
+	//}
 }
 
 eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVertex_mesh* i_vertexData, uint16_t* i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount)
