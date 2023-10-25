@@ -85,7 +85,7 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
 			return result;
 		}
-		if (!(result = eae6320::Graphics::Effect::Load(effects[1], "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor2.shader")))
+		if (!(result = eae6320::Graphics::Effect::Load(effects[1], "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/standard.shader")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
 			return result;
@@ -160,7 +160,7 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			return result;
 		}
 
-		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[1], "data/Meshes/triangle.mesh")))
+		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[1], "data/Meshes/Plane.mesh")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;

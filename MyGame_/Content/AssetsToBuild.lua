@@ -18,5 +18,6 @@ return
 	{
 		"Meshes/square.mesh",
 		"Meshes/triangle.mesh",
+		"Meshes/Plane.mesh",
 	},
 }

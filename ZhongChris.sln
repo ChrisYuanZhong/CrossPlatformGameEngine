@@ -94,6 +94,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildMyGameAssets", "MyGame
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MeshBuilder", "Tools\MeshBuilder\MeshBuilder.vcxproj", "{12DBFD3C-EA5B-40C0-8B9F-F85ABC552D41}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MayaMeshExporter", "Tools\MayaMeshExporter\MayaMeshExporter.vcxproj", "{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -334,6 +336,14 @@ Global
 		{12DBFD3C-EA5B-40C0-8B9F-F85ABC552D41}.Release|x64.Build.0 = Release|x64
 		{12DBFD3C-EA5B-40C0-8B9F-F85ABC552D41}.Release|x86.ActiveCfg = Release|Win32
 		{12DBFD3C-EA5B-40C0-8B9F-F85ABC552D41}.Release|x86.Build.0 = Release|Win32
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}.Debug|x64.ActiveCfg = Debug|x64
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}.Debug|x64.Build.0 = Debug|x64
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}.Debug|x86.ActiveCfg = Debug|x64
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}.Debug|x86.Build.0 = Debug|x64
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}.Release|x64.ActiveCfg = Release|x64
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}.Release|x64.Build.0 = Release|x64
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}.Release|x86.ActiveCfg = Release|x64
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -369,6 +379,7 @@ Global
 		{E8BA17D4-2443-478E-B48B-3F82E8F18897} = {E5C51EF7-81D3-4030-A4CE-0D2D666CEF4F}
 		{86060554-383F-4971-9C2B-878448284DFD} = {7DAC7916-77C8-4A02-AB11-35C17FF51E90}
 		{12DBFD3C-EA5B-40C0-8B9F-F85ABC552D41} = {31B05C03-4BB2-4A0D-B621-B41DA6B0F57E}
+		{7E1B3DFF-88C1-43F2-AE97-BE197D80EF2B} = {31B05C03-4BB2-4A0D-B621-B41DA6B0F57E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A89F366F-0B7F-464F-90A8-A4828B273298}
