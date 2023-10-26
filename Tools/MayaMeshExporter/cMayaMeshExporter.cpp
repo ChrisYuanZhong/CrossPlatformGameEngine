@@ -790,25 +790,6 @@ namespace
 			// but if you run into problems you can uncomment the line below to always used fixed notation
 //			fout << std::fixed;
 
-			// Below is an example of a mesh file
-			//return
-			//{
-
-			//	vertices =
-			//	{
-			//		{	-0.5,	-0.5,	0.0	},
-			//		{	-0.5,	0.5,	0.0 },
-			//		{	0.5,	0.5,	0.0 },
-			//		{	0.5,	-0.5,	0.0 },
-			//	},
-
-			//	indices =
-			//	{
-			//		0, 1, 2,
-			//		0, 2, 3,
-			//	},
-			//}
-
 			// Open table
 			// (If you want to use JSON instead of Lua you will have to change this slightly)
 			fout << "return" "\n"
@@ -848,39 +829,6 @@ namespace
 				}
 				fout << "\t" "}," "\n";
 			}
-
-			//// Write vertex data
-			//{
-			//	fout << "\t" "vertices =" "\n"
-			//		"\t" "{" "\n";
-			//	const size_t vertexCount = i_vertexArray.size();
-			//	for (size_t i = 0; i < vertexCount; ++i )
-			//	{
-			//		const auto& vertex = i_vertexArray[i];
-			//		fout << "\t\t" "{ ";
-			//		fout << vertex.vertex.x << ", ";
-			//		fout << vertex.vertex.y << ", ";
-			//		fout << -vertex.vertex.z << " },";
-			//		fout << "\t" "-- Vertex " << i << "\n";
-			//	}
-			//	fout << "\t" "}," "\n";
-			//}
-
-			//// Write index data
-			//{
-			//	fout << "\t" "indices =" "\n"
-			//		"\t" "{" "\n";
-			//	const size_t indexCount = i_indexArray.size();
-			//	for ( size_t i = 0; i < indexCount; i += 3 )
-			//	{
-			//		fout << "\t\t";
-			//		fout << i_indexArray[i] << ", ";
-			//		fout << i_indexArray[i + 2] << ", ";
-			//		fout << i_indexArray[i + 1] << ",";
-			//		fout << "\t" "-- Triangle " << i / 3 << "\n";
-			//	}
-			//	fout << "\t" "}," "\n";
-			//}
 
 			// Close table
 			fout << "}" "\n";

@@ -285,9 +285,18 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 
 void eae6320::Graphics::Mesh::ConvertLeftHandedToRight(uint16_t* const& i_indexData)
 {
-	// Convert left-handed to right-handed
-	for (unsigned int i = 0; i + 2 < indexCount; i += 3)
+	for (unsigned int i = 0; i < indexCount; i += 3)
 	{
-		std::swap(i_indexData[i + 1], i_indexData[i + 2]);
+		uint16_t temp = i_indexData[i];
+		i_indexData[i] = i_indexData[i + 2];
+		i_indexData[i + 2] = temp;
 	}
 }
+
+//{
+//	// Convert left-handed to right-handed
+//	for (unsigned int i = 0; i + 2 < indexCount; i += 3)
+//	{
+//		std::swap(i_indexData[i + 1], i_indexData[i + 2]);
+//	}
+//}

@@ -117,6 +117,9 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 			return result;
 		}
 	}
+
+	ConvertRightHandedToLeft(i_indexData);
+
 	// Create Index Buffer
 	{
 		const auto bufferSize = sizeof(i_indexData[0]) * i_indexCount;
