@@ -122,9 +122,9 @@ namespace eae6320
 
 		virtual void SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_sinceLastSimulationUpdate) override;
 
-		static constexpr unsigned int numGameObjectsToBeRendered = 1;
+		static constexpr unsigned int numGameObjectsToBeRendered = 2;
 
-		static constexpr unsigned int numPairs = 2;
+		static constexpr unsigned int numPairs = 3;
 		eae6320::Graphics::Mesh* meshes[numPairs]{}; // 0: original, 1: modified
 		eae6320::Graphics::Effect* effects[numPairs]{}; // 0: original, 1: modified
 		eae6320::Assets::GameObject gameObjectsToBeRendered[numGameObjectsToBeRendered];

@@ -19,5 +19,7 @@ return
 		"Meshes/square.mesh",
 		"Meshes/triangle.mesh",
 		"Meshes/Plane.mesh",
+		"Meshes/Helix.mesh",
+		"Meshes/Snowman.mesh",
 	},
 }

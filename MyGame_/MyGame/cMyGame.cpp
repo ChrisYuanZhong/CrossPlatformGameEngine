@@ -154,20 +154,29 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 		//	return result;
 		//}
 
-		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[0], "data/Meshes/square.mesh")))
+		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[0], "data/Meshes/Plane.mesh")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;
 		}
 
-		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[1], "data/Meshes/Plane.mesh")))
+		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[1], "data/Meshes/Snowman.mesh")))
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
 			return result;
 		}
 
-		gameObjectsToBeRendered[0].SetMesh(meshes[0]);
+		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[2], "data/Meshes/Helix.mesh")))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
+			return result;
+		}
+
+		gameObjectsToBeRendered[0].SetMesh(meshes[1]);
 		gameObjectsToBeRendered[0].SetEffect(effects[0]);
+		gameObjectsToBeRendered[1].SetMesh(meshes[0]);
+		gameObjectsToBeRendered[1].SetEffect(effects[1]);
+		gameObjectsToBeRendered[1].SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
 	}
 
 	// Set the main camera here
@@ -201,13 +210,13 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	if (gameInputs.is1Down)
 	{
 		isMeshModified = false;
-		gameObjectsToBeRendered[0].SetMesh(meshes[0]);
+		gameObjectsToBeRendered[0].SetMesh(meshes[1]);
 		gameObjectsToBeRendered[0].SetEffect(effects[0]);
 	}
 	if (gameInputs.is2Down)
 	{
 		isMeshModified = true;
-		gameObjectsToBeRendered[0].SetMesh(meshes[1]);
+		gameObjectsToBeRendered[0].SetMesh(meshes[2]);
 		gameObjectsToBeRendered[0].SetEffect(effects[1]);
 	}
 
