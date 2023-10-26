@@ -223,7 +223,7 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 			return result;
 		}
 
-		ConvertLeftHandedToRight(i_indexData);
+		//ConvertLeftHandedToRight(i_indexData);
 
 		const unsigned int bufferSize = sizeof(i_indexData[0]) * indexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<unsigned int>::max());
