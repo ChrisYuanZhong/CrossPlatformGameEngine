@@ -180,6 +180,7 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 
 		if (bufferSize > std::numeric_limits<unsigned int>::max())
 		{
+			eae6320::Logging::OutputError("The mesh has too many vertices (%u) to be rendered", i_vertexCount);
 			result = eae6320::Results::Failure;
 			return result;
 		}
@@ -232,8 +233,16 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 
 		//ConvertLeftHandedToRight(i_indexData);
 
-		const unsigned int bufferSize = sizeof(i_indexData[0]) * indexCount;
+		const unsigned int bufferSize = sizeof(i_indexData[0]) * i_indexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<unsigned int>::max());
+
+		if (bufferSize > std::numeric_limits<unsigned int>::max())
+		{
+			eae6320::Logging::OutputError("The mesh has too many indices (%u) to be rendered", i_indexCount);
+			result = eae6320::Results::Failure;
+			return result;
+		}
+
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(bufferSize), reinterpret_cast<GLvoid*>(i_indexData),
 						// In our class we won't ever read from the buffer
 						GL_STATIC_DRAW);
