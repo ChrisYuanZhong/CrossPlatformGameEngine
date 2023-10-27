@@ -174,6 +174,7 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 
 		gameObjectsToBeRendered[0].SetMesh(meshes[1]);
 		gameObjectsToBeRendered[0].SetEffect(effects[0]);
+		gameObjectsToBeRendered[0].SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
 		gameObjectsToBeRendered[1].SetMesh(meshes[0]);
 		gameObjectsToBeRendered[1].SetEffect(effects[1]);
 		gameObjectsToBeRendered[1].SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
