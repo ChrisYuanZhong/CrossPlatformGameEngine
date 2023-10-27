@@ -177,6 +177,13 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 	{
 		const unsigned int bufferSize = sizeof(i_vertexData[0]) * i_vertexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<unsigned int>::max());
+
+		if (bufferSize > std::numeric_limits<unsigned int>::max())
+		{
+			result = eae6320::Results::Failure;
+			return result;
+		}
+
 		glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(bufferSize), reinterpret_cast<GLvoid*>(i_vertexData),
 			// In our class we won't ever read from the buffer
 			GL_STATIC_DRAW);

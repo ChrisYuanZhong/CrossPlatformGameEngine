@@ -84,6 +84,13 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 	{
 		const auto bufferSize = sizeof(i_vertexData[0]) * i_vertexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
+
+		if (bufferSize > std::numeric_limits<unsigned int>::max())
+		{
+			result = eae6320::Results::Failure;
+			return result;
+		}
+
 		const auto bufferDescription = [bufferSize]
 		{
 			D3D11_BUFFER_DESC bufferDescription{};
