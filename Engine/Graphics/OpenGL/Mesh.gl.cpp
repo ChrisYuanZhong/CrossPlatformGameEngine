@@ -231,8 +231,6 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 			return result;
 		}
 
-		//ConvertLeftHandedToRight(i_indexData);
-
 		const unsigned int bufferSize = sizeof(i_indexData[0]) * i_indexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<unsigned int>::max());
 
@@ -298,21 +296,3 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 
 	return result;
 }
-
-void eae6320::Graphics::Mesh::ConvertLeftHandedToRight(uint16_t* const& i_indexData)
-{
-	for (unsigned int i = 0; i < indexCount; i += 3)
-	{
-		uint16_t temp = i_indexData[i];
-		i_indexData[i] = i_indexData[i + 2];
-		i_indexData[i + 2] = temp;
-	}
-}
-
-//{
-//	// Convert left-handed to right-handed
-//	for (unsigned int i = 0; i + 2 < indexCount; i += 3)
-//	{
-//		std::swap(i_indexData[i + 1], i_indexData[i + 2]);
-//	}
-//}

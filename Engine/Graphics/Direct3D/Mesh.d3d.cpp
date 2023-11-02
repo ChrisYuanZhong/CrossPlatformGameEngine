@@ -126,8 +126,6 @@ eae6320::cResult eae6320::Graphics::Mesh::InitializeGeometry(VertexFormats::sVer
 		}
 	}
 
-	ConvertRightHandedToLeft(i_indexData);
-
 	// Create Index Buffer
 	{
 		const auto bufferSize = sizeof(i_indexData[0]) * i_indexCount;
@@ -194,15 +192,5 @@ void eae6320::Graphics::Mesh::CleanUp(eae6320::cResult& result)
 	{
 		indexBuffer->Release();
 		indexBuffer = nullptr;
-	}
-}
-
-void eae6320::Graphics::Mesh::ConvertRightHandedToLeft(uint16_t* const& i_indexData)
-{
-	for (unsigned int i = 0; i < indexCount; i += 3)
-	{
-		uint16_t temp = i_indexData[i];
-		i_indexData[i] = i_indexData[i + 2];
-		i_indexData[i + 2] = temp;
 	}
 }

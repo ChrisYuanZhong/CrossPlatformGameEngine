@@ -140,6 +140,10 @@ eae6320::cResult eae6320::Assets::cMeshBuilder::Build(const std::vector<std::str
 			}
 		});
 
+#if defined( EAE6320_PLATFORM_D3D )
+	ConvertRightHandedToLeft(indexData, indexCount);
+#endif
+
 	// Write to binary file
 	if (!(result = WriteToBinaryFile(vertexData, indexData, vertexCount, indexCount, m_path_target)))
 	{
@@ -159,6 +163,18 @@ eae6320::cResult eae6320::Assets::cMeshBuilder::Build(const std::vector<std::str
 	//	return Results::Success;
 	//}
 }
+
+#if defined( EAE6320_PLATFORM_D3D )
+void eae6320::Assets::cMeshBuilder::ConvertRightHandedToLeft(uint16_t* const& i_indexData, const unsigned int i_indexCount)
+{
+	for (unsigned int i = 0; i < i_indexCount; i += 3)
+	{
+		uint16_t temp = i_indexData[i];
+		i_indexData[i] = i_indexData[i + 2];
+		i_indexData[i + 2] = temp;
+	}
+}
+#endif
 
 eae6320::cResult eae6320::Assets::cMeshBuilder::WriteToBinaryFile(Graphics::VertexFormats::sVertex_mesh* i_vertexData, uint16_t* i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount, const char* const i_path)
 {

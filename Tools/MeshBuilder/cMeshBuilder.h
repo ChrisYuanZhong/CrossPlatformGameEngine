@@ -39,6 +39,10 @@ namespace eae6320
 			// Implementation
 			//===============
 
+#if defined( EAE6320_PLATFORM_D3D )
+			void ConvertRightHandedToLeft(uint16_t* const& i_indexData, const unsigned int i_indexCount);
+#endif
+
 			// Lua Mesh Data
 			//--------------
 

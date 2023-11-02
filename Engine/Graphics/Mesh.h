@@ -31,12 +31,6 @@ namespace eae6320
 				static cResult Load(Mesh*& o_mesh, VertexFormats::sVertex_mesh* i_vertexData, uint16_t* i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount);
 				static cResult LoadFromFile(Mesh*& o_mesh, const char* const meshPath);
 
-		#if defined( EAE6320_PLATFORM_D3D )
-				void ConvertRightHandedToLeft(uint16_t* const& i_indexData);
-		#elif defined( EAE6320_PLATFORM_GL )
-				void ConvertLeftHandedToRight(uint16_t* const& i_indexData);
-		#endif
-
 			void DrawGeometry();
 
 		private:
