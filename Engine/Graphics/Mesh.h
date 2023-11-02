@@ -49,16 +49,6 @@ namespace eae6320
 
 			unsigned int indexCount = 0;
 
-			// Lua Mesh Data
-			//--------------
-
-			static eae6320::cResult LoadTableValues_vertices(lua_State& io_luaState, VertexFormats::sVertex_mesh*& i_vertexData, unsigned int& i_vertexCount);
-			static eae6320::cResult LoadTableValues_vertices_vertex(lua_State& io_luaState, VertexFormats::sVertex_mesh*& i_vertexData, unsigned int& i_vertexCount);
-			static eae6320::cResult LoadTableValues_vertices_vertex_coordinates(lua_State& io_luaState, VertexFormats::sVertex_mesh& i_vertexData);
-
-			static eae6320::cResult LoadTableValues_indices(lua_State& io_luaState, uint16_t*& i_indexData, unsigned int& i_indexCount);
-			static eae6320::cResult LoadTableValues_indices_index(lua_State& io_luaState, uint16_t*& i_indexData, unsigned int& i_indexCount);
-
 			// Geometry Data
 			//--------------
 
