@@ -169,11 +169,11 @@ eae6320::cResult eae6320::Assets::cMeshBuilder::WriteToBinaryFile(Graphics::Vert
 	if (outfile.is_open())
 	{
 		// Write vertex count
-		outfile.write(reinterpret_cast<const char*>(&i_vertexCount), sizeof(unsigned int));
+		outfile.write(reinterpret_cast<const char*>(&i_vertexCount), sizeof(uint32_t));
 		// Write vertex data
 		outfile.write(reinterpret_cast<const char*>(i_vertexData), sizeof(Graphics::VertexFormats::sVertex_mesh) * i_vertexCount);
 		// Write index count
-		outfile.write(reinterpret_cast<const char*>(&i_indexCount), sizeof(unsigned int));
+		outfile.write(reinterpret_cast<const char*>(&i_indexCount), sizeof(uint32_t));
 		// Write index data
 		outfile.write(reinterpret_cast<const char*>(i_indexData), sizeof(uint16_t) * i_indexCount);
 

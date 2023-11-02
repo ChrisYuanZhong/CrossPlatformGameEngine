@@ -31,12 +31,12 @@ eae6320::cResult eae6320::Graphics::Mesh::LoadFromFile(Mesh*& o_mesh, const char
 	}
 
 	// Read vertex count
-	infile.read(reinterpret_cast<char*>(&vertexCount), sizeof(unsigned int));
+	infile.read(reinterpret_cast<char*>(&vertexCount), sizeof(uint32_t));
 	// Read vertex data
 	vertexData = new VertexFormats::sVertex_mesh[vertexCount];
 	infile.read(reinterpret_cast<char*>(vertexData), sizeof(VertexFormats::sVertex_mesh) * vertexCount);
 	// Read index count
-	infile.read(reinterpret_cast<char*>(&indexCount), sizeof(unsigned int));
+	infile.read(reinterpret_cast<char*>(&indexCount), sizeof(uint32_t));
 	// Read index data
 	indexData = new uint16_t[indexCount];
 	infile.read(reinterpret_cast<char*>(indexData), sizeof(uint16_t) * indexCount);
