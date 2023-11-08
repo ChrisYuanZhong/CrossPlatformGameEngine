@@ -174,10 +174,10 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 
 		gameObjectsToBeRendered[0].SetMesh(meshes[1]);
 		gameObjectsToBeRendered[0].SetEffect(effects[0]);
-		gameObjectsToBeRendered[0].SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
+		gameObjectsToBeRendered[0].GetTransform().SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
 		gameObjectsToBeRendered[1].SetMesh(meshes[0]);
 		gameObjectsToBeRendered[1].SetEffect(effects[1]);
-		gameObjectsToBeRendered[1].SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
+		gameObjectsToBeRendered[1].GetTransform().SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
 	}
 
 	// Set the main camera here
@@ -226,19 +226,19 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 
 	if (gameInputs.isWDown)
 	{
-		gameObjectsToBeRendered[0].SetVelocity(gameObjectsToBeRendered[0].GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
+		gameObjectsToBeRendered[0].GetRigidBody().SetVelocity(gameObjectsToBeRendered[0].GetRigidBody().GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
 	}
 	if (gameInputs.isADown)
 	{
-		gameObjectsToBeRendered[0].SetVelocity(gameObjectsToBeRendered[0].GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
+		gameObjectsToBeRendered[0].GetRigidBody().SetVelocity(gameObjectsToBeRendered[0].GetRigidBody().GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
 	}
 	if (gameInputs.isSDown)
 	{
-		gameObjectsToBeRendered[0].SetVelocity(gameObjectsToBeRendered[0].GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
+		gameObjectsToBeRendered[0].GetRigidBody().SetVelocity(gameObjectsToBeRendered[0].GetRigidBody().GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
 	}
 	if (gameInputs.isDDown)
 	{
-		gameObjectsToBeRendered[0].SetVelocity(gameObjectsToBeRendered[0].GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
+		gameObjectsToBeRendered[0].GetRigidBody().SetVelocity(gameObjectsToBeRendered[0].GetRigidBody().GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
 	}
 
 	if (gameInputs.isUpArrowDown)
