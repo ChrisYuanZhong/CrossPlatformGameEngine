@@ -17,7 +17,11 @@ namespace eae6320
 			//==========
 
 			// Default constructor
-			Transform() = default;
+			Transform() :
+				position(Math::sVector(0.0f, 0.0f, 0.0f))
+			{
+
+			}
 
 			// Data
 			//=====
@@ -36,7 +40,7 @@ namespace eae6320
 
 		private:
 			Math::sVector position;	// In arbitrary units determined by the applicaton's convention
-			Math::cQuaternion orientation;	// In degrees
+			Math::cQuaternion orientation;	// In radians
 		};
 	}
 }

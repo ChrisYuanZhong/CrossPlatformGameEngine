@@ -22,8 +22,15 @@ namespace eae6320
 			~GameObject();
 			
 			inline Transform GetTransform() const { return m_transform; }
-			inline void SetTransform(Transform i_transform) { m_transform = i_transform; }
+			inline void SetPosition(Math::sVector i_position) { m_transform.SetPosition(i_position); }
+			inline void SetOrientation(Math::cQuaternion i_orientation) { m_transform.SetOrientation(i_orientation); }
+			
 			inline ChrisZ::Physics::RigidBody GetRigidBody() const { return m_rigidBody; }
+			inline eae6320::Math::sVector GetVelocity() const { return m_rigidBody.GetVelocity(); }
+			inline void SetVelocity(eae6320::Math::sVector i_velocity) { m_rigidBody.SetVelocity(i_velocity); }
+			inline eae6320::Math::sVector GetAcceleration() const { return m_rigidBody.GetAcceleration(); }
+			inline void SetAcceleration(eae6320::Math::sVector i_acceleration) { m_rigidBody.SetAcceleration(i_acceleration); }
+
 			inline Graphics::Mesh* GetMesh() const { return m_mesh; }
 			inline void SetMesh(Graphics::Mesh* i_mesh) { m_mesh = i_mesh; }
 			inline Graphics::Effect* GetEffect() const { return m_effect; }
@@ -48,7 +55,7 @@ namespace eae6320
 
 		private:
 			Transform m_transform;
-			ChrisZ::Physics::RigidBody m_rigidBody;
+			ChrisZ::Physics::RigidBody m_rigidBody = ChrisZ::Physics::RigidBody(this);
 
 			Graphics::Mesh* m_mesh;
 			Graphics::Effect* m_effect;

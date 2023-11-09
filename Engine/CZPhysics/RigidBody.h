@@ -26,6 +26,11 @@ namespace ChrisZ
 		class RigidBody
 		{
 		public:
+			// Initialization
+			//===============
+
+			RigidBody(eae6320::Assets::GameObject* i_gameObject) : gameObject(i_gameObject) {}
+
 			// Getters and Setters
 			//====================
 

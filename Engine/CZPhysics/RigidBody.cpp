@@ -6,7 +6,7 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 {
 	// Update position
 	{
-		gameObject->GetTransform().SetPosition(gameObject->GetTransform().GetPosition() + velocity * i_secondCountToIntegrate);
+		gameObject->SetPosition(gameObject->GetTransform().GetPosition() + velocity * i_secondCountToIntegrate);
 	}
 	// Update velocity
 	{
@@ -16,8 +16,8 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 	// Update orientation
 	{
 		const auto rotation = eae6320::Math::cQuaternion(angularSpeed * i_secondCountToIntegrate, angularVelocity_axis_local);
-		gameObject->GetTransform().SetOrientation(rotation * gameObject->GetTransform().GetOrientation());
-		gameObject->GetTransform().SetOrientation(gameObject->GetTransform().GetOrientation().GetNormalized());
+		gameObject->SetOrientation(rotation * gameObject->GetTransform().GetOrientation());
+		gameObject->SetOrientation(gameObject->GetTransform().GetOrientation().GetNormalized());
 	}
 }
 
