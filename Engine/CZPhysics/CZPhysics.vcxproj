@@ -19,8 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="CZPhysics.h" />
     <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="SphereCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Math\Math.vcxproj">
@@ -28,7 +31,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="CZPhysics.cpp" />
     <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="SphereCollider.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

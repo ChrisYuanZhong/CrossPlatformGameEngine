@@ -8,7 +8,8 @@
 #include <Engine/Math/cMatrix_transformation.h>
 #include <Engine/Graphics/Mesh.h>
 #include <Engine/Graphics/Effect.h>
-#include <Engine/CZPhysics/RigidBody.h>
+
+#include <Engine/CZPhysics/CZPhysics.h>
 
 namespace eae6320
 {
@@ -17,49 +18,31 @@ namespace eae6320
 		class GameObject
 		{
 		public:
-			GameObject() = default;
+			GameObject();
 			GameObject(Graphics::Mesh* i_mesh, Graphics::Effect* i_effect);
 			~GameObject();
 			
-			inline Transform GetTransform() const { return m_transform; }
-			inline void SetPosition(Math::sVector i_position) { m_transform.SetPosition(i_position); }
-			inline void SetOrientation(Math::cQuaternion i_orientation) { m_transform.SetOrientation(i_orientation); }
+			inline Transform& GetTransform() { return m_transform; }
 			
-			inline ChrisZ::Physics::RigidBody GetRigidBody() const { return m_rigidBody; }
-			inline eae6320::Math::sVector GetVelocity() const { return m_rigidBody.GetVelocity(); }
-			inline void SetVelocity(eae6320::Math::sVector i_velocity) { m_rigidBody.SetVelocity(i_velocity); }
-			inline eae6320::Math::sVector GetAcceleration() const { return m_rigidBody.GetAcceleration(); }
-			inline void SetAcceleration(eae6320::Math::sVector i_acceleration) { m_rigidBody.SetAcceleration(i_acceleration); }
+			inline ChrisZ::Physics::RigidBody& GetRigidBody() { return m_rigidBody; }
+
+			inline ChrisZ::Physics::SphereCollider& GetSphereCollider() { return m_sphereCollider; }
 
 			inline Graphics::Mesh* GetMesh() const { return m_mesh; }
 			inline void SetMesh(Graphics::Mesh* i_mesh) { m_mesh = i_mesh; }
 			inline Graphics::Effect* GetEffect() const { return m_effect; }
 			inline void SetEffect(Graphics::Effect* i_effect) { m_effect = i_effect; }
 
-			//// Rigid Body State
-			//inline Math::sVector GetPosition() const { return m_rigidBodyState.position; }
-			//inline void SetPosition(Math::sVector i_position) { m_rigidBodyState.position = i_position; }
-			//inline Math::cQuaternion GetOrientation() const { return m_rigidBodyState.orientation; }
-			//inline void SetOrientation(Math::cQuaternion i_orientation) { m_rigidBodyState.orientation = i_orientation; }
-			//inline Math::sVector GetVelocity() const { return m_rigidBodyState.velocity; }
-			//inline void SetVelocity(Math::sVector i_velocity) { m_rigidBodyState.velocity = i_velocity; }
-			//inline Math::sVector GetAcceleration() const { return m_rigidBodyState.acceleration; }
-			//inline void SetAcceleration(Math::sVector i_acceleration) { m_rigidBodyState.acceleration = i_acceleration; }
-
-			//inline Math::cMatrix_transformation GetLocalToWorldTransformPrediction(const float i_secondCountToExtrapolate) const { return m_rigidBodyState.PredictFutureTransform(i_secondCountToExtrapolate); }
-
-			//inline void Update(const float i_secondCountToIntegrate) { m_rigidBodyState.Update(i_secondCountToIntegrate); }
-
-			inline void Update(const float i_secondCountToIntegrate) { m_rigidBody.Update(i_secondCountToIntegrate); }
+			//inline void Update(const float i_secondCountToIntegrate) { m_rigidBody.Update(i_secondCountToIntegrate); }
 			inline Math::cMatrix_transformation GetLocalToWorldTransformPrediction(const float i_secondCountToExtrapolate) const { return m_rigidBody.PredictFutureTransform(i_secondCountToExtrapolate); }
 
 		private:
 			Transform m_transform;
 			ChrisZ::Physics::RigidBody m_rigidBody = ChrisZ::Physics::RigidBody(this);
+			ChrisZ::Physics::SphereCollider m_sphereCollider = ChrisZ::Physics::SphereCollider(Math::sVector(0.0f, 0.0f, 0.0f), 0.1f, this);
 
 			Graphics::Mesh* m_mesh;
 			Graphics::Effect* m_effect;
-			//Physics::sRigidBodyState m_rigidBodyState;
 		};
 	}
 }

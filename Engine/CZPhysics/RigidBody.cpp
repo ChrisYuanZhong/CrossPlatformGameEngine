@@ -1,12 +1,17 @@
-#include "RigidBody.h"
+#include <Engine/CZPhysics/RigidBody.h>
 
 #include <Engine/Assets/GameObject.h>
+
+#include <Engine/Logging/Logging.h>
 
 void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 {
 	// Update position
 	{
-		gameObject->SetPosition(gameObject->GetTransform().GetPosition() + velocity * i_secondCountToIntegrate);
+		gameObject->GetTransform().SetPosition(gameObject->GetTransform().GetPosition() + velocity * i_secondCountToIntegrate);
+
+		// Update center of collider
+		gameObject->GetSphereCollider().SetCenter(gameObject->GetTransform().GetPosition());
 	}
 	// Update velocity
 	{
@@ -16,8 +21,8 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 	// Update orientation
 	{
 		const auto rotation = eae6320::Math::cQuaternion(angularSpeed * i_secondCountToIntegrate, angularVelocity_axis_local);
-		gameObject->SetOrientation(rotation * gameObject->GetTransform().GetOrientation());
-		gameObject->SetOrientation(gameObject->GetTransform().GetOrientation().GetNormalized());
+		gameObject->GetTransform().SetOrientation(rotation * gameObject->GetTransform().GetOrientation());
+		gameObject->GetTransform().SetOrientation(gameObject->GetTransform().GetOrientation().GetNormalized());
 	}
 }
 
