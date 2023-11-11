@@ -45,6 +45,8 @@ namespace ChrisZ
 			void SetAngularSpeed(float i_angularSpeed) { angularSpeed = i_angularSpeed; }
 			float GetDragCoefficient() const { return dragCoefficient; }
 			void SetDragCoefficient(float i_dragCoefficient) { dragCoefficient = i_dragCoefficient; }
+			float GetMass() const { return mass; }
+			void SetMass(float i_mass) { mass = i_mass; }
 
 			// Interface
 			//==========
@@ -62,6 +64,7 @@ namespace ChrisZ
 			eae6320::Math::sVector angularVelocity_axis_local = eae6320::Math::sVector(0.0f, 1.0f, 0.0f);	// In local space (not world space)
 			float angularSpeed = 0.0f;	// Radians per second (positive values rotate right-handed, negative rotate left-handed)
 			float dragCoefficient = 2.0f;	// Drag is the force that resists movement through a fluid
+			float mass = 1.0f;
 		};
 	}
 }

@@ -24,7 +24,7 @@ namespace eae6320
 			
 			inline Transform& GetTransform() { return m_transform; }
 			
-			inline ChrisZ::Physics::RigidBody& GetRigidBody() { return m_rigidBody; }
+			inline ChrisZ::Physics::RigidBody* GetRigidBody() { return &m_rigidBody; }
 
 			inline ChrisZ::Physics::SphereCollider& GetSphereCollider() { return m_sphereCollider; }
 

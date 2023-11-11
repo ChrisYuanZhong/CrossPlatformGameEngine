@@ -228,19 +228,19 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 
 	if (gameInputs.isWDown)
 	{
-		gameObjectsToBeRendered[0].GetRigidBody().SetVelocity(gameObjectsToBeRendered[0].GetRigidBody().GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
+		gameObjectsToBeRendered[0].GetRigidBody()->SetVelocity(gameObjectsToBeRendered[0].GetRigidBody()->GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
 	}
 	if (gameInputs.isADown)
 	{
-		gameObjectsToBeRendered[0].GetRigidBody().SetVelocity(gameObjectsToBeRendered[0].GetRigidBody().GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
+		gameObjectsToBeRendered[0].GetRigidBody()->SetVelocity(gameObjectsToBeRendered[0].GetRigidBody()->GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
 	}
 	if (gameInputs.isSDown)
 	{
-		gameObjectsToBeRendered[0].GetRigidBody().SetVelocity(gameObjectsToBeRendered[0].GetRigidBody().GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
+		gameObjectsToBeRendered[0].GetRigidBody()->SetVelocity(gameObjectsToBeRendered[0].GetRigidBody()->GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
 	}
 	if (gameInputs.isDDown)
 	{
-		gameObjectsToBeRendered[0].GetRigidBody().SetVelocity(gameObjectsToBeRendered[0].GetRigidBody().GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
+		gameObjectsToBeRendered[0].GetRigidBody()->SetVelocity(gameObjectsToBeRendered[0].GetRigidBody()->GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
 	}
 
 	if (gameInputs.isUpArrowDown)
