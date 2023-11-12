@@ -22,7 +22,7 @@ namespace eae6320
 			GameObject(Graphics::Mesh* i_mesh, Graphics::Effect* i_effect);
 			~GameObject();
 			
-			inline Transform& GetTransform() { return m_transform; }
+			inline Transform* GetTransform() { return &m_transform; }
 			
 			inline ChrisZ::Physics::RigidBody* GetRigidBody() { return &m_rigidBody; }
 

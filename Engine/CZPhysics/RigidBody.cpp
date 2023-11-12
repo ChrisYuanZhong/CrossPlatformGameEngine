@@ -8,10 +8,10 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 {
 	// Update position
 	{
-		gameObject->GetTransform().SetPosition(gameObject->GetTransform().GetPosition() + velocity * i_secondCountToIntegrate);
+		gameObject->GetTransform()->SetPosition(gameObject->GetTransform()->GetPosition() + velocity * i_secondCountToIntegrate);
 
 		// Update center of collider
-		gameObject->GetSphereCollider().SetCenter(gameObject->GetTransform().GetPosition());
+		gameObject->GetSphereCollider().SetCenter(gameObject->GetTransform()->GetPosition());
 	}
 	// Update velocity
 	{
@@ -21,20 +21,20 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 	// Update orientation
 	{
 		const auto rotation = eae6320::Math::cQuaternion(angularSpeed * i_secondCountToIntegrate, angularVelocity_axis_local);
-		gameObject->GetTransform().SetOrientation(rotation * gameObject->GetTransform().GetOrientation());
-		gameObject->GetTransform().SetOrientation(gameObject->GetTransform().GetOrientation().GetNormalized());
+		gameObject->GetTransform()->SetOrientation(rotation * gameObject->GetTransform()->GetOrientation());
+		gameObject->GetTransform()->SetOrientation(gameObject->GetTransform()->GetOrientation().GetNormalized());
 	}
 }
 
 eae6320::Math::sVector ChrisZ::Physics::RigidBody::PredictFuturePosition(const float i_secondCountToExtrapolate) const
 {
-	return gameObject->GetTransform().GetPosition() + velocity * i_secondCountToExtrapolate;
+	return gameObject->GetTransform()->GetPosition() + velocity * i_secondCountToExtrapolate;
 }
 
 eae6320::Math::cQuaternion ChrisZ::Physics::RigidBody::PredictFutureOrientation(const float i_secondCountToExtrapolate) const
 {
 	const auto rotation = eae6320::Math::cQuaternion(angularSpeed * i_secondCountToExtrapolate, angularVelocity_axis_local);
-	return eae6320::Math::cQuaternion(rotation * gameObject->GetTransform().GetOrientation()).GetNormalized();
+	return eae6320::Math::cQuaternion(rotation * gameObject->GetTransform()->GetOrientation()).GetNormalized();
 }
 
 eae6320::Math::cMatrix_transformation ChrisZ::Physics::RigidBody::PredictFutureTransform(const float i_secondCountToExtrapolate) const
