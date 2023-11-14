@@ -46,8 +46,14 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::Intersects(Collider
             return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
         }
 
-        // Use the AABB method as a middle phase detection to check if the boxes have a possibility of intersecting
-        if (!this->AABBDetection(otherBox))
+        // If the boxes are axis aligned, use the AABB method as the final phase detection
+        if (isAxisAligned(this->gameObject->GetOrientation()) && isAxisAligned(otherBox->GetGameObject()->GetOrientation()))
+        {
+			// Use the AABB method as the final phase detection
+			return this->AABBDetectionAxisAligned(otherBox);
+		}
+        // If the boxes are not axis aligned, use the AABB method as a middle phase detection
+		else if (!this->AABBDetection(otherBox))
         {
             // No collision
             return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
@@ -185,6 +191,29 @@ bool ChrisZ::Physics::BoxCollider::AABBDetection(BoxCollider* other)
     }
 }
 
+ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::AABBDetectionAxisAligned(BoxCollider* other)
+{
+    // A common AABB method for axis aligned boxes
+    eae6320::Math::sVector minA = this->center - this->extents;
+    eae6320::Math::sVector maxA = this->center + this->extents;
+    eae6320::Math::sVector minB = other->GetCenter() - other->extents;
+    eae6320::Math::sVector maxB = other->GetCenter() + other->extents;
+
+    // Check if the min and max points overlap along each axis
+    if (maxA.x > minB.x && minA.x < maxB.x && maxA.y > minB.y && minA.y < maxB.y && maxA.z > minB.z && minA.z < maxB.z)
+    {
+		// Calculate and return CollisionInfo
+		eae6320::Math::sVector contactNormal = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
+		float penetrationDepth = 0.0f;
+		return CollisionInfo(contactNormal, penetrationDepth);
+	}
+    else
+    {
+		// No collision
+		return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
+	}
+}
+
 ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCollider* otherBox)
 {
     // Get the orientation matrices of the two boxes
@@ -254,4 +283,11 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCol
         // No collision
         return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
     }
+}
+
+bool ChrisZ::Physics::BoxCollider::isAxisAligned(eae6320::Math::cQuaternion orientation)
+{
+	// Check if the orientation is axis aligned
+    eae6320::Math::sVector exampleVector = orientation * eae6320::Math::sVector(1.0f, 1.0f, 1.0f);
+    return (exampleVector.x == 1.0f && exampleVector.y == 1.0f && exampleVector.z == 1.0f);
 }

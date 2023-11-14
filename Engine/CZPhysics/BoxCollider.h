@@ -32,9 +32,14 @@ namespace ChrisZ
 			// Complexity: O(n)
 			bool AABBDetection(BoxCollider* other);
 
+			// Use the AABB method as the final phase detection if the boxes are axis aligned
+			CollisionInfo AABBDetectionAxisAligned(BoxCollider* other);
+
 			// Use the SAT method to check if this box collider intersects with another box collider
 			// Complexity: O(n ^ 2)
 			CollisionInfo SATDetection(BoxCollider* other);
+
+			bool isAxisAligned(eae6320::Math::cQuaternion orientation);
 
 		private:
 			eae6320::Math::sVector extents = eae6320::Math::sVector(0.5f, 0.5f, 0.5f); // The half-size of the box along each axis
