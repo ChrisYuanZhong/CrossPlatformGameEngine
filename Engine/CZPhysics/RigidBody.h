@@ -29,7 +29,14 @@ namespace ChrisZ
 			// Initialization
 			//===============
 
-			RigidBody(eae6320::Assets::GameObject* i_gameObject) : gameObject(i_gameObject) {}
+			RigidBody(eae6320::Assets::GameObject* i_gameObject);
+
+			// Interface
+			//==========
+			void AddForce(const eae6320::Math::sVector i_force);
+			void AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact);
+			void AddImpulse(const eae6320::Math::sVector i_impulse);
+			void AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact);
 
 			// Getters and Setters
 			//====================
@@ -61,10 +68,10 @@ namespace ChrisZ
 
 			eae6320::Math::sVector velocity;	// Distance per second
 			eae6320::Math::sVector acceleration;	// Distance per second^2
-			eae6320::Math::sVector angularVelocity_axis_local = eae6320::Math::sVector(0.0f, 1.0f, 0.0f);	// In local space (not world space)
-			float angularSpeed = 0.0f;	// Radians per second (positive values rotate right-handed, negative rotate left-handed)
-			float dragCoefficient = 2.0f;	// Drag is the force that resists movement through a fluid
-			float mass = 1.0f;
+			eae6320::Math::sVector angularVelocity_axis_local;	// In local space (not world space)
+			float angularSpeed;	// Radians per second (positive values rotate right-handed, negative rotate left-handed)
+			float dragCoefficient;	// Drag is the force that resists movement through a fluid
+			float mass;
 		};
 	}
 }

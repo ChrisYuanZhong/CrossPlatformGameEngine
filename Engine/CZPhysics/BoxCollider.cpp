@@ -1,23 +1,25 @@
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 
+#include <Engine/CZPhysics/CZPhysics.h>
+
 #include <Engine/Math/cMatrix_transformation.h>
 #include <Engine/Assets/GameObject.h>
 
 #include <cfloat>
 #include <algorithm>
 
-ChrisZ::Physics::BoxCollider::BoxCollider(eae6320::Math::sVector i_center, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject)
+ChrisZ::Physics::BoxCollider::BoxCollider(eae6320::Math::sVector i_center, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject) : Collider(i_gameObject)
 {
 	this->center = i_center;
 	this->extents = i_extents;
-	this->gameObject = i_gameObject;
 }
 
-bool ChrisZ::Physics::BoxCollider::Intersects(Collider* other)
+ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::Intersects(Collider* other)
 {
     // If the other collider is a sphere collider, use the sphere-box intersection formula
-    if (SphereCollider* otherSphere = dynamic_cast<SphereCollider*>(other)) {
+    if (SphereCollider* otherSphere = dynamic_cast<SphereCollider*>(other))
+    {
         // Get the closest point on the box to the sphere center
         eae6320::Math::sVector closestPoint = this->ClosestPoint(otherSphere->GetCenter());
 
@@ -25,27 +27,38 @@ bool ChrisZ::Physics::BoxCollider::Intersects(Collider* other)
         float distance = (otherSphere->GetCenter() - closestPoint).GetLength();
 
         // If the distance is less than or equal to the radius, the sphere and the box intersect
-        return distance <= otherSphere->GetRadius();
+        if (distance <= otherSphere->GetRadius())
+        {
+            // Calculate and return CollisionInfo
+            eae6320::Math::sVector contactNormal = (closestPoint - otherSphere->GetCenter()).GetNormalized();
+            float penetrationDepth = otherSphere->GetRadius() - distance;
+            return CollisionInfo(contactNormal, penetrationDepth);
+        }
     }
 
     // If the other collider is a box collider, use the box-box intersection detections
-    if (BoxCollider* otherBox = dynamic_cast<BoxCollider*>(other)) {
+    if (BoxCollider* otherBox = dynamic_cast<BoxCollider*>(other))
+    {
         // Use the bounding sphere detection as a broad phase detection to check if the boxes have a possibility of intersecting
-        if (!this->BoundingSphereDetection(otherBox)) {
-            return false;
+        if (!this->BoundingSphereDetection(otherBox))
+        {
+            // No collision
+            return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
         }
 
         // Use the AABB method as a middle phase detection to check if the boxes have a possibility of intersecting
-        if (!this->AABBDetection(otherBox)) {
-            return false;
+        if (!this->AABBDetection(otherBox))
+        {
+            // No collision
+            return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
         }
 
-        // Use the SAT method to check if the boxes intersect
+        // Use the SAT method to check if the boxes intersect and return the CollisionInfo
         return this->SATDetection(otherBox);
     }
 
-    // Otherwise, return false
-    return false;
+    // No collision
+    return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
 }
 
 // Helper Methods
@@ -54,7 +67,7 @@ bool ChrisZ::Physics::BoxCollider::Intersects(Collider* other)
 eae6320::Math::sVector ChrisZ::Physics::BoxCollider::ClosestPoint(eae6320::Math::sVector point)
 {
     // Transform the point to the local space of the box
-    eae6320::Math::sVector localPoint = this->gameObject->GetTransform()->GetOrientation().GetInverse() * (point - this->center);
+    eae6320::Math::sVector localPoint = this->gameObject->GetOrientation().GetInverse() * (point - this->center);
 
     // Clamp the point to the extents of the box
     eae6320::Math::sVector localClosestPoint;
@@ -63,7 +76,7 @@ eae6320::Math::sVector ChrisZ::Physics::BoxCollider::ClosestPoint(eae6320::Math:
     localClosestPoint.z = std::clamp(localPoint.z, -this->extents.z / 2, this->extents.z / 2);
 
     // Transform the point back to the world space
-    eae6320::Math::sVector worldClosestPoint = this->center + this->gameObject->GetTransform()->GetOrientation() * localClosestPoint;
+    eae6320::Math::sVector worldClosestPoint = this->center + this->gameObject->GetOrientation() * localClosestPoint;
 
     // Return the closest point
     return worldClosestPoint;
@@ -82,14 +95,14 @@ void ChrisZ::Physics::BoxCollider::ProjectOntoAxis(eae6320::Math::sVector axis, 
     for (int i = 0; i < 8; i++)
     {
         // Get the vertex position
-        eae6320::Math::sVector vertex = center + gameObject->GetTransform()->GetOrientation() * eae6320::Math::sVector(
+        eae6320::Math::sVector vertex = center + gameObject->GetOrientation() * eae6320::Math::sVector(
 			(i & 1) ? extents.x : -extents.x,
 			(i & 2) ? extents.y : -extents.y,
 			(i & 4) ? extents.z : -extents.z
 		);
 
         // Rotate the vertex by the orientation of the box
-        vertex = gameObject->GetTransform()->GetOrientation() * vertex;
+        vertex = gameObject->GetOrientation() * vertex;
 
         // Project the vertex onto the axis
         float projection = eae6320::Math::Dot(vertex, axis);
@@ -130,8 +143,8 @@ bool ChrisZ::Physics::BoxCollider::BoundingSphereDetection(BoxCollider* other)
 bool ChrisZ::Physics::BoxCollider::AABBDetection(BoxCollider* other)
 {
     // Get the orientation matrices of the two boxes
-    eae6320::Math::cMatrix_transformation localToWorld = eae6320::Math::cMatrix_transformation(gameObject->GetTransform()->GetOrientation(), center);
-    eae6320::Math::cMatrix_transformation otherLocalToWorld = eae6320::Math::cMatrix_transformation(other->GetGameObject()->GetTransform()->GetOrientation(), other->GetCenter());
+    eae6320::Math::cMatrix_transformation localToWorld = eae6320::Math::cMatrix_transformation(gameObject->GetOrientation(), center);
+    eae6320::Math::cMatrix_transformation otherLocalToWorld = eae6320::Math::cMatrix_transformation(other->GetGameObject()->GetOrientation(), other->GetCenter());
 
     // Get the world axes
     eae6320::Math::sVector axes[3];
@@ -172,11 +185,11 @@ bool ChrisZ::Physics::BoxCollider::AABBDetection(BoxCollider* other)
     }
 }
 
-bool ChrisZ::Physics::BoxCollider::SATDetection(BoxCollider* otherBox)
+ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCollider* otherBox)
 {
     // Get the orientation matrices of the two boxes
-    eae6320::Math::cMatrix_transformation localToWorld = eae6320::Math::cMatrix_transformation(gameObject->GetTransform()->GetOrientation(), center);
-    eae6320::Math::cMatrix_transformation otherLocalToWorld = eae6320::Math::cMatrix_transformation(otherBox->GetGameObject()->GetTransform()->GetOrientation(), otherBox->GetCenter());
+    eae6320::Math::cMatrix_transformation localToWorld = eae6320::Math::cMatrix_transformation(gameObject->GetOrientation(), center);
+    eae6320::Math::cMatrix_transformation otherLocalToWorld = eae6320::Math::cMatrix_transformation(otherBox->GetGameObject()->GetOrientation(), otherBox->GetCenter());
 
     // Get the axes of the two boxes
     eae6320::Math::sVector axes[15];
@@ -196,6 +209,10 @@ bool ChrisZ::Physics::BoxCollider::SATDetection(BoxCollider* otherBox)
         }
     }
 
+    // Initialize MTV variables
+    float minOverlap = FLT_MAX;
+    eae6320::Math::sVector mtv(0.0f, 0.0f, 0.0f);
+
     // For each axis
     for (int i = 0; i < 15; i++)
     {
@@ -207,11 +224,34 @@ bool ChrisZ::Physics::BoxCollider::SATDetection(BoxCollider* otherBox)
         // Check if the projections overlap
         if (maxA < minB || maxB < minA)
         {
-            // There is no overlap, so there is no intersection
-            return false;
+            // There is no overlap on this axis, so there is no intersection
+            mtv = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
+            break;
+        }
+        else
+        {
+            // Calculate the overlap on this axis
+            float overlap = std::min(maxA, maxB) - std::max(minA, minB);
+
+            // Update the minimum overlap and the MTV
+            if (overlap < minOverlap)
+            {
+                minOverlap = overlap;
+                mtv = axes[i] * overlap;
+            }
         }
     }
 
-    // There is overlap on all axes, so there is intersection
-    return true;
+    // If there is an intersection, return CollisionInfo
+    if (mtv.GetLength() * mtv.GetLength() > 0.0f)
+    {
+        eae6320::Math::sVector contactNormal = mtv.GetNormalized();
+        float penetrationDepth = mtv.GetLength();
+        return CollisionInfo(contactNormal, penetrationDepth);
+    }
+    else
+    {
+        // No collision
+        return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
+    }
 }

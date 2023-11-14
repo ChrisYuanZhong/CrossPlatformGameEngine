@@ -3,6 +3,9 @@
 
 #include "cMyGame.h"
 
+#include "Plane.h"
+#include "Cube.h"
+
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/UserInput/UserInput.h>
 #include <Engine/Math/cQuaternion.h>
@@ -82,16 +85,16 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 
 	// Initialize the shading data
 	{
-		if (!(result = eae6320::Graphics::Effect::Load(effects[0], "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader")))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
-			return result;
-		}
-		if (!(result = eae6320::Graphics::Effect::Load(effects[1], "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/standard.shader")))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
-			return result;
-		}
+		//if (!(result = eae6320::Graphics::Effect::Load(effects[0], "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader")))
+		//{
+		//	EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
+		//	return result;
+		//}
+		//if (!(result = eae6320::Graphics::Effect::Load(effects[1], "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/standard.shader")))
+		//{
+		//	EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
+		//	return result;
+		//}
 	}
 	// Initialize the geometry
 	{
@@ -156,31 +159,40 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 		//	return result;
 		//}
 
-		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[0], "data/Meshes/Plane.mesh")))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
-			return result;
-		}
+		//if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[0], "data/Meshes/Plane.mesh")))
+		//{
+		//	EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
+		//	return result;
+		//}
 
-		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[1], "data/Meshes/Snowman.mesh")))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
-			return result;
-		}
+		//if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[1], "data/Meshes/Snowman.mesh")))
+		//{
+		//	EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
+		//	return result;
+		//}
 
-		if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[2], "data/Meshes/Helix.mesh")))
-		{
-			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
-			return result;
-		}
+		//if (!(result = eae6320::Graphics::Mesh::LoadFromFile(meshes[2], "data/Meshes/Helix.mesh")))
+		//{
+		//	EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
+		//	return result;
+		//}
 
-		gameObjectsToBeRendered[0].SetMesh(meshes[1]);
-		gameObjectsToBeRendered[0].SetEffect(effects[0]);
-		gameObjectsToBeRendered[0].GetTransform()->SetPosition(Math::sVector(0.0f, 0.0f, 0.0f));
-		gameObjectsToBeRendered[1].SetMesh(meshes[0]);
-		gameObjectsToBeRendered[1].SetEffect(effects[1]);
-		gameObjectsToBeRendered[1].GetTransform()->SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
+		//gameObjectsToBeRendered[1]->SetMesh(meshes[1]);
+		//gameObjectsToBeRendered[1]->SetEffect(effects[0]);
+		//gameObjectsToBeRendered[1]->SetPosition(Math::sVector(0.0f, -0.8f, 0.0f));
+		//gameObjectsToBeRendered[1].SetMesh(meshes[0]);
+		//gameObjectsToBeRendered[1].SetEffect(effects[1]);
+		//gameObjectsToBeRendered[1].SetPosition(Math::sVector(0.0f, -1.0f, 0.0f));
 	}
+
+	gameObjectsToBeRendered[0] = new Plane();
+	gameObjectsToBeRendered[1] = new Cube();
+	gameObjectsToBeRendered[2] = new Cube();
+
+	gameObjectsToBeRendered[1]->SetPosition(Math::sVector(-1.0f, 0.0f, 0.0f));
+	gameObjectsToBeRendered[2]->SetPosition(Math::sVector(1.0f, 0.0f, 0.0f));
+
+	gameObjectsToBeRendered[2]->GetRigidBody()->SetMass(15.0f);
 
 	// Set the main camera here
 	mainCamera = &camera;
@@ -194,15 +206,20 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 
 	auto result = Results::Success;
 
-	if (isMeshModified)
+	//if (isMeshModified)
+	//{
+	//	meshes[0]->DecrementReferenceCount();
+	//	effects[0]->DecrementReferenceCount();
+	//}
+	//else
+	//{
+	//	meshes[1]->DecrementReferenceCount();
+	//	effects[1]->DecrementReferenceCount();
+	//}
+
+	for (unsigned int i = 0; i < numGameObjectsToBeRendered; i++)
 	{
-		meshes[0]->DecrementReferenceCount();
-		effects[0]->DecrementReferenceCount();
-	}
-	else
-	{
-		meshes[1]->DecrementReferenceCount();
-		effects[1]->DecrementReferenceCount();
+		delete gameObjectsToBeRendered[i];
 	}
 
 	return result;
@@ -210,37 +227,37 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 
 void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 {
-	if (gameInputs.is1Down)
-	{
-		isMeshModified = false;
-		gameObjectsToBeRendered[0].SetMesh(meshes[1]);
-		gameObjectsToBeRendered[0].SetEffect(effects[0]);
-	}
-	if (gameInputs.is2Down)
-	{
-		isMeshModified = true;
-		gameObjectsToBeRendered[0].SetMesh(meshes[2]);
-		gameObjectsToBeRendered[0].SetEffect(effects[1]);
-	}
+	//if (gameInputs.is1Down)
+	//{
+	//	isMeshModified = false;
+	//	gameObjectsToBeRendered[1]->SetMesh(meshes[1]);
+	//	gameObjectsToBeRendered[1]->SetEffect(effects[0]);
+	//}
+	//if (gameInputs.is2Down)
+	//{
+	//	isMeshModified = true;
+	//	gameObjectsToBeRendered[1]->SetMesh(meshes[2]);
+	//	gameObjectsToBeRendered[1]->SetEffect(effects[1]);
+	//}
 
 	//gameObjects[0].SetPosition(Math::sVector(0.0f, 0.0f, 0.0f));
 	//gameObjects[0].SetOrientation(Math::cQuaternion(1.0f, Math::sVector(0.0f, 0.0f, 1.0f)));
 
 	if (gameInputs.isWDown)
 	{
-		gameObjectsToBeRendered[0].GetRigidBody()->SetVelocity(gameObjectsToBeRendered[0].GetRigidBody()->GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
+		gameObjectsToBeRendered[1]->GetRigidBody()->SetVelocity(gameObjectsToBeRendered[1]->GetRigidBody()->GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
 	}
 	if (gameInputs.isADown)
 	{
-		gameObjectsToBeRendered[0].GetRigidBody()->SetVelocity(gameObjectsToBeRendered[0].GetRigidBody()->GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
+		gameObjectsToBeRendered[1]->GetRigidBody()->SetVelocity(gameObjectsToBeRendered[1]->GetRigidBody()->GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
 	}
 	if (gameInputs.isSDown)
 	{
-		gameObjectsToBeRendered[0].GetRigidBody()->SetVelocity(gameObjectsToBeRendered[0].GetRigidBody()->GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
+		gameObjectsToBeRendered[1]->GetRigidBody()->SetVelocity(gameObjectsToBeRendered[1]->GetRigidBody()->GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
 	}
 	if (gameInputs.isDDown)
 	{
-		gameObjectsToBeRendered[0].GetRigidBody()->SetVelocity(gameObjectsToBeRendered[0].GetRigidBody()->GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
+		gameObjectsToBeRendered[1]->GetRigidBody()->SetVelocity(gameObjectsToBeRendered[1]->GetRigidBody()->GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
 	}
 
 	if (gameInputs.isUpArrowDown)
@@ -282,10 +299,10 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 
 	for (unsigned int i = 0; i < numGameObjectsToBeRendered; i++)
 	{
-		meshEffectLocationTrios[i].mesh = gameObjectsToBeRendered[i].GetMesh();
-		meshEffectLocationTrios[i].effect = gameObjectsToBeRendered[i].GetEffect();
+		meshEffectLocationTrios[i].mesh = gameObjectsToBeRendered[i]->GetMesh();
+		meshEffectLocationTrios[i].effect = gameObjectsToBeRendered[i]->GetEffect();
 		meshEffectLocationTrios[i].constantData_drawCall.g_transform_localToWorld =
-			gameObjectsToBeRendered[i].GetLocalToWorldTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate);
+			gameObjectsToBeRendered[i]->GetLocalToWorldTransformPrediction(i_elapsedSecondCount_sinceLastSimulationUpdate);
 	}
 
 	Graphics::SubmitMeshEffectLocationTrios(meshEffectLocationTrios, numGameObjectsToBeRendered);

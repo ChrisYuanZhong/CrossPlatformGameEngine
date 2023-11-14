@@ -16,8 +16,7 @@ return
 
 	meshes =
 	{
-		"Meshes/square.mesh",
-		"Meshes/triangle.mesh",
+		"Meshes/Cube.mesh",
 		"Meshes/Plane.mesh",
 		"Meshes/Helix.mesh",
 		"Meshes/Snowman.mesh",

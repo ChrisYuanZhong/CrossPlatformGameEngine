@@ -13,7 +13,7 @@ namespace ChrisZ
 			BoxCollider(eae6320::Math::sVector i_center, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject);
 
 			// A method to check if this box collider intersects with another collider
-			bool Intersects(Collider* other) override;
+			CollisionInfo Intersects(Collider* other) override;
 
 			// Helper Methods
 			//===============
@@ -34,10 +34,10 @@ namespace ChrisZ
 
 			// Use the SAT method to check if this box collider intersects with another box collider
 			// Complexity: O(n ^ 2)
-			bool SATDetection(BoxCollider* other);
+			CollisionInfo SATDetection(BoxCollider* other);
 
 		private:
-			eae6320::Math::sVector extents = eae6320::Math::sVector(1.0f, 1.0f, 1.0f); // The half-size of the box along each axis
+			eae6320::Math::sVector extents = eae6320::Math::sVector(0.5f, 0.5f, 0.5f); // The half-size of the box along each axis
 		};
 	}
 }

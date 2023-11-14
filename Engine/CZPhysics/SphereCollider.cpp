@@ -1,16 +1,18 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 
+#include <Engine/CZPhysics/CZPhysics.h>
+
 #include <Engine/Assets/GameObject.h>
 
-ChrisZ::Physics::SphereCollider::SphereCollider(eae6320::Math::sVector i_center, float i_radius, eae6320::Assets::GameObject* i_gameObject)
+ChrisZ::Physics::SphereCollider::SphereCollider(eae6320::Math::sVector i_center, float i_radius, eae6320::Assets::GameObject* i_gameObject) : Collider(i_gameObject)
 {
     this->center = i_center;
 	this->radius = i_radius;
 	this->gameObject = i_gameObject;
 }
 
-bool ChrisZ::Physics::SphereCollider::Intersects(Collider* other)
+ChrisZ::Physics::CollisionInfo ChrisZ::Physics::SphereCollider::Intersects(Collider* other)
 {
     // If the other collider is a sphere collider, use the sphere-sphere intersection formula
     if (SphereCollider* otherSphere = dynamic_cast<SphereCollider*>(other)) {
@@ -18,7 +20,12 @@ bool ChrisZ::Physics::SphereCollider::Intersects(Collider* other)
         float distance = (this->center - otherSphere->center).GetLength();
 
         // If the distance is less than or equal to the sum of the radius, the spheres intersect
-        return distance <= (this->radius + otherSphere->radius);
+        if (distance <= (this->radius + otherSphere->radius)) {
+            // Calculate and return CollisionInfo
+            eae6320::Math::sVector contactNormal = (otherSphere->center - this->center).GetNormalized();
+            float penetrationDepth = (this->radius + otherSphere->radius) - distance;
+            return CollisionInfo(contactNormal, penetrationDepth);
+        }
     }
 
     // If the other collider is a box collider, use the sphere-box intersection formula
@@ -30,12 +37,18 @@ bool ChrisZ::Physics::SphereCollider::Intersects(Collider* other)
         float distance = (this->center - closestPoint).GetLength();
 
         // If the distance is less than or equal to the radius, the sphere and the box intersect
-        return distance <= this->radius;
+        if (distance <= this->radius) {
+            // Calculate and return CollisionInfo
+            eae6320::Math::sVector contactNormal = (closestPoint - this->center).GetNormalized();
+            float penetrationDepth = this->radius - distance;
+            return CollisionInfo(contactNormal, penetrationDepth);
+        }
     }
 
-    // Otherwise, return false
-    return false;
+    // No collision
+    return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
 }
+
 
 float ChrisZ::Physics::SphereCollider::GetRadius() const
 {

@@ -30,9 +30,21 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="cMyGame.h" />
+    <ClInclude Include="Cube.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMyGame.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="Cube.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
