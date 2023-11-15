@@ -9,6 +9,8 @@
 
 #include <Engine/Logging/Logging.h>
 
+#define VELOCITY_THRESHOLD 0.01f
+
 // A list of all rigid bodies
 std::vector<ChrisZ::Physics::RigidBody*> rigidBodies;
 // A list of all colliders
@@ -51,9 +53,6 @@ void ChrisZ::Physics::Update(const float i_secondCountToIntegrate)
                     // Check if there's a collision based on penetration depth
                     if (collisionInfo.penetrationDepth > 0.0f)
                     {
-                        // Log that there is a collision
-                        eae6320::Logging::OutputMessage("Collision detected!");
-
                         // Add colliding colliders to each other's lists if not already added
                         if (!collider->IsCollidingWith(other))
                         {
@@ -68,7 +67,7 @@ void ChrisZ::Physics::Update(const float i_secondCountToIntegrate)
                         // Handle collision if the two colliders are not triggers
                         if (!(collider->IsTrigger() || other->IsTrigger()))
                         {
-                            HandleCollision(collider, other, collisionInfo);
+                            HandleCollision(collider, other, collisionInfo, i_secondCountToIntegrate);
                         }
                     }
                     else
@@ -86,7 +85,7 @@ void ChrisZ::Physics::Update(const float i_secondCountToIntegrate)
 	}
 }
 
-void ChrisZ::Physics::HandleCollision(Collider* collider, Collider* other, CollisionInfo collisionInfo)
+void ChrisZ::Physics::HandleCollision(Collider* collider, Collider* other, CollisionInfo collisionInfo, const float i_secondCountToIntegrate)
 {
     // Get the rigid bodies of the colliding colliders
     RigidBody* bodyA = collider->GetGameObject()->GetRigidBody();
@@ -110,6 +109,8 @@ void ChrisZ::Physics::HandleCollision(Collider* collider, Collider* other, Colli
 
     // Calculate the relative velocity of the two bodies along the collision normal
     eae6320::Math::sVector relativeVelocity = velocityB - velocityA;
+
+    // Calculate the relative velocity of the two bodies along the collision normal
     float velocityAlongNormal = Dot(relativeVelocity, collisionInfo.contactNormal);
 
     // Do nothing if the bodies are moving away from each other
@@ -156,4 +157,55 @@ void ChrisZ::Physics::HandleCollision(Collider* collider, Collider* other, Colli
     {
         bodyB->GetGameObject()->SetPosition(bodyB->GetGameObject()->GetPosition() + (1 / massB) * correction);
     }
+
+
+    // Ignore velocities below the threshold
+    if (abs(relativeVelocity.x) < VELOCITY_THRESHOLD)
+    {
+        relativeVelocity.x = 0.0f;
+    }
+    if (abs(relativeVelocity.y) < VELOCITY_THRESHOLD)
+	{
+		relativeVelocity.y = 0.0f;
+	}
+    if (abs(relativeVelocity.z) < VELOCITY_THRESHOLD)
+	{
+		relativeVelocity.z = 0.0f;
+	}
+
+	// Calculate the coefficient of friction between the two bodies
+	float mu = collider->GetFrictionCoefficient() * other->GetFrictionCoefficient();
+
+	// If the relative velocity is zero or it is parallel to the collision normal, or the friction is zero, do nothing
+	if (relativeVelocity == eae6320::Math::sVector(0.0f, 0.0f, 0.0f) || Cross(relativeVelocity, collisionInfo.contactNormal) == eae6320::Math::sVector(0.0f, 0.0f, 0.0f) || mu == 0.0f)
+	{
+		return;
+	}
+
+	// Calculate the tangent vector of the collision
+	eae6320::Math::sVector tangent = relativeVelocity - (Dot(relativeVelocity, collisionInfo.contactNormal) * collisionInfo.contactNormal);
+	tangent.Normalize();
+
+	// Calculate the magnitude of the friction impulse
+	float jt = -Dot(relativeVelocity, tangent);
+	jt /= 1 / massA + 1 / massB;
+
+	// Clamp the friction impulse to avoid reversing the direction of motion
+	if (abs(jt) > j * mu)
+	{
+		jt = j * mu * (jt < 0 ? -1.0f : 1.0f);
+	}
+
+	// Apply the friction impulse to the bodies
+	eae6320::Math::sVector frictionImpulse = jt * tangent;
+	// Check if bodyA has a rigid body
+	if (bodyA)
+	{
+		bodyA->AddImpulse(-frictionImpulse);
+	}
+	// Check if bodyB has a rigid body
+	if (bodyB)
+	{
+		bodyB->AddImpulse(frictionImpulse);
+	}
 }

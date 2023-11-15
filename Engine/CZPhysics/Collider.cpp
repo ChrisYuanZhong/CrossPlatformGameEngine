@@ -41,6 +41,16 @@ void ChrisZ::Physics::Collider::SetRestitution(float restitution)
 	this->restitution = restitution;
 }
 
+float ChrisZ::Physics::Collider::GetFrictionCoefficient() const
+{
+	return this->frictionCoefficient;
+}
+
+void ChrisZ::Physics::Collider::SetFrictionCoefficient(float frictionCoefficient)
+{
+	this->frictionCoefficient = frictionCoefficient;
+}
+
 bool ChrisZ::Physics::Collider::IsCollidingWith(Collider* other) const
 {
 	// Check if the other collider exists in the hash set

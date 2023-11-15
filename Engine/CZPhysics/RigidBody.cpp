@@ -10,7 +10,7 @@ ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject)
 	// Set default values
 	velocity = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
 	acceleration = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
-	dragCoefficient = 2.0f;
+	dragCoefficient = 0.6f;
 	angularSpeed = 0.0f;
 	angularVelocity_axis_local = eae6320::Math::sVector(0.0f, 1.0f, 0.0f);
 	mass = 1.0f;

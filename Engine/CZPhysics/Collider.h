@@ -64,6 +64,12 @@ namespace ChrisZ
 			// A method to set the energy consumed after collision
 			void SetRestitution(float restitution);
 
+			// A method to get the friction coefficient
+			float GetFrictionCoefficient() const;
+
+			// A method to set the friction coefficient
+			void SetFrictionCoefficient(float frictionCoefficient);
+
 			// Method to check if a collider is colliding with self
 			bool IsCollidingWith(Collider* other) const;
 
@@ -79,6 +85,9 @@ namespace ChrisZ
 
 			// The energy consumed after collision
 			float restitution = 0.3f;
+
+			// The friction coefficient
+			float frictionCoefficient = 0.5f;
 
 			// Hash set of pointers to colliders that are colliding with self
 			std::unordered_set<Collider*> collidingColliders;

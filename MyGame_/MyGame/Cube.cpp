@@ -12,4 +12,5 @@ Cube::Cube()
 	eae6320::Graphics::Effect::Load(m_effect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader");
 
 	m_rigidBody->SetMass(20.0f);
+	//m_collider->SetFrictionCoefficient(0.0f);
 }

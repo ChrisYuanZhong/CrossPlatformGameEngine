@@ -10,7 +10,7 @@
 class Player : public eae6320::Assets::GameObject
 {
 public:
-	float speed = 10.0f;
+	float speed = 5.0f;
 	eae6320::Graphics::Effect* originalEffect;
 	eae6320::Graphics::Effect* alternativeEffect;
 

@@ -10,6 +10,7 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 
+
 namespace ChrisZ
 {
 	namespace Physics
@@ -34,6 +35,6 @@ namespace ChrisZ
 		void Update(const float i_secondCountToIntegrate);
 
 		// Helper functions
-		void HandleCollision(Collider* collider, Collider* other, CollisionInfo collisionInfo);
+		void HandleCollision(Collider* collider, Collider* other, CollisionInfo collisionInfo, const float i_secondCountToIntegrate);
 	}
 }

@@ -11,5 +11,6 @@ Plane::Plane()
 
 	m_transform->SetPosition(eae6320::Math::sVector(0.0f, -1.0f, 0.0f));
 	m_collider->SetRestitution(0.5f);
+	m_collider->SetFrictionCoefficient(0.5f);
 	//m_rigidBody->SetMass(5.0f);
 }
