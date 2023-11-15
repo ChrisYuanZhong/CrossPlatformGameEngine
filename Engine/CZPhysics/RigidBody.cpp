@@ -15,7 +15,7 @@ ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject)
 	angularVelocity_axis_local = eae6320::Math::sVector(0.0f, 1.0f, 0.0f);
 	mass = 1.0f;
 	gravityEnabled = false;
-	g = 20.0f;
+	g = 9.8f;
 
 	// Add this rigid body to the physics system
 	ChrisZ::Physics::AddRigidBody(this);
@@ -23,8 +23,11 @@ ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject)
 
 void ChrisZ::Physics::RigidBody::AddForce(const eae6320::Math::sVector i_force)
 {
-	// Update velocity
-	velocity += i_force / mass;
+	// Update force
+	force += i_force;
+
+	//// Update velocity
+	//velocity += i_force / mass;
 }
 
 void ChrisZ::Physics::RigidBody::AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact)
@@ -62,7 +65,11 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 	// Apply gravity if enabled
 	if (gravityEnabled)
 	{
-		acceleration.y -= g;
+		force.y -= mass * g;
+	}
+	// Update acceleration
+	{
+		acceleration = force / mass;
 	}
 	// Update position
 	{
@@ -73,8 +80,8 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 	}
 	// Update velocity
 	{
+		velocity *= (1 - dragCoefficient * i_secondCountToIntegrate);
 		velocity += acceleration * i_secondCountToIntegrate;
-		velocity -= velocity * dragCoefficient * i_secondCountToIntegrate;
 	}
 	// Update orientation
 	{
@@ -83,11 +90,8 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 		gameObject->SetOrientation(gameObject->GetOrientation().GetNormalized());
 	}
 
-	// Reset acceleration from gravity
-	if (gravityEnabled)
-	{
-		acceleration.y += g;
-	}
+	// Reset force
+	force = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
 }
 
 eae6320::Math::sVector ChrisZ::Physics::RigidBody::PredictFuturePosition(const float i_secondCountToExtrapolate) const

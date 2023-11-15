@@ -74,6 +74,7 @@ namespace ChrisZ
 			float angularSpeed;	// Radians per second (positive values rotate right-handed, negative rotate left-handed)
 			float dragCoefficient;	// Drag is the force that resists movement through a fluid
 			float mass;
+			eae6320::Math::sVector force;
 			bool gravityEnabled;
 			float g;	// m/s^2
 		};

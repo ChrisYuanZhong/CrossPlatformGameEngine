@@ -10,7 +10,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="GameObject-inl.h" />
+    <ClInclude Include="GameObject.inl" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Windows">

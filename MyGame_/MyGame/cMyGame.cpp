@@ -194,8 +194,6 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 	gameObjectsToBeRendered[1]->SetPosition(Math::sVector(-1.0f, 0.0f, 0.0f));
 	gameObjectsToBeRendered[2]->SetPosition(Math::sVector(1.0f, 0.0f, 0.0f));
 
-	gameObjectsToBeRendered[2]->GetRigidBody()->SetMass(50.0f);
-
 	// Set the main camera here
 	mainCamera = &camera;
 
@@ -261,6 +259,11 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	//{
 	//	gameObjectsToBeRendered[1]->GetRigidBody()->AddForce(Math::sVector(force, 0.0f, 0.0f));
 	//}
+	// Move up
+	if (eae6320::UserInput::IsKeyPressed('W'))
+	{
+		gameObjectsToBeRendered[1]->GetRigidBody()->AddForce(eae6320::Math::sVector(0.0f, 0.0826f, 0.0f));
+	}
 
 	if (gameInputs.isUpArrowDown)
 	{
