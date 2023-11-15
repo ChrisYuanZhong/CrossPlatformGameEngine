@@ -2,17 +2,17 @@
 //=========
 
 #include "Plane.h"
+#include "Cube.h"
 
 #include <Engine/Assets/GameObject.h>
 #include <Engine/UserInput/UserInput.h>
 
 class Player : public eae6320::Assets::GameObject
 {
-private:
-	bool isJumping = false;
-
 public:
 	float speed = 0.02f;
+	eae6320::Graphics::Effect* originalEffect;
+	eae6320::Graphics::Effect* alternativeEffect;
 
 	Player()
 	{
@@ -23,8 +23,22 @@ public:
 		eae6320::Graphics::Mesh::LoadFromFile(m_mesh, "data/Meshes/ThinLongCube.mesh");
 		eae6320::Graphics::Effect::Load(m_effect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader");
 
+		originalEffect = m_effect;
+		eae6320::Graphics::Effect::Load(alternativeEffect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/standard.shader");
+
 		m_rigidBody->SetGravityEnabled(true);
 	}
+
+	~Player()
+	{
+		if (m_effect != alternativeEffect)
+			alternativeEffect->DecrementReferenceCount();
+		else
+			originalEffect->DecrementReferenceCount();
+	}
+
+private:
+	bool isJumping = false;
 
 	void Update(const float i_secondCountToIntegrate) override
 	{
@@ -54,13 +68,25 @@ public:
 		{
 			isJumping = false;
 		}
+		if (dynamic_cast<Cube*>(other->GetGameObject()))
+		{
+			m_effect = alternativeEffect;
+		}
+	}
+
+	void OnCollisionExit(ChrisZ::Physics::Collider* other) override
+	{
+		if (dynamic_cast<Cube*>(other->GetGameObject()))
+		{
+			m_effect = originalEffect;
+		}
 	}
 
 	void Jump()
 	{
 		if (!isJumping)
 		{
-			m_rigidBody->AddForce(eae6320::Math::sVector(0.0f, 5.0f, 0.0f));
+			m_rigidBody->AddImpulse(eae6320::Math::sVector(0.0f, 5.0f, 0.0f));
 			isJumping = true;
 		}
 	}

@@ -20,7 +20,7 @@ namespace eae6320
 		public:
 			GameObject();
 			GameObject(Graphics::Mesh* i_mesh, Graphics::Effect* i_effect);
-			~GameObject();
+			virtual ~GameObject();
 			
 			// Virtual collision callback methods
 			virtual void OnCollisionEnter(ChrisZ::Physics::Collider* other) {}
