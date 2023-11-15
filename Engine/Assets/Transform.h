@@ -23,6 +23,12 @@ namespace eae6320
 
 			}
 
+			Transform(float i_x, float i_y, float i_z) :
+				position(Math::sVector(i_x, i_y, i_z))
+			{
+
+			}
+
 			// Data
 			//=====
 

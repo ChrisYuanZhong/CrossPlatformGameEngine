@@ -16,6 +16,7 @@ return
 
 	meshes =
 	{
+		"Meshes/ThinLongCube.mesh",
 		"Meshes/Cube.mesh",
 		"Meshes/Plane.mesh",
 		"Meshes/Helix.mesh",

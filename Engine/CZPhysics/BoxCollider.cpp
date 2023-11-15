@@ -9,10 +9,8 @@
 #include <cfloat>
 #include <algorithm>
 
-ChrisZ::Physics::BoxCollider::BoxCollider(eae6320::Math::sVector i_center, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject) : Collider(i_gameObject)
+ChrisZ::Physics::BoxCollider::BoxCollider(eae6320::Math::sVector i_center, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject) : Collider(i_center, i_gameObject), extents(i_extents)
 {
-	this->center = i_center;
-	this->extents = i_extents;
 }
 
 ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::Intersects(Collider* other)
@@ -202,9 +200,47 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::AABBDetectionAxisAl
     // Check if the min and max points overlap along each axis
     if (maxA.x > minB.x && minA.x < maxB.x && maxA.y > minB.y && minA.y < maxB.y && maxA.z > minB.z && minA.z < maxB.z)
     {
-		// Calculate and return CollisionInfo
-		eae6320::Math::sVector contactNormal = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
-		float penetrationDepth = 0.0f;
+		// Calculate CollisionInfo
+
+        eae6320::Math::sVector contactNormal;
+
+        // The contact normal is the axis of least penetration
+        float penetrationDepth = FLT_MAX;
+        if (maxA.x - minB.x < penetrationDepth)
+		{
+			contactNormal = eae6320::Math::sVector(1.0f, 0.0f, 0.0f);
+			penetrationDepth = maxA.x - minB.x;
+		}
+        if (maxB.x - minA.x < penetrationDepth)
+		{
+			contactNormal = eae6320::Math::sVector(-1.0f, 0.0f, 0.0f);
+			penetrationDepth = maxB.x - minA.x;
+		}
+
+		if (maxA.y - minB.y < penetrationDepth)
+		{
+			contactNormal = eae6320::Math::sVector(0.0f, 1.0f, 0.0f);
+			penetrationDepth = maxA.y - minB.y;
+		}
+
+		if (maxB.y - minA.y < penetrationDepth)
+		{
+			contactNormal = eae6320::Math::sVector(0.0f, -1.0f, 0.0f);
+			penetrationDepth = maxB.y - minA.y;
+		}
+
+		if (maxA.z - minB.z < penetrationDepth)
+		{
+			contactNormal = eae6320::Math::sVector(0.0f, 0.0f, 1.0f);
+			penetrationDepth = maxA.z - minB.z;
+		}
+
+		if (maxB.z - minA.z < penetrationDepth)
+		{
+            contactNormal = eae6320::Math::sVector(0.0f, 0.0f, -1.0f);
+			penetrationDepth = maxB.z - minA.z;
+		}
+
 		return CollisionInfo(contactNormal, penetrationDepth);
 	}
     else

@@ -137,6 +137,7 @@ namespace eae6320
 		//-------------------
 
 		float velocity = 0.2f;
+		float force = 0.02f;
 		bool isMeshModified = false;
 	};
 }

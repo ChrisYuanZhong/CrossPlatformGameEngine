@@ -39,6 +39,7 @@
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Engine\Application\Application.vcxproj">

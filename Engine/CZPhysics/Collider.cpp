@@ -3,8 +3,10 @@
 #include <Engine/CZPhysics/CZPhysics.h>
 #include <Engine/Assets/GameObject.h>
 
-ChrisZ::Physics::Collider::Collider(eae6320::Assets::GameObject* i_gameObject) : gameObject(i_gameObject)
+ChrisZ::Physics::Collider::Collider(eae6320::Math::sVector i_center, eae6320::Assets::GameObject* i_gameObject) : gameObject(i_gameObject)
 {
+	center = i_center;
+
 	// Add this collider to the physics system
 	ChrisZ::Physics::AddCollider(this);
 }
@@ -32,6 +34,11 @@ void ChrisZ::Physics::Collider::SetCenter(eae6320::Math::sVector center)
 float ChrisZ::Physics::Collider::GetRestitution() const
 {
 	return this->restitution;
+}
+
+void ChrisZ::Physics::Collider::SetRestitution(float restitution)
+{
+	this->restitution = restitution;
 }
 
 bool ChrisZ::Physics::Collider::IsCollidingWith(Collider* other) const

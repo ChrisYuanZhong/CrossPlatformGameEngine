@@ -3,6 +3,7 @@
 
 #include "cMyGame.h"
 
+#include "Player.h"
 #include "Plane.h"
 #include "Cube.h"
 
@@ -32,22 +33,22 @@ void eae6320::cMyGame::UpdateBasedOnInput()
 		const auto result = Exit( EXIT_SUCCESS );
 		EAE6320_ASSERT( result );
 	}
-	if (UserInput::IsKeyPressed('W'))
-	{
-		gameInputs.isWDown = true;
-	}
-	if (UserInput::IsKeyPressed('A'))
-	{
-		gameInputs.isADown = true;
-	}
-	if (UserInput::IsKeyPressed('S'))
-	{
-		gameInputs.isSDown = true;
-	}
-	if (UserInput::IsKeyPressed('D'))
-	{
-		gameInputs.isDDown = true;
-	}
+	//if (UserInput::IsKeyPressed('W'))
+	//{
+	//	gameInputs.isWDown = true;
+	//}
+	//if (UserInput::IsKeyPressed('A'))
+	//{
+	//	gameInputs.isADown = true;
+	//}
+	//if (UserInput::IsKeyPressed('S'))
+	//{
+	//	gameInputs.isSDown = true;
+	//}
+	//if (UserInput::IsKeyPressed('D'))
+	//{
+	//	gameInputs.isDDown = true;
+	//}
 	if (UserInput::IsKeyPressed('1'))
 	{
 		gameInputs.is1Down = true;
@@ -186,13 +187,14 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 	}
 
 	gameObjectsToBeRendered[0] = new Plane();
-	gameObjectsToBeRendered[1] = new Cube();
+	gameObjectsToBeRendered[1] = new Player();
 	gameObjectsToBeRendered[2] = new Cube();
 
+	gameObjectsToBeRendered[1]->GetRigidBody()->SetGravityEnabled(true);
 	gameObjectsToBeRendered[1]->SetPosition(Math::sVector(-1.0f, 0.0f, 0.0f));
 	gameObjectsToBeRendered[2]->SetPosition(Math::sVector(1.0f, 0.0f, 0.0f));
 
-	gameObjectsToBeRendered[2]->GetRigidBody()->SetMass(10.0f);
+	gameObjectsToBeRendered[2]->GetRigidBody()->SetMass(50.0f);
 
 	// Set the main camera here
 	mainCamera = &camera;
@@ -243,22 +245,22 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	//gameObjects[0].SetPosition(Math::sVector(0.0f, 0.0f, 0.0f));
 	//gameObjects[0].SetOrientation(Math::cQuaternion(1.0f, Math::sVector(0.0f, 0.0f, 1.0f)));
 
-	if (gameInputs.isWDown)
-	{
-		gameObjectsToBeRendered[1]->GetRigidBody()->SetVelocity(gameObjectsToBeRendered[1]->GetRigidBody()->GetVelocity() + Math::sVector(0.0f, velocity, 0.0f));
-	}
-	if (gameInputs.isADown)
-	{
-		gameObjectsToBeRendered[1]->GetRigidBody()->SetVelocity(gameObjectsToBeRendered[1]->GetRigidBody()->GetVelocity() + Math::sVector(-velocity, 0.0f, 0.0f));
-	}
-	if (gameInputs.isSDown)
-	{
-		gameObjectsToBeRendered[1]->GetRigidBody()->SetVelocity(gameObjectsToBeRendered[1]->GetRigidBody()->GetVelocity() + Math::sVector(0.0f, -velocity, 0.0f));
-	}
-	if (gameInputs.isDDown)
-	{
-		gameObjectsToBeRendered[1]->GetRigidBody()->SetVelocity(gameObjectsToBeRendered[1]->GetRigidBody()->GetVelocity() + Math::sVector(velocity, 0.0f, 0.0f));
-	}
+	//if (gameInputs.isWDown)
+	//{
+	//	gameObjectsToBeRendered[1]->GetRigidBody()->AddImpulse(Math::sVector(0.0f, 1.0f, 0.0f));
+	//}
+	//if (gameInputs.isADown)
+	//{
+	//	gameObjectsToBeRendered[1]->GetRigidBody()->AddForce(Math::sVector(-force, 0.0f, 0.0f));
+	//}
+	//if (gameInputs.isSDown)
+	//{
+	//	gameObjectsToBeRendered[1]->GetRigidBody()->AddForce(Math::sVector(0.0f, -force, 0.0f));
+	//}
+	//if (gameInputs.isDDown)
+	//{
+	//	gameObjectsToBeRendered[1]->GetRigidBody()->AddForce(Math::sVector(force, 0.0f, 0.0f));
+	//}
 
 	if (gameInputs.isUpArrowDown)
 	{
@@ -280,11 +282,11 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 
 void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
 {
-	//// Update the game objects
-	//for (unsigned int i = 0; i < numGameObjectsToBeRendered; i++)
-	//{
-	//	gameObjectsToBeRendered[i].Update(i_elapsedSecondCount_sinceLastUpdate);
-	//}
+	// Update the game objects
+	for (unsigned int i = 0; i < numGameObjectsToBeRendered; i++)
+	{
+		gameObjectsToBeRendered[i]->Update(i_elapsedSecondCount_sinceLastUpdate);
+	}
 
 	ChrisZ::Physics::Update(i_elapsedSecondCount_sinceLastUpdate);
 

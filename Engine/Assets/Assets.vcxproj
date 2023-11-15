@@ -22,6 +22,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="cHandle.h" />
     <ClInclude Include="cManager.h" />
+    <ClInclude Include="GameObject-inl.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ReferenceCountedAssets.h" />
     <ClInclude Include="Transform.h" />

@@ -14,6 +14,8 @@ ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject)
 	angularSpeed = 0.0f;
 	angularVelocity_axis_local = eae6320::Math::sVector(0.0f, 1.0f, 0.0f);
 	mass = 1.0f;
+	gravityEnabled = false;
+	g = 20.0f;
 
 	// Add this rigid body to the physics system
 	ChrisZ::Physics::AddRigidBody(this);
@@ -21,20 +23,14 @@ ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject)
 
 void ChrisZ::Physics::RigidBody::AddForce(const eae6320::Math::sVector i_force)
 {
-	// Calculate the change in velocity
-	const auto deltaVelocity = i_force / mass;
-
 	// Update velocity
-	velocity += deltaVelocity;
+	velocity += i_force / mass;
 }
 
 void ChrisZ::Physics::RigidBody::AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact)
 {
-	// Calculate the change in velocity
-	const auto deltaVelocity = i_force / mass;
-
 	// Update velocity
-	velocity += deltaVelocity;
+	velocity += i_force / mass;
 
 	// Calculate the change in angular velocity
 	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_force) / mass;
@@ -45,20 +41,14 @@ void ChrisZ::Physics::RigidBody::AddForceAtLocation(const eae6320::Math::sVector
 
 void ChrisZ::Physics::RigidBody::AddImpulse(const eae6320::Math::sVector i_impulse)
 {
-	// Calculate the change in velocity
-	const auto deltaVelocity = i_impulse / mass;
-
 	// Update velocity
-	velocity += deltaVelocity;
+	velocity += i_impulse / mass;
 }
 
 void ChrisZ::Physics::RigidBody::AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact)
 {
-	// Calculate the change in velocity
-	const auto deltaVelocity = i_impulse / mass;
-
 	// Update velocity
-	velocity += deltaVelocity;
+	velocity += i_impulse / mass;
 
 	// Calculate the change in angular velocity
 	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_impulse) / mass;
@@ -69,6 +59,11 @@ void ChrisZ::Physics::RigidBody::AddImpulseAtLocation(const eae6320::Math::sVect
 
 void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 {
+	// Apply gravity if enabled
+	if (gravityEnabled)
+	{
+		acceleration.y -= g;
+	}
 	// Update position
 	{
 		gameObject->SetPosition(gameObject->GetPosition() + velocity * i_secondCountToIntegrate);
@@ -86,6 +81,12 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 		const auto rotation = eae6320::Math::cQuaternion(angularSpeed * i_secondCountToIntegrate, angularVelocity_axis_local);
 		gameObject->SetOrientation(rotation * gameObject->GetOrientation());
 		gameObject->SetOrientation(gameObject->GetOrientation().GetNormalized());
+	}
+
+	// Reset acceleration from gravity
+	if (gravityEnabled)
+	{
+		acceleration.y += g;
 	}
 }
 

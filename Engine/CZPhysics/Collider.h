@@ -41,7 +41,7 @@ namespace ChrisZ
 		{
 		public:
 			// Constructor
-			Collider(eae6320::Assets::GameObject* i_gameObject);
+			Collider(eae6320::Math::sVector i_center, eae6320::Assets::GameObject* i_gameObject);
 
 			// A virtual method to check if this collider intersects with another collider
 			virtual CollisionInfo Intersects(Collider* other) = 0;
@@ -61,6 +61,9 @@ namespace ChrisZ
 			// A method to get the energy consumed after collision
 			float GetRestitution() const;
 
+			// A method to set the energy consumed after collision
+			void SetRestitution(float restitution);
+
 			// Method to check if a collider is colliding with self
 			bool IsCollidingWith(Collider* other) const;
 
@@ -75,7 +78,7 @@ namespace ChrisZ
 			eae6320::Math::sVector center = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
 
 			// The energy consumed after collision
-			float restitution = 0.5f;
+			float restitution = 0.3f;
 
 			// Hash set of pointers to colliders that are colliding with self
 			std::unordered_set<Collider*> collidingColliders;

@@ -54,6 +54,8 @@ namespace ChrisZ
 			void SetDragCoefficient(float i_dragCoefficient) { dragCoefficient = i_dragCoefficient; }
 			float GetMass() const { return mass; }
 			void SetMass(float i_mass) { mass = i_mass; }
+			bool GetGravityEnabled() const { return gravityEnabled; }
+			void SetGravityEnabled(bool i_gravityEnabled) { gravityEnabled = i_gravityEnabled; }
 
 			// Interface
 			//==========
@@ -72,6 +74,8 @@ namespace ChrisZ
 			float angularSpeed;	// Radians per second (positive values rotate right-handed, negative rotate left-handed)
 			float dragCoefficient;	// Drag is the force that resists movement through a fluid
 			float mass;
+			bool gravityEnabled;
+			float g;	// m/s^2
 		};
 	}
 }

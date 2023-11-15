@@ -10,6 +10,16 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 
+// Forward Declarations
+//=====================
+//namespace eae6320
+//{
+//	namespace Assets
+//	{
+//		class GameObject;
+//	}
+//}
+
 namespace ChrisZ
 {
 	namespace Physics
