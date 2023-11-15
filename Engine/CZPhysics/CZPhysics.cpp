@@ -1,7 +1,6 @@
 #include "CZPhysics.h"
 
 #include <Engine/Assets/GameObject.h>
-//#include <Engine/Assets/GameObject-inl.h>
 #include <Engine/CZPhysics/SphereCollider.h>
 #include <Engine/CZPhysics/BoxCollider.h>
 
@@ -18,12 +17,12 @@ std::vector<ChrisZ::Physics::Collider*> colliders;
 
 void ChrisZ::Physics::AddRigidBody(RigidBody* i_rigidBody)
 {
-	rigidBodies.push_back(i_rigidBody);
+    rigidBodies.push_back(i_rigidBody);
 }
 
 void ChrisZ::Physics::AddCollider(Collider* i_collider)
 {
-	colliders.push_back(i_collider);
+    colliders.push_back(i_collider);
 }
 
 void ChrisZ::Physics::Update(const float i_secondCountToIntegrate)

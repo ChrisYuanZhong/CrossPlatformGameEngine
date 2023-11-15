@@ -45,14 +45,3 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::SphereCollider::Intersects(Colli
     // No collision
     return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
 }
-
-
-float ChrisZ::Physics::SphereCollider::GetRadius() const
-{
-	return this->radius;
-}
-
-void ChrisZ::Physics::SphereCollider::SetRadius(float i_radius)
-{
-	this->radius = i_radius;
-}

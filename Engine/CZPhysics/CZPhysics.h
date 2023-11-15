@@ -3,13 +3,16 @@
 	This file declares the external interface for the physics system
 */
 
+#ifndef CZPHYSICS_H
+#define CZPHYSICS_H
+
 // Includes
 //=========
 
 #include "RigidBody.h"
-#include "SphereCollider.h"
-#include "BoxCollider.h"
+#include "Collider.h"
 
+#endif // !CZPHYSICS_H
 
 namespace ChrisZ
 {

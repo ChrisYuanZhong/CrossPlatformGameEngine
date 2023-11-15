@@ -2,17 +2,13 @@
 
 #include <Engine/Math/cQuaternion.h>
 #include <Engine/Math/sVector.h>
+#include <Engine/Math/cMatrix_transformation.h>
 
 // Forward Declarations
 //=====================
 
 namespace eae6320
 {
-	namespace Math
-	{
-		class cMatrix_transformation;
-	}
-
 	namespace Assets
 	{
 		class GameObject;
@@ -33,29 +29,29 @@ namespace ChrisZ
 
 			// Interface
 			//==========
-			void AddForce(const eae6320::Math::sVector i_force);
+			inline void AddForce(const eae6320::Math::sVector i_force);
 			void AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact);
-			void AddImpulse(const eae6320::Math::sVector i_impulse);
+			inline void AddImpulse(const eae6320::Math::sVector i_impulse);
 			void AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact);
 
 			// Getters and Setters
 			//====================
 
-			eae6320::Assets::GameObject* GetGameObject() const { return gameObject; }
-			eae6320::Math::sVector GetVelocity() const { return velocity; }
-			void SetVelocity(eae6320::Math::sVector i_velocity) { velocity = i_velocity; }
-			eae6320::Math::sVector GetAcceleration() const { return acceleration; }
-			void SetAcceleration(eae6320::Math::sVector i_acceleration) { acceleration = i_acceleration; }
-			eae6320::Math::sVector GetAngularVelocity_axis_local() const { return angularVelocity_axis_local; }
-			void SetAngularVelocity_axis_local(eae6320::Math::sVector i_angularVelocity_axis_local) { angularVelocity_axis_local = i_angularVelocity_axis_local; }
-			float GetAngularSpeed() const { return angularSpeed; }
-			void SetAngularSpeed(float i_angularSpeed) { angularSpeed = i_angularSpeed; }
-			float GetDragCoefficient() const { return dragCoefficient; }
-			void SetDragCoefficient(float i_dragCoefficient) { dragCoefficient = i_dragCoefficient; }
-			float GetMass() const { return mass; }
-			void SetMass(float i_mass) { mass = i_mass; }
-			bool GetGravityEnabled() const { return gravityEnabled; }
-			void SetGravityEnabled(bool i_gravityEnabled) { gravityEnabled = i_gravityEnabled; }
+			eae6320::Assets::GameObject* GetGameObject() const;
+			inline eae6320::Math::sVector GetVelocity() const;
+			inline void SetVelocity(eae6320::Math::sVector i_velocity);
+			inline eae6320::Math::sVector GetAcceleration() const;
+			inline void SetAcceleration(eae6320::Math::sVector i_acceleration);
+			inline eae6320::Math::sVector GetAngularVelocity_axis_local() const;
+			inline void SetAngularVelocity_axis_local(eae6320::Math::sVector i_angularVelocity_axis_local);
+			inline float GetAngularSpeed() const;
+			inline void SetAngularSpeed(float i_angularSpeed);
+			inline float GetDragCoefficient() const;
+			inline void SetDragCoefficient(float i_dragCoefficient);
+			inline float GetMass() const;
+			inline void SetMass(float i_mass);
+			inline bool GetGravityEnabled() const;
+			inline void SetGravityEnabled(bool i_gravityEnabled);
 
 			// Interface
 			//==========
@@ -63,7 +59,7 @@ namespace ChrisZ
 			void Update(const float i_secondCountToIntegrate);
 			eae6320::Math::sVector PredictFuturePosition(const float i_secondCountToExtrapolate) const;
 			eae6320::Math::cQuaternion PredictFutureOrientation(const float i_secondCountToExtrapolate) const;
-			eae6320::Math::cMatrix_transformation PredictFutureTransform(const float i_secondCountToExtrapolate) const;
+			inline eae6320::Math::cMatrix_transformation PredictFutureTransform(const float i_secondCountToExtrapolate) const;
 
 		private:
 			eae6320::Assets::GameObject* gameObject = nullptr;
@@ -80,3 +76,5 @@ namespace ChrisZ
 		};
 	}
 }
+
+#include "RigidBody.inl"

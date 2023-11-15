@@ -15,11 +15,21 @@ namespace ChrisZ
 			// A method to check if this sphere collider intersects with another collider
 			CollisionInfo Intersects(Collider* other) override;
 
-			float GetRadius() const;
-			void SetRadius(float i_radius);
+			inline float GetRadius() const;
+			inline void SetRadius(float i_radius);
 
 		private:
 			float radius = 0.0f;
 		};
 	}
+}
+
+inline float ChrisZ::Physics::SphereCollider::GetRadius() const
+{
+	return this->radius;
+}
+
+inline void ChrisZ::Physics::SphereCollider::SetRadius(float i_radius)
+{
+	this->radius = i_radius;
 }

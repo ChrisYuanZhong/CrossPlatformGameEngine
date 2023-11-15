@@ -21,45 +21,6 @@ ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject)
 	ChrisZ::Physics::AddRigidBody(this);
 }
 
-void ChrisZ::Physics::RigidBody::AddForce(const eae6320::Math::sVector i_force)
-{
-	// Update force
-	force += i_force;
-
-	//// Update velocity
-	//velocity += i_force / mass;
-}
-
-void ChrisZ::Physics::RigidBody::AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact)
-{
-	// Update velocity
-	velocity += i_force / mass;
-
-	// Calculate the change in angular velocity
-	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_force) / mass;
-
-	// Update angular velocity
-	angularVelocity_axis_local += deltaAngularVelocity;
-}
-
-void ChrisZ::Physics::RigidBody::AddImpulse(const eae6320::Math::sVector i_impulse)
-{
-	// Update velocity
-	velocity += i_impulse / mass;
-}
-
-void ChrisZ::Physics::RigidBody::AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact)
-{
-	// Update velocity
-	velocity += i_impulse / mass;
-
-	// Calculate the change in angular velocity
-	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_impulse) / mass;
-
-	// Update angular velocity
-	angularVelocity_axis_local += deltaAngularVelocity;
-}
-
 void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 {
 	// Apply gravity if enabled
@@ -94,6 +55,35 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 	force = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
 }
 
+eae6320::Assets::GameObject* ChrisZ::Physics::RigidBody::GetGameObject() const
+{
+	return gameObject;
+}
+
+void ChrisZ::Physics::RigidBody::AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact)
+{
+	// Update velocity
+	velocity += i_force / mass;
+
+	// Calculate the change in angular velocity
+	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_force) / mass;
+
+	// Update angular velocity
+	angularVelocity_axis_local += deltaAngularVelocity;
+}
+
+void ChrisZ::Physics::RigidBody::AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact)
+{
+	// Update velocity
+	velocity += i_impulse / mass;
+
+	// Calculate the change in angular velocity
+	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_impulse) / mass;
+
+	// Update angular velocity
+	angularVelocity_axis_local += deltaAngularVelocity;
+}
+
 eae6320::Math::sVector ChrisZ::Physics::RigidBody::PredictFuturePosition(const float i_secondCountToExtrapolate) const
 {
 	return gameObject->GetPosition() + velocity * i_secondCountToExtrapolate;
@@ -103,9 +93,4 @@ eae6320::Math::cQuaternion ChrisZ::Physics::RigidBody::PredictFutureOrientation(
 {
 	const auto rotation = eae6320::Math::cQuaternion(angularSpeed * i_secondCountToExtrapolate, angularVelocity_axis_local);
 	return eae6320::Math::cQuaternion(rotation * gameObject->GetOrientation()).GetNormalized();
-}
-
-eae6320::Math::cMatrix_transformation ChrisZ::Physics::RigidBody::PredictFutureTransform(const float i_secondCountToExtrapolate) const
-{
-	return eae6320::Math::cMatrix_transformation(PredictFutureOrientation(i_secondCountToExtrapolate), PredictFuturePosition(i_secondCountToExtrapolate));
 }

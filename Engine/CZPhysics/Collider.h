@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef CZPHYSICS_COLLIDER_H
+#define CZPHYSICS_COLLIDER_H
+
 // Includes
 //=========
 
@@ -7,6 +10,8 @@
 #include <Engine/Math/sVector.h>
 
 #include <unordered_set>
+
+#endif // !CZPHYSICS_COLLIDER_H
 
 // Forward Declarations
 //=====================
@@ -50,28 +55,28 @@ namespace ChrisZ
 			eae6320::Assets::GameObject* GetGameObject();
 
 			// A method to check if this collider can overlap with other colliders
-			bool IsTrigger() const;
+			inline bool IsTrigger() const;
 
 			// A method to get the center of the collider
-			eae6320::Math::sVector GetCenter() const;
+			inline eae6320::Math::sVector GetCenter() const;
 
 			// A method to set the center of the collider
-			void SetCenter(eae6320::Math::sVector center);
+			inline void SetCenter(eae6320::Math::sVector center);
 
 			// A method to get the energy consumed after collision
-			float GetRestitution() const;
+			inline float GetRestitution() const;
 
 			// A method to set the energy consumed after collision
-			void SetRestitution(float restitution);
+			inline void SetRestitution(float restitution);
 
 			// A method to get the friction coefficient
-			float GetFrictionCoefficient() const;
+			inline float GetFrictionCoefficient() const;
 
 			// A method to set the friction coefficient
-			void SetFrictionCoefficient(float frictionCoefficient);
+			inline void SetFrictionCoefficient(float frictionCoefficient);
 
 			// Method to check if a collider is colliding with self
-			bool IsCollidingWith(Collider* other) const;
+			inline bool IsCollidingWith(Collider* other) const;
 
 			// Method to add a collider to the hash set of colliding colliders
 			void AddCollidingCollider(Collider* other);
@@ -100,3 +105,5 @@ namespace ChrisZ
 		};
 	}
 }
+
+#include "Collider.inl"

@@ -4,6 +4,8 @@
 #include "Plane.h"
 #include "Cube.h"
 
+#include <Engine/CZPhysics/BoxCollider.h>
+
 #include <Engine/Assets/GameObject.h>
 #include <Engine/UserInput/UserInput.h>
 

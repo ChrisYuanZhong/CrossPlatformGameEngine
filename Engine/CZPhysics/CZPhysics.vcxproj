@@ -37,6 +37,10 @@
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Collider.inl" />
+    <None Include="RigidBody.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
