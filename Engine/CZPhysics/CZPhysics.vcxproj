@@ -38,6 +38,7 @@
     <ClCompile Include="SphereCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BoxCollider.inl" />
     <None Include="Collider.inl" />
     <None Include="RigidBody.inl" />
   </ItemGroup>

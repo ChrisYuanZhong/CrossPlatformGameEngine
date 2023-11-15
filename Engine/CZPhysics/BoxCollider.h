@@ -15,6 +15,18 @@ namespace ChrisZ
 			// A method to check if this box collider intersects with another collider
 			CollisionInfo Intersects(Collider* other) override;
 
+			// A method to get the orientation of the box
+			inline eae6320::Math::cQuaternion GetOrientation() const;
+
+			// A method to set the orientation of the box
+			inline void SetOrientation(const eae6320::Math::cQuaternion i_orientation);
+
+			// A method to get the extents of the box
+			inline eae6320::Math::sVector GetExtents() const;
+
+			// A method to set the extents of the box
+			inline void SetExtents(eae6320::Math::sVector i_extents);
+
 			// Helper Methods
 			//===============
 
@@ -26,7 +38,7 @@ namespace ChrisZ
 
 			// Use the bounding sphere detection as a broad phase detection to check if this box collider has a possibility of intersecting with another box collider
 			// Complexity: O(1)
-			bool BoundingSphereDetection(BoxCollider* other);
+			inline bool BoundingSphereDetection(BoxCollider* other);
 
 			// Use the AABB method as a middle phase detection to check if this box collider has a possibility of intersecting with another box collider
 			// Complexity: O(n)
@@ -39,10 +51,13 @@ namespace ChrisZ
 			// Complexity: O(n ^ 2)
 			CollisionInfo SATDetection(BoxCollider* other);
 
-			bool isAxisAligned(eae6320::Math::cQuaternion orientation);
+			inline bool isAxisAligned(eae6320::Math::cQuaternion orientation);
 
 		private:
+			eae6320::Math::cQuaternion orientation; // The orientation of the box
 			eae6320::Math::sVector extents = eae6320::Math::sVector(0.5f, 0.5f, 0.5f); // The half-size of the box along each axis
 		};
 	}
 }
+
+#include "BoxCollider.inl"

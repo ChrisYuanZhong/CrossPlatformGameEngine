@@ -123,27 +123,6 @@ void ChrisZ::Physics::BoxCollider::ProjectOntoAxis(eae6320::Math::sVector axis, 
     }
 }
 
-bool ChrisZ::Physics::BoxCollider::BoundingSphereDetection(BoxCollider* other)
-{
-    // Get the distance between the centers of the two boxes
-    eae6320::Math::sVector distance = center - other->GetCenter();
-
-    // Get the sum of the radii of the two bounding spheres
-    float sumRadii = extents.GetLength() + other->extents.GetLength();
-
-    // Check if the distance is less than the sum of the radii
-    if (distance.GetLength() < sumRadii)
-    {
-        // There is a possibility of intersection
-        return true;
-    }
-    else
-    {
-        // There is no intersection
-        return false;
-    }
-}
-
 bool ChrisZ::Physics::BoxCollider::AABBDetection(BoxCollider* other)
 {
     // Get the orientation matrices of the two boxes
@@ -319,11 +298,4 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCol
         // No collision
         return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
     }
-}
-
-bool ChrisZ::Physics::BoxCollider::isAxisAligned(eae6320::Math::cQuaternion orientation)
-{
-	// Check if the orientation is axis aligned
-    eae6320::Math::sVector exampleVector = orientation * eae6320::Math::sVector(1.0f, 1.0f, 1.0f);
-    return (exampleVector.x == 1.0f && exampleVector.y == 1.0f && exampleVector.z == 1.0f);
 }

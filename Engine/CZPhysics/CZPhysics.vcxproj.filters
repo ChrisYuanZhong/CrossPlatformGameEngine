@@ -55,5 +55,8 @@
     <None Include="RigidBody.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="BoxCollider.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
