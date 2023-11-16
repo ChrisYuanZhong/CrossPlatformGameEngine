@@ -16,10 +16,10 @@ namespace ChrisZ
 			CollisionInfo Intersects(Collider* other) override;
 
 			// A method to get the orientation of the box
-			inline eae6320::Math::cQuaternion GetOrientation() const;
+			//inline eae6320::Math::cQuaternion GetOrientation() const;
 
 			// A method to set the orientation of the box
-			inline void SetOrientation(const eae6320::Math::cQuaternion i_orientation);
+			//inline void SetOrientation(const eae6320::Math::cQuaternion i_orientation);
 
 			// A method to get the extents of the box
 			inline eae6320::Math::sVector GetExtents() const;
@@ -54,7 +54,7 @@ namespace ChrisZ
 			inline bool isAxisAligned(eae6320::Math::cQuaternion orientation);
 
 		private:
-			eae6320::Math::cQuaternion orientation; // The orientation of the box
+			//eae6320::Math::cQuaternion orientation; // The orientation of the box
 			eae6320::Math::sVector extents = eae6320::Math::sVector(0.5f, 0.5f, 0.5f); // The half-size of the box along each axis
 		};
 	}

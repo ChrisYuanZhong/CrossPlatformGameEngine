@@ -192,7 +192,7 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 
 	gameObjectsToBeRendered[1]->GetRigidBody()->SetGravityEnabled(true);
 	gameObjectsToBeRendered[1]->SetPosition(Math::sVector(-1.0f, 0.0f, 0.0f));
-	gameObjectsToBeRendered[2]->SetPosition(Math::sVector(1.0f, 0.0f, 0.0f));
+	gameObjectsToBeRendered[2]->SetPosition(Math::sVector(1.0f, -0.2f, 0.0f));
 
 	// Set the main camera here
 	mainCamera = &camera;

@@ -12,6 +12,11 @@ inline bool ChrisZ::Physics::Collider::IsTrigger() const
 	return this->isTrigger;
 }
 
+inline void ChrisZ::Physics::Collider::SetIsTrigger(bool isTrigger)
+{
+	this->isTrigger = isTrigger;
+}
+
 inline eae6320::Math::sVector ChrisZ::Physics::Collider::GetCenter() const
 {
 	return this->center;

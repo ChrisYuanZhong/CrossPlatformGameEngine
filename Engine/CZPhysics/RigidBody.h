@@ -30,9 +30,9 @@ namespace ChrisZ
 			// Interface
 			//==========
 			inline void AddForce(const eae6320::Math::sVector i_force);
-			void AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact);
+			//void AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact);
 			inline void AddImpulse(const eae6320::Math::sVector i_impulse);
-			void AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact);
+			//void AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact);
 
 			// Getters and Setters
 			//====================
@@ -68,7 +68,7 @@ namespace ChrisZ
 			eae6320::Math::sVector acceleration;	// Distance per second^2
 			eae6320::Math::sVector angularVelocity_axis_local;	// In local space (not world space)
 			float angularSpeed;	// Radians per second (positive values rotate right-handed, negative rotate left-handed)
-			float dragCoefficient;	// Drag is the force that resists movement through a fluid
+			float dragCoefficient;	// Drag is the force that resists movement
 			float mass;
 			eae6320::Math::sVector force;
 			bool gravityEnabled;

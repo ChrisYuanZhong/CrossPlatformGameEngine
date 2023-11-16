@@ -30,8 +30,6 @@ namespace eae6320
 			// Virtual update method
 			virtual void Update(const float i_secondCountToIntegrate) {}
 
-			//inline Transform* GetTransform() { return m_transform; }
-
 			inline Math::sVector GetPosition() const;
 			inline void SetPosition(const Math::sVector& i_position);
 			inline Math::cQuaternion GetOrientation() const;

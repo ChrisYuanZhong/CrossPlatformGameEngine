@@ -88,7 +88,7 @@ private:
 	{
 		if (!isJumping)
 		{
-			m_rigidBody->AddImpulse(eae6320::Math::sVector(0.0f, 5.0f, 0.0f));
+			m_rigidBody->AddImpulse(eae6320::Math::sVector(0.0f, 7.0f, 0.0f));
 			isJumping = true;
 		}
 	}

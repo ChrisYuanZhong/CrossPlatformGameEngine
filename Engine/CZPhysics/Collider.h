@@ -57,6 +57,9 @@ namespace ChrisZ
 			// A method to check if this collider can overlap with other colliders
 			inline bool IsTrigger() const;
 
+			// A method to set whether this collider can overlap with other colliders
+			inline void SetIsTrigger(bool isTrigger);
+
 			// A method to get the center of the collider
 			inline eae6320::Math::sVector GetCenter() const;
 

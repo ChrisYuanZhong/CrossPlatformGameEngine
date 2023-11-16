@@ -60,29 +60,29 @@ eae6320::Assets::GameObject* ChrisZ::Physics::RigidBody::GetGameObject() const
 	return gameObject;
 }
 
-void ChrisZ::Physics::RigidBody::AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact)
-{
-	// Update velocity
-	velocity += i_force / mass;
-
-	// Calculate the change in angular velocity
-	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_force) / mass;
-
-	// Update angular velocity
-	angularVelocity_axis_local += deltaAngularVelocity;
-}
-
-void ChrisZ::Physics::RigidBody::AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact)
-{
-	// Update velocity
-	velocity += i_impulse / mass;
-
-	// Calculate the change in angular velocity
-	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_impulse) / mass;
-
-	// Update angular velocity
-	angularVelocity_axis_local += deltaAngularVelocity;
-}
+//void ChrisZ::Physics::RigidBody::AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact)
+//{
+//	// Update velocity
+//	velocity += i_force / mass;
+//
+//	// Calculate the change in angular velocity
+//	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_force) / mass;
+//
+//	// Update angular velocity
+//	angularVelocity_axis_local += deltaAngularVelocity;
+//}
+//
+//void ChrisZ::Physics::RigidBody::AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact)
+//{
+//	// Update velocity
+//	velocity += i_impulse / mass;
+//
+//	// Calculate the change in angular velocity
+//	const auto deltaAngularVelocity = eae6320::Math::Cross(i_pointOfImpact - gameObject->GetPosition(), i_impulse) / mass;
+//
+//	// Update angular velocity
+//	angularVelocity_axis_local += deltaAngularVelocity;
+//}
 
 eae6320::Math::sVector ChrisZ::Physics::RigidBody::PredictFuturePosition(const float i_secondCountToExtrapolate) const
 {
