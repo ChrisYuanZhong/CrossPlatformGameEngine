@@ -260,10 +260,10 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	//	gameObjectsToBeRendered[1]->GetRigidBody()->AddForce(Math::sVector(force, 0.0f, 0.0f));
 	//}
 	// Move up
-	if (eae6320::UserInput::IsKeyPressed('W'))
-	{
-		gameObjectsToBeRendered[1]->GetRigidBody()->AddForce(eae6320::Math::sVector(0.0f, 0.0826f, 0.0f));
-	}
+	//if (eae6320::UserInput::IsKeyPressed('W'))
+	//{
+	//	gameObjectsToBeRendered[1]->GetRigidBody()->AddForce(eae6320::Math::sVector(0.0f, 0.0826f, 0.0f));
+	//}
 
 	if (gameInputs.isUpArrowDown)
 	{

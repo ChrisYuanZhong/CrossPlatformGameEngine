@@ -56,6 +56,16 @@ private:
 		{
 			m_rigidBody->AddForce(eae6320::Math::sVector(speed, 0.0f, 0.0f));
 		}
+		// Move forward
+		if (eae6320::UserInput::IsKeyPressed('W'))
+		{
+			m_rigidBody->AddForce(eae6320::Math::sVector(0.0f, 0.0f, -speed));
+		}
+		// Move backward
+		if (eae6320::UserInput::IsKeyPressed('S'))
+		{
+			m_rigidBody->AddForce(eae6320::Math::sVector(0.0f, 0.0f, speed));
+		}
 
 		// Jump
 		if (eae6320::UserInput::IsKeyPressed(VK_SPACE))

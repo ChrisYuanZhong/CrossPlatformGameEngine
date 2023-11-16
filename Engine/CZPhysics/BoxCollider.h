@@ -15,12 +15,6 @@ namespace ChrisZ
 			// A method to check if this box collider intersects with another collider
 			CollisionInfo Intersects(Collider* other) override;
 
-			// A method to get the orientation of the box
-			//inline eae6320::Math::cQuaternion GetOrientation() const;
-
-			// A method to set the orientation of the box
-			//inline void SetOrientation(const eae6320::Math::cQuaternion i_orientation);
-
 			// A method to get the extents of the box
 			inline eae6320::Math::sVector GetExtents() const;
 
@@ -32,6 +26,9 @@ namespace ChrisZ
 
 			// A method to get the closest point on the box to a given point
 			eae6320::Math::sVector ClosestPoint(eae6320::Math::sVector point);
+
+			// Calculate the vertices of the box
+			void CalculateVertices();
 
 			// Define a helper method to project the box onto an axis
 			void ProjectOntoAxis(eae6320::Math::sVector axis, float& min, float& max);
@@ -54,8 +51,8 @@ namespace ChrisZ
 			inline bool isAxisAligned(eae6320::Math::cQuaternion orientation);
 
 		private:
-			//eae6320::Math::cQuaternion orientation; // The orientation of the box
 			eae6320::Math::sVector extents = eae6320::Math::sVector(0.5f, 0.5f, 0.5f); // The half-size of the box along each axis
+			eae6320::Math::sVector vertices[8]; // The vertices of the box
 		};
 	}
 }

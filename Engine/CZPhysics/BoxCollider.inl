@@ -2,16 +2,6 @@
 
 #include "BoxCollider.h"
 
-//inline eae6320::Math::cQuaternion ChrisZ::Physics::BoxCollider::GetOrientation() const
-//{
-//	return this->orientation;
-//}
-//
-//inline void ChrisZ::Physics::BoxCollider::SetOrientation(const eae6320::Math::cQuaternion i_orientation)
-//{
-//	this->orientation = i_orientation;
-//}
-
 inline eae6320::Math::sVector ChrisZ::Physics::BoxCollider::GetExtents() const
 {
 	return this->extents;

@@ -51,10 +51,17 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::Intersects(Collider
 			return this->AABBDetectionAxisAligned(otherBox);
 		}
         // If the boxes are not axis aligned, use the AABB method as a middle phase detection
-		else if (!this->AABBDetection(otherBox))
+		else 
         {
-            // No collision
-            return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
+            // Calculate the vertices of the boxes
+            CalculateVertices();
+            otherBox->CalculateVertices();
+
+            if (!this->AABBDetection(otherBox))
+            {
+				// No collision
+				return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
+			}
         }
 
         // Use the SAT method to check if the boxes intersect and return the CollisionInfo
@@ -86,37 +93,44 @@ eae6320::Math::sVector ChrisZ::Physics::BoxCollider::ClosestPoint(eae6320::Math:
     return worldClosestPoint;
 }
 
+void ChrisZ::Physics::BoxCollider::CalculateVertices()
+{
+    // Get the orientation matrix of the box
+    eae6320::Math::cMatrix_transformation orientation = eae6320::Math::cMatrix_transformation(gameObject->GetOrientation(), center);
+
+    // Get the right, up, and back vectors of the box
+    eae6320::Math::sVector right = orientation.GetRightDirection() * extents.x;
+    eae6320::Math::sVector up = orientation.GetUpDirection() * extents.y;
+    eae6320::Math::sVector back = orientation.GetBackDirection() * extents.z;
+
+    // Calculate the eight vertices of the box by adding or subtracting the right, up, and back vectors from the center
+    this->vertices[0] = this->center + right + up + back; // front top right
+    this->vertices[1] = this->center + right + up - back; // front top left
+    this->vertices[2] = this->center + right - up + back; // front bottom right
+    this->vertices[3] = this->center + right - up - back; // front bottom left
+    this->vertices[4] = this->center - right + up + back; // back top right
+    this->vertices[5] = this->center - right + up - back; // back top left
+    this->vertices[6] = this->center - right - up + back; // back bottom right
+    this->vertices[7] = this->center - right - up - back; // back bottom left
+}
+
 void ChrisZ::Physics::BoxCollider::ProjectOntoAxis(eae6320::Math::sVector axis, float& min, float& max)
 {
-    // Normalize the axis
-    axis.Normalize();
+    // Initialize the min and max values to the first vertex projection
+    min = max = eae6320::Math::Dot(this->vertices[0], axis);
 
-    // Initialize the min and max values
-    min = FLT_MAX;
-    max = -FLT_MAX;
-
-    // For each vertex of the box
-    for (int i = 0; i < 8; i++)
+    // Loop through the remaining vertices and update the min and max values
+    for (int i = 1; i < 8; i++)
     {
-        // Get the vertex position
-        eae6320::Math::sVector vertex = center + gameObject->GetOrientation() * eae6320::Math::sVector(
-			(i & 1) ? extents.x : -extents.x,
-			(i & 2) ? extents.y : -extents.y,
-			(i & 4) ? extents.z : -extents.z
-		);
-
-        // Rotate the vertex by the orientation of the box
-        vertex = gameObject->GetOrientation() * vertex;
-
         // Project the vertex onto the axis
-        float projection = eae6320::Math::Dot(vertex, axis);
+        float projection = eae6320::Math::Dot(this->vertices[i], axis);
 
         // Update the min and max values
         if (projection < min)
         {
             min = projection;
         }
-        if (projection > max)
+        else if (projection > max)
         {
             max = projection;
         }
@@ -231,71 +245,63 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::AABBDetectionAxisAl
 
 ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCollider* otherBox)
 {
-    // Get the orientation matrices of the two boxes
-    eae6320::Math::cMatrix_transformation localToWorld = eae6320::Math::cMatrix_transformation(gameObject->GetOrientation(), center);
-    eae6320::Math::cMatrix_transformation otherLocalToWorld = eae6320::Math::cMatrix_transformation(otherBox->GetGameObject()->GetOrientation(), otherBox->GetCenter());
+    // Initialize the collision information
+    CollisionInfo info(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
 
-    // Get the axes of the two boxes
-    eae6320::Math::sVector axes[15];
-    axes[0] = localToWorld.GetRightDirection();
-    axes[1] = localToWorld.GetUpDirection();
-    axes[2] = localToWorld.GetBackDirection();
-    axes[3] = otherLocalToWorld.GetRightDirection();
-    axes[4] = otherLocalToWorld.GetUpDirection();
-    axes[5] = otherLocalToWorld.GetBackDirection();
+    // Get the axes of the boxes
+    eae6320::Math::sVector axes[6];
+    // Get the forward vector of this box
+    axes[2] = this->gameObject->GetOrientation().CalculateForwardDirection();
+    // Get the right vector of this box by crossing the forward vector with the world up vector
+    axes[0] = eae6320::Math::Cross(axes[2], eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
+    // Get the up vector of this box by crossing the right vector with the forward vector
+    axes[1] = eae6320::Math::Cross(axes[0], axes[2]);
+    // Get the forward vector of the other box
+    axes[5] = otherBox->GetGameObject()->GetOrientation().CalculateForwardDirection();
+    // Get the right vector of the other box by crossing the forward vector with the world up vector
+    axes[3] = eae6320::Math::Cross(axes[5], eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
+    // Get the up vector of the other box by crossing the right vector with the forward vector
+    axes[4] = eae6320::Math::Cross(axes[3], axes[5]);
 
-    // Get the cross products of the axes
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 3; j < 6; j++)
-        {
-            axes[6 + i * 3 + j - 3] = eae6320::Math::Cross(axes[i], axes[j]);
-        }
-    }
-
-    // Initialize MTV variables
+    // Initialize the minimum overlap and the index of the axis with the minimum overlap
     float minOverlap = FLT_MAX;
-    eae6320::Math::sVector mtv(0.0f, 0.0f, 0.0f);
+    int minIndex = -1;
 
-    // For each axis
-    for (int i = 0; i < 15; i++)
+    // Loop through the axes and test for overlap
+    for (int i = 0; i < 6; i++)
     {
-        // Project the two boxes onto the axis
+        // Project the boxes onto the axis
         float minA, maxA, minB, maxB;
-        ProjectOntoAxis(axes[i], minA, maxA);
+        this->ProjectOntoAxis(axes[i], minA, maxA);
         otherBox->ProjectOntoAxis(axes[i], minB, maxB);
 
         // Check if the projections overlap
-        if (maxA < minB || maxB < minA)
+        if (minA <= maxB && minB <= maxA)
         {
-            // There is no overlap on this axis, so there is no intersection
-            mtv = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
-            break;
-        }
-        else
-        {
-            // Calculate the overlap on this axis
+            // Calculate the overlap
             float overlap = std::min(maxA, maxB) - std::max(minA, minB);
 
-            // Update the minimum overlap and the MTV
+            // Update the minimum overlap and the index
             if (overlap < minOverlap)
             {
                 minOverlap = overlap;
-                mtv = axes[i] * overlap;
+                minIndex = i;
             }
+        }
+        else
+        {
+            // No overlap, return zero collision information
+            return info;
         }
     }
 
-    // If there is an intersection, return CollisionInfo
-    if (mtv.GetLength() * mtv.GetLength() > 0.0f)
-    {
-        eae6320::Math::sVector contactNormal = mtv.GetNormalized();
-        float penetrationDepth = mtv.GetLength();
-        return CollisionInfo(contactNormal, penetrationDepth);
-    }
-    else
-    {
-        // No collision
-        return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
-    }
+    // If we reach this point, then there is a collision
+    // Set the contact normal to the axis with the minimum overlap
+    info.contactNormal = axes[minIndex];
+
+    // Set the penetration depth to the minimum overlap
+    info.penetrationDepth = minOverlap;
+
+    // Return the collision information
+    return info;
 }
