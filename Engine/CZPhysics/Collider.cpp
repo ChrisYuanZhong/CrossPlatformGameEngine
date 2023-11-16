@@ -3,9 +3,9 @@
 #include <Engine/CZPhysics/CZPhysics.h>
 #include <Engine/Assets/GameObject.h>
 
-ChrisZ::Physics::Collider::Collider(eae6320::Math::sVector i_center, eae6320::Assets::GameObject* i_gameObject) : gameObject(i_gameObject)
+ChrisZ::Physics::Collider::Collider(eae6320::Math::sVector i_centerOffset, eae6320::Assets::GameObject* i_gameObject) : centerOffset(i_centerOffset), gameObject(i_gameObject)
 {
-	center = i_center;
+	center = i_gameObject->GetPosition() + i_centerOffset;
 
 	// Add this collider to the physics system
 	ChrisZ::Physics::AddCollider(this);

@@ -46,7 +46,7 @@ namespace ChrisZ
 		{
 		public:
 			// Constructor
-			Collider(eae6320::Math::sVector i_center, eae6320::Assets::GameObject* i_gameObject);
+			Collider(eae6320::Math::sVector i_centerOffset, eae6320::Assets::GameObject* i_gameObject);
 
 			// A virtual method to check if this collider intersects with another collider
 			virtual CollisionInfo Intersects(Collider* other) = 0;
@@ -65,6 +65,12 @@ namespace ChrisZ
 
 			// A method to set the center of the collider
 			inline void SetCenter(eae6320::Math::sVector center);
+
+			// A method to get the offset of the center of the collider from the center of the game object
+			inline eae6320::Math::sVector GetCenterOffset() const;
+
+			// A method to set the offset of the center of the collider from the center of the game object
+			inline void SetCenterOffset(eae6320::Math::sVector centerOffset);
 
 			// A method to get the energy consumed after collision
 			inline float GetRestitution() const;
@@ -88,8 +94,11 @@ namespace ChrisZ
 			void RemoveCollidingCollider(Collider* other);
 
 		protected:
-			// The center of the collider
-			eae6320::Math::sVector center = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
+			// The center of the collider in world space
+			eae6320::Math::sVector center;
+
+			// The offset of the center of the collider from the center of the game object
+			eae6320::Math::sVector centerOffset;
 
 			// The energy consumed after collision
 			float restitution = 0.3f;

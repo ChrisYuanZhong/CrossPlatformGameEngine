@@ -5,7 +5,7 @@
 
 #include <Engine/Assets/GameObject.h>
 
-ChrisZ::Physics::SphereCollider::SphereCollider(eae6320::Math::sVector i_center, float i_radius, eae6320::Assets::GameObject* i_gameObject) : Collider(i_center, i_gameObject), radius(i_radius)
+ChrisZ::Physics::SphereCollider::SphereCollider(eae6320::Math::sVector i_centerOffset, float i_radius, eae6320::Assets::GameObject* i_gameObject) : Collider(i_centerOffset, i_gameObject), radius(i_radius)
 {
 }
 

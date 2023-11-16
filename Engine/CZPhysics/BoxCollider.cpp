@@ -11,7 +11,7 @@
 
 #define AXIS_ALIGNED_THRESHOLD 0.1f
 
-ChrisZ::Physics::BoxCollider::BoxCollider(eae6320::Math::sVector i_center, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject) : Collider(i_center, i_gameObject), extents(i_extents)
+ChrisZ::Physics::BoxCollider::BoxCollider(eae6320::Math::sVector i_centerOffset, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject) : Collider(i_centerOffset, i_gameObject), extents(i_extents)
 {
 }
 
@@ -79,20 +79,34 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::Intersects(Collider
 
 eae6320::Math::sVector ChrisZ::Physics::BoxCollider::ClosestPoint(eae6320::Math::sVector point)
 {
-    // Transform the point to the local space of the box
-    eae6320::Math::sVector localPoint = this->gameObject->GetOrientation().GetInverse() * (point - this->center);
+    //// Get the orientation matrix of the box
+    //eae6320::Math::cMatrix_transformation orientation = eae6320::Math::cMatrix_transformation(gameObject->GetOrientation(), center);
 
-    // Clamp the point to the extents of the box
-    eae6320::Math::sVector localClosestPoint;
-    localClosestPoint.x = std::clamp(localPoint.x, -this->extents.x / 2, this->extents.x / 2);
-    localClosestPoint.y = std::clamp(localPoint.y, -this->extents.y / 2, this->extents.y / 2);
-    localClosestPoint.z = std::clamp(localPoint.z, -this->extents.z / 2, this->extents.z / 2);
+    //// Calculate the inverse transformation
+    //eae6320::Math::cMatrix_transformation inverseOrientation(
+    //    orientation.m_00, orientation.m_01, orientation.m_02, 0.0f,
+    //    orientation.m_10, orientation.m_11, orientation.m_12, 0.0f,
+    //    orientation.m_20, orientation.m_21, orientation.m_22, 0.0f,
+    //    -(orientation.m_00 * center.x + orientation.m_10 * center.y + orientation.m_20 * center.z),
+    //    -(orientation.m_01 * center.x + orientation.m_11 * center.y + orientation.m_21 * center.z),
+    //    -(orientation.m_02 * center.x + orientation.m_12 * center.y + orientation.m_22 * center.z), 1.0f
+    //);
 
-    // Transform the point back to the world space
-    eae6320::Math::sVector worldClosestPoint = this->center + this->gameObject->GetOrientation() * localClosestPoint;
+    //// Transform the external point into the local space of the box
+    //eae6320::Math::sVector localPoint = inverseOrientation * point;
 
-    // Return the closest point
-    return worldClosestPoint;
+    //// Clamp the local point to the box extents
+    //eae6320::Math::sVector closestPoint;
+    //closestPoint.x = std::max(-extents.x, std::min(extents.x, localPoint.x));
+    //closestPoint.y = std::max(-extents.y, std::min(extents.y, localPoint.y));
+    //closestPoint.z = std::max(-extents.z, std::min(extents.z, localPoint.z));
+
+    //// Transform the closest point back to world space
+    //closestPoint = orientation * closestPoint + center;
+
+    //return closestPoint;
+
+    return eae6320::Math::sVector(-1.0f, -1.0f, 0.0f);
 }
 
 void ChrisZ::Physics::BoxCollider::CalculateVertices()

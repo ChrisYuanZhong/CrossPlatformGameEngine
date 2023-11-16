@@ -27,6 +27,16 @@ inline void ChrisZ::Physics::Collider::SetCenter(eae6320::Math::sVector center)
 	this->center = center;
 }
 
+inline eae6320::Math::sVector ChrisZ::Physics::Collider::GetCenterOffset() const
+{
+	return this->centerOffset;
+}
+
+inline void ChrisZ::Physics::Collider::SetCenterOffset(eae6320::Math::sVector centerOffset)
+{
+	this->centerOffset = centerOffset;
+}
+
 inline float ChrisZ::Physics::Collider::GetRestitution() const
 {
 	return this->restitution;

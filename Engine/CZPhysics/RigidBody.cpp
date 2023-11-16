@@ -39,7 +39,7 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 		gameObject->SetPosition(gameObject->GetPosition() + velocity * i_secondCountToIntegrate);
 
 		// Update center of collider
-		gameObject->GetCollider()->SetCenter(gameObject->GetPosition());
+		gameObject->GetCollider()->SetCenter(gameObject->GetPosition() + gameObject->GetCollider()->GetCenterOffset());
 	}
 	// Update velocity
 	{

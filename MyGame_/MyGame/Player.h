@@ -4,6 +4,7 @@
 #include "Plane.h"
 #include "Cube.h"
 
+#include <Engine/CZPhysics/SphereCollider.h>
 #include <Engine/CZPhysics/BoxCollider.h>
 
 #include <Engine/Assets/GameObject.h>
@@ -20,7 +21,8 @@ public:
 	{
 		m_transform = new eae6320::Assets::Transform();
 		m_rigidBody = new ChrisZ::Physics::RigidBody(this);
-		m_collider = new ChrisZ::Physics::BoxCollider(eae6320::Math::sVector::sVector(), eae6320::Math::sVector(0.2f, 0.5f, 0.2f), this);
+		m_collider = new ChrisZ::Physics::SphereCollider(eae6320::Math::sVector::sVector(), 0.5f, this);
+		//m_collider = new ChrisZ::Physics::BoxCollider(eae6320::Math::sVector::sVector(), eae6320::Math::sVector(0.2f, 0.5f, 0.2f), this);
 
 		eae6320::Graphics::Mesh::LoadFromFile(m_mesh, "data/Meshes/ThinLongCube.mesh");
 		eae6320::Graphics::Effect::Load(m_effect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor1.shader");
@@ -84,6 +86,7 @@ private:
 		if (dynamic_cast<Plane*>(other->GetGameObject()))
 		{
 			isJumping = false;
+			m_effect = alternativeEffect;
 		}
 		if (dynamic_cast<Cube*>(other->GetGameObject()))
 		{
@@ -94,6 +97,10 @@ private:
 	void OnCollisionExit(ChrisZ::Physics::Collider* other) override
 	{
 		if (dynamic_cast<Cube*>(other->GetGameObject()))
+		{
+			m_effect = originalEffect;
+		}
+		if (dynamic_cast<Plane*>(other->GetGameObject()))
 		{
 			m_effect = originalEffect;
 		}

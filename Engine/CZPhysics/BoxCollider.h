@@ -10,7 +10,7 @@ namespace ChrisZ
 		{
 		public:
 			// A constructor that takes the center, size, orientation and game object as parameters
-			BoxCollider(eae6320::Math::sVector i_center, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject);
+			BoxCollider(eae6320::Math::sVector i_centerOffset, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject);
 
 			// A method to check if this box collider intersects with another collider
 			CollisionInfo Intersects(Collider* other) override;

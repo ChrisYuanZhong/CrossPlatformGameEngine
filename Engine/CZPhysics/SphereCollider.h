@@ -10,7 +10,7 @@ namespace ChrisZ
 		{
 		public:
 			// A constructor that takes the center, radius and game object as parameters
-			SphereCollider(eae6320::Math::sVector i_center, float i_radius, eae6320::Assets::GameObject* i_gameObject);
+			SphereCollider(eae6320::Math::sVector i_centerOffset, float i_radius, eae6320::Assets::GameObject* i_gameObject);
 
 			// A method to check if this sphere collider intersects with another collider
 			CollisionInfo Intersects(Collider* other) override;
