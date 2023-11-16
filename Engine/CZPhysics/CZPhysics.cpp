@@ -90,21 +90,14 @@ void ChrisZ::Physics::HandleCollision(Collider* collider, Collider* other, Colli
     RigidBody* bodyA = collider->GetGameObject()->GetRigidBody();
     RigidBody* bodyB = other->GetGameObject()->GetRigidBody();
 
-    eae6320::Math::sVector velocityA = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
-    float massA = FLT_MAX;
-    if (bodyA)
-    {
-        velocityA = bodyA->GetVelocity();
-        massA = bodyA->GetMass();
-    }
+    // Relative velocity and masses
+    eae6320::Math::sVector velocityA = (bodyA) ? bodyA->GetVelocity() : eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
+    eae6320::Math::sVector angularVelocityA = (bodyA) ? bodyA->GetAngularVelocity() : eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
+    float massA = (bodyA) ? bodyA->GetMass() : FLT_MAX;
 
-	eae6320::Math::sVector velocityB = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
-	float massB = FLT_MAX;
-	if (bodyB)
-	{
-		velocityB = bodyB->GetVelocity();
-		massB = bodyB->GetMass();
-	}
+    eae6320::Math::sVector velocityB = (bodyB) ? bodyB->GetVelocity() : eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
+    eae6320::Math::sVector angularVelocityB = (bodyB) ? bodyB->GetAngularVelocity() : eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
+    float massB = (bodyB) ? bodyB->GetMass() : FLT_MAX;
 
     // Calculate the relative velocity of the two bodies along the collision normal
     eae6320::Math::sVector relativeVelocity = velocityB - velocityA;
@@ -127,15 +120,22 @@ void ChrisZ::Physics::HandleCollision(Collider* collider, Collider* other, Colli
 
     // Apply the impulse force to the bodies
     eae6320::Math::sVector impulse = j * collisionInfo.contactNormal;
+
+    // Apply the impulse torque to the bodies (angular velocity)
+    eae6320::Math::sVector torqueA = eae6320::Math::Cross(collisionInfo.contactNormal, impulse);
+    eae6320::Math::sVector torqueB = eae6320::Math::Cross(collisionInfo.contactNormal, -impulse);
+
     // Check if bodyA has a rigid body
     if (bodyA)
     {
         bodyA->AddImpulse(-impulse);
+        bodyA->AddTorque(torqueA);
     }
     // Check if bodyB has a rigid body
     if (bodyB)
     {
         bodyB->AddImpulse(impulse);
+        bodyB->AddTorque(torqueB);
     }
 
     // Calculate the amount of position correction needed to prevent interpenetration
@@ -207,4 +207,19 @@ void ChrisZ::Physics::HandleCollision(Collider* collider, Collider* other, Colli
 	{
 		bodyB->AddImpulse(frictionImpulse);
 	}
+
+    // Apply the friction torque to the bodies (angular velocity)
+    eae6320::Math::sVector frictionTorqueA = eae6320::Math::Cross(collisionInfo.contactNormal, frictionImpulse);
+    eae6320::Math::sVector frictionTorqueB = eae6320::Math::Cross(collisionInfo.contactNormal, -frictionImpulse);
+
+    // Check if bodyA has a rigid body
+    if (bodyA)
+    {
+        bodyA->AddTorque(frictionTorqueA);
+    }
+    // Check if bodyB has a rigid body
+    if (bodyB)
+    {
+        bodyB->AddTorque(frictionTorqueB);
+    }
 }

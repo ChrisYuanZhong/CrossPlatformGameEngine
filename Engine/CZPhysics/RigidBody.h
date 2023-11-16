@@ -33,6 +33,7 @@ namespace ChrisZ
 			//void AddForceAtLocation(const eae6320::Math::sVector i_force, const eae6320::Math::sVector i_pointOfImpact);
 			inline void AddImpulse(const eae6320::Math::sVector i_impulse);
 			//void AddImpulseAtLocation(const eae6320::Math::sVector i_impulse, const eae6320::Math::sVector i_pointOfImpact);
+			inline void AddTorque(const eae6320::Math::sVector i_torque);
 
 			// Getters and Setters
 			//====================
@@ -42,10 +43,10 @@ namespace ChrisZ
 			inline void SetVelocity(eae6320::Math::sVector i_velocity);
 			inline eae6320::Math::sVector GetAcceleration() const;
 			inline void SetAcceleration(eae6320::Math::sVector i_acceleration);
-			inline eae6320::Math::sVector GetAngularVelocity_axis_local() const;
-			inline void SetAngularVelocity_axis_local(eae6320::Math::sVector i_angularVelocity_axis_local);
-			inline float GetAngularSpeed() const;
-			inline void SetAngularSpeed(float i_angularSpeed);
+			inline eae6320::Math::sVector GetAngularVelocity() const;
+			inline void SetAngularVelocity(eae6320::Math::sVector i_angularVelocity);
+			inline bool GetRotationLocked(int i_axis) const;
+			inline void SetRotationLocked(bool i_rotationLocked_x, bool i_rotationLocked_y, bool i_rotationLocked_z);
 			inline float GetDragCoefficient() const;
 			inline void SetDragCoefficient(float i_dragCoefficient);
 			inline float GetMass() const;
@@ -66,8 +67,10 @@ namespace ChrisZ
 
 			eae6320::Math::sVector velocity;	// Distance per second
 			eae6320::Math::sVector acceleration;	// Distance per second^2
-			eae6320::Math::sVector angularVelocity_axis_local;	// In local space (not world space)
-			float angularSpeed;	// Radians per second (positive values rotate right-handed, negative rotate left-handed)
+			eae6320::Math::sVector angularVelocity; // Radians per second (positive values rotate counter-clockwise, negative values rotate clockwise)
+				
+			bool rotationLocked[3];	// Lock rotation on x, y, z axis
+
 			float dragCoefficient;	// Drag is the force that resists movement
 			float mass;
 			eae6320::Math::sVector force;

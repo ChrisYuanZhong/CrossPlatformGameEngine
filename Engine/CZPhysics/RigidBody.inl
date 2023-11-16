@@ -14,6 +14,14 @@ inline void ChrisZ::Physics::RigidBody::AddImpulse(const eae6320::Math::sVector 
 	velocity += i_impulse / mass;
 }
 
+inline void ChrisZ::Physics::RigidBody::AddTorque(const eae6320::Math::sVector i_torque)
+{
+	// Update angular velocity according to rotationLocked[3]
+	angularVelocity.x += !rotationLocked[0] * i_torque.x / mass;
+	angularVelocity.y += !rotationLocked[1] * i_torque.y / mass;
+	angularVelocity.z += !rotationLocked[2] * i_torque.z / mass;
+}
+
 // Getters and Setters
 //====================
 
@@ -37,24 +45,26 @@ inline void ChrisZ::Physics::RigidBody::SetAcceleration(eae6320::Math::sVector i
 	acceleration = i_acceleration;
 }
 
-inline eae6320::Math::sVector ChrisZ::Physics::RigidBody::GetAngularVelocity_axis_local() const
+inline eae6320::Math::sVector ChrisZ::Physics::RigidBody::GetAngularVelocity() const
 {
-	return angularVelocity_axis_local;
+	return angularVelocity;
 }
 
-inline void ChrisZ::Physics::RigidBody::SetAngularVelocity_axis_local(eae6320::Math::sVector i_angularVelocity_axis_local)
+inline void ChrisZ::Physics::RigidBody::SetAngularVelocity(eae6320::Math::sVector i_angularVelocity)
 {
-	angularVelocity_axis_local = i_angularVelocity_axis_local;
+	angularVelocity = i_angularVelocity;
 }
 
-inline float ChrisZ::Physics::RigidBody::GetAngularSpeed() const
+inline bool ChrisZ::Physics::RigidBody::GetRotationLocked(int i_axis) const
 {
-	return angularSpeed;
+	return rotationLocked[i_axis];
 }
 
-inline void ChrisZ::Physics::RigidBody::SetAngularSpeed(float i_angularSpeed)
+inline void ChrisZ::Physics::RigidBody::SetRotationLocked(bool i_rotationLocked_x, bool i_rotationLocked_y, bool i_rotationLocked_z)
 {
-	angularSpeed = i_angularSpeed;
+	rotationLocked[0] = i_rotationLocked_x;
+	rotationLocked[1] = i_rotationLocked_y;
+	rotationLocked[2] = i_rotationLocked_z;
 }
 
 inline float ChrisZ::Physics::RigidBody::GetDragCoefficient() const

@@ -11,11 +11,13 @@ ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject)
 	velocity = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
 	acceleration = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
 	dragCoefficient = 0.6f;
-	angularSpeed = 0.0f;
-	angularVelocity_axis_local = eae6320::Math::sVector(0.0f, 1.0f, 0.0f);
+	angularVelocity = eae6320::Math::sVector(0.0f, 0.0f, 0.0f);
 	mass = 1.0f;
 	gravityEnabled = false;
 	g = 9.8f;
+	rotationLocked[0] = false;
+	rotationLocked[1] = false;
+	rotationLocked[2] = false;
 
 	// Add this rigid body to the physics system
 	ChrisZ::Physics::AddRigidBody(this);
@@ -46,9 +48,22 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 	}
 	// Update orientation
 	{
-		const auto rotation = eae6320::Math::cQuaternion(angularSpeed * i_secondCountToIntegrate, angularVelocity_axis_local);
-		gameObject->SetOrientation(rotation * gameObject->GetOrientation());
-		gameObject->SetOrientation(gameObject->GetOrientation().GetNormalized());
+		// Check if angular velocity is zero
+		if (!(angularVelocity.x == 0.0f && angularVelocity.y == 0.0f && angularVelocity.z == 0.0f))
+		{
+			// Calculate the angle (magnitude of the vector)
+			float angleInRadians = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y + angularVelocity.z * angularVelocity.z) * i_secondCountToIntegrate;
+
+			// Normalize the vector
+			float magnitude = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y + angularVelocity.z * angularVelocity.z);
+			eae6320::Math::sVector axisOfRotation_normalized = { angularVelocity.x / magnitude, angularVelocity.y / magnitude, angularVelocity.z / magnitude };
+
+			// Now you can create the quaternion
+			const auto rotation = eae6320::Math::cQuaternion(angleInRadians, axisOfRotation_normalized);
+
+			gameObject->SetOrientation(rotation * gameObject->GetOrientation());
+			gameObject->SetOrientation(gameObject->GetOrientation().GetNormalized());
+		}
 	}
 
 	// Reset force
@@ -91,6 +106,23 @@ eae6320::Math::sVector ChrisZ::Physics::RigidBody::PredictFuturePosition(const f
 
 eae6320::Math::cQuaternion ChrisZ::Physics::RigidBody::PredictFutureOrientation(const float i_secondCountToExtrapolate) const
 {
-	const auto rotation = eae6320::Math::cQuaternion(angularSpeed * i_secondCountToExtrapolate, angularVelocity_axis_local);
-	return eae6320::Math::cQuaternion(rotation * gameObject->GetOrientation()).GetNormalized();
+	// Check if angular velocity is zero
+	if (!(angularVelocity.x == 0.0f && angularVelocity.y == 0.0f && angularVelocity.z == 0.0f))
+	{
+		// Calculate the angle (magnitude of the vector)
+		float angleInRadians = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y + angularVelocity.z * angularVelocity.z) * i_secondCountToExtrapolate;
+
+		// Normalize the vector
+		float magnitude = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y + angularVelocity.z * angularVelocity.z);
+		eae6320::Math::sVector axisOfRotation_normalized = { angularVelocity.x / magnitude, angularVelocity.y / magnitude, angularVelocity.z / magnitude };
+
+		// Now you can create the quaternion
+		const auto rotation = eae6320::Math::cQuaternion(angleInRadians, axisOfRotation_normalized);
+
+		return eae6320::Math::cQuaternion(rotation * gameObject->GetOrientation()).GetNormalized();
+	}
+	else
+	{
+		return gameObject->GetOrientation().GetNormalized();
+	}
 }

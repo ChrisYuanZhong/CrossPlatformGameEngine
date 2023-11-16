@@ -29,6 +29,11 @@ public:
 		eae6320::Graphics::Effect::Load(alternativeEffect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/standard.shader");
 
 		m_rigidBody->SetGravityEnabled(true);
+		m_rigidBody->SetRotationLocked(true, false, true);
+
+		// Set the orientation of the cube to be 45 degrees around the y-axis
+		//m_transform->SetOrientation(eae6320::Math::cQuaternion(0.785398163f, eae6320::Math::sVector(0.0f, 1.0f, 0.0f)));
+
 	}
 
 	~Player()
