@@ -9,7 +9,7 @@
 #include <cfloat>
 #include <algorithm>
 
-#define AXIS_ALIGNED_THRESHOLD 0.1f
+#define ZERO_VECTOR_THRESHOLD 0.1f
 
 ChrisZ::Physics::BoxCollider::BoxCollider(eae6320::Math::sVector i_centerOffset, eae6320::Math::sVector i_extents, eae6320::Assets::GameObject* i_gameObject) : Collider(i_centerOffset, i_gameObject), extents(i_extents)
 {
@@ -324,7 +324,7 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCol
     // Check if any of the axes are zero vectors
     for (int i = 0; i < 15; ++i)
 	{
-		if (abs(axes[i].x) < AXIS_ALIGNED_THRESHOLD && abs(axes[i].y) < AXIS_ALIGNED_THRESHOLD && abs(axes[i].z) < AXIS_ALIGNED_THRESHOLD)
+		if (abs(axes[i].x) < ZERO_VECTOR_THRESHOLD && abs(axes[i].y) < ZERO_VECTOR_THRESHOLD && abs(axes[i].z) < ZERO_VECTOR_THRESHOLD)
 		{
             // Give the axis a default value
 			axes[i] = eae6320::Math::sVector(1.0f, 0.0f, 0.0f);

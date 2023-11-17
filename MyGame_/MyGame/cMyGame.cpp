@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Plane.h"
 #include "Cube.h"
+#include "RotatingCube.h"
 
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/UserInput/UserInput.h>
@@ -189,10 +190,12 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 	gameObjectsToBeRendered[0] = new Plane();
 	gameObjectsToBeRendered[1] = new Player();
 	gameObjectsToBeRendered[2] = new Cube();
+	gameObjectsToBeRendered[3] = new RotatingCube();
 
 	gameObjectsToBeRendered[1]->GetRigidBody()->SetGravityEnabled(true);
-	gameObjectsToBeRendered[1]->SetPosition(Math::sVector(-1.0f, 0.0f, 0.0f));
-	gameObjectsToBeRendered[2]->SetPosition(Math::sVector(1.0f, -0.2f, 0.0f));
+	gameObjectsToBeRendered[1]->SetPosition(Math::sVector(0.0f, 0.0f, 0.0f));
+	gameObjectsToBeRendered[2]->SetPosition(Math::sVector(1.3f, -0.2f, 0.0f));
+	gameObjectsToBeRendered[3]->SetPosition(Math::sVector(-1.3f, -0.2f, 0.0f));
 
 	// Set the main camera here
 	mainCamera = &camera;

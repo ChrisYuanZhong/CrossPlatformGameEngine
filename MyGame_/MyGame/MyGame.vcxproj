@@ -33,6 +33,7 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Resource Files\Resource.h" />
     <ClInclude Include="Resource Files\targetver.h" />
+    <ClInclude Include="RotatingCube.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cMyGame.cpp" />

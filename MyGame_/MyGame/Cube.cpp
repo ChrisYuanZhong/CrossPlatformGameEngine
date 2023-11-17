@@ -15,7 +15,7 @@ Cube::Cube()
 	//	Set the orientation of the cube to be 180 degrees around the x-axis
 	//m_transform->SetOrientation(eae6320::Math::cQuaternion(3.14159265f, eae6320::Math::sVector(1.0f, 0.0f, 0.0f)));
 
-	m_rigidBody->SetAngularVelocity(eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
+	//m_rigidBody->SetAngularVelocity(eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
 	m_rigidBody->SetRotationLocked(true, false, true);
 	m_rigidBody->SetMass(20.0f);
 	m_collider->SetFrictionCoefficient(0.0f);

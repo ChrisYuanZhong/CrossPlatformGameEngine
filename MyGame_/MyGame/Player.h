@@ -3,6 +3,7 @@
 
 #include "Plane.h"
 #include "Cube.h"
+#include "RotatingCube.h"
 
 #include <Engine/CZPhysics/SphereCollider.h>
 #include <Engine/CZPhysics/BoxCollider.h>
@@ -87,7 +88,7 @@ private:
 		{
 			isJumping = false;
 		}
-		if (dynamic_cast<Cube*>(other->GetGameObject()))
+		if (dynamic_cast<RotatingCube*>(other->GetGameObject()))
 		{
 			m_effect = alternativeEffect;
 		}
@@ -95,7 +96,7 @@ private:
 
 	void OnCollisionExit(ChrisZ::Physics::Collider* other) override
 	{
-		if (dynamic_cast<Cube*>(other->GetGameObject()))
+		if (dynamic_cast<RotatingCube*>(other->GetGameObject()))
 		{
 			m_effect = originalEffect;
 		}
