@@ -5,6 +5,8 @@
 
 #include <Engine/Logging/Logging.h>
 
+#define VELOCITY_THRESHOLD 0.01f
+
 ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject) : gameObject(i_gameObject)
 {
 	// Set default values
@@ -49,7 +51,7 @@ void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 	// Update orientation
 	{
 		// Check if angular velocity is zero
-		if (!(angularVelocity.x == 0.0f && angularVelocity.y == 0.0f && angularVelocity.z == 0.0f))
+		if (!(angularVelocity.x < VELOCITY_THRESHOLD && angularVelocity.y < VELOCITY_THRESHOLD && angularVelocity.z < VELOCITY_THRESHOLD))
 		{
 			// Calculate the angle (magnitude of the vector)
 			float angleInRadians = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y + angularVelocity.z * angularVelocity.z) * i_secondCountToIntegrate;
@@ -107,7 +109,7 @@ eae6320::Math::sVector ChrisZ::Physics::RigidBody::PredictFuturePosition(const f
 eae6320::Math::cQuaternion ChrisZ::Physics::RigidBody::PredictFutureOrientation(const float i_secondCountToExtrapolate) const
 {
 	// Check if angular velocity is zero
-	if (!(angularVelocity.x == 0.0f && angularVelocity.y == 0.0f && angularVelocity.z == 0.0f))
+	if (!(angularVelocity.x < VELOCITY_THRESHOLD && angularVelocity.y < VELOCITY_THRESHOLD && angularVelocity.z < VELOCITY_THRESHOLD))
 	{
 		// Calculate the angle (magnitude of the vector)
 		float angleInRadians = sqrt(angularVelocity.x * angularVelocity.x + angularVelocity.y * angularVelocity.y + angularVelocity.z * angularVelocity.z) * i_secondCountToExtrapolate;

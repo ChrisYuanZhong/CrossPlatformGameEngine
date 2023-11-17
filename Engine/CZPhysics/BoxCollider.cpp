@@ -30,10 +30,15 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::Intersects(Collider
         if (distance <= otherSphere->GetRadius())
         {
             // Calculate and return CollisionInfo
-            eae6320::Math::sVector contactNormal = (closestPoint - otherSphere->GetCenter()).GetNormalized();
+            eae6320::Math::sVector contactNormal = (otherSphere->GetCenter() - closestPoint).GetNormalized();
             float penetrationDepth = otherSphere->GetRadius() - distance;
             return CollisionInfo(contactNormal, penetrationDepth);
         }
+        else
+        {
+			// No collision
+			return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
+		}
     }
 
     // If the other collider is a box collider, use the box-box intersection detections
@@ -79,34 +84,22 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::Intersects(Collider
 
 eae6320::Math::sVector ChrisZ::Physics::BoxCollider::ClosestPoint(eae6320::Math::sVector point)
 {
-    //// Get the orientation matrix of the box
-    //eae6320::Math::cMatrix_transformation orientation = eae6320::Math::cMatrix_transformation(gameObject->GetOrientation(), center);
+    // Get the orientation of the box
+    eae6320::Math::cQuaternion orientation = gameObject->GetOrientation();
 
-    //// Calculate the inverse transformation
-    //eae6320::Math::cMatrix_transformation inverseOrientation(
-    //    orientation.m_00, orientation.m_01, orientation.m_02, 0.0f,
-    //    orientation.m_10, orientation.m_11, orientation.m_12, 0.0f,
-    //    orientation.m_20, orientation.m_21, orientation.m_22, 0.0f,
-    //    -(orientation.m_00 * center.x + orientation.m_10 * center.y + orientation.m_20 * center.z),
-    //    -(orientation.m_01 * center.x + orientation.m_11 * center.y + orientation.m_21 * center.z),
-    //    -(orientation.m_02 * center.x + orientation.m_12 * center.y + orientation.m_22 * center.z), 1.0f
-    //);
+    // Transform the point to the local space of the box
+    eae6320::Math::sVector localPoint = orientation.GetInverse() * (point - center);
 
-    //// Transform the external point into the local space of the box
-    //eae6320::Math::sVector localPoint = inverseOrientation * point;
+    // Clamp the local coordinates of the point to the box extents
+    eae6320::Math::sVector localClosest = localPoint;
+    localClosest.x = std::max(-extents.x, std::min(extents.x, localPoint.x));
+    localClosest.y = std::max(-extents.y, std::min(extents.y, localPoint.y));
+    localClosest.z = std::max(-extents.z, std::min(extents.z, localPoint.z));
 
-    //// Clamp the local point to the box extents
-    //eae6320::Math::sVector closestPoint;
-    //closestPoint.x = std::max(-extents.x, std::min(extents.x, localPoint.x));
-    //closestPoint.y = std::max(-extents.y, std::min(extents.y, localPoint.y));
-    //closestPoint.z = std::max(-extents.z, std::min(extents.z, localPoint.z));
+    // Transform the closest point back to world space
+    eae6320::Math::sVector worldClosest = center + (orientation * localClosest);
 
-    //// Transform the closest point back to world space
-    //closestPoint = orientation * closestPoint + center;
-
-    //return closestPoint;
-
-    return eae6320::Math::sVector(-1.0f, -1.0f, 0.0f);
+    return worldClosest;
 }
 
 void ChrisZ::Physics::BoxCollider::CalculateVertices()
