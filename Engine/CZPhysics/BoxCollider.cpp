@@ -326,9 +326,13 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCol
 	{
 		if (abs(axes[i].x) < AXIS_ALIGNED_THRESHOLD && abs(axes[i].y) < AXIS_ALIGNED_THRESHOLD && abs(axes[i].z) < AXIS_ALIGNED_THRESHOLD)
 		{
+            // Give the axis a default value
 			axes[i] = eae6320::Math::sVector(1.0f, 0.0f, 0.0f);
 		}
 	}
+
+    float penetrationDepth = FLT_MAX;
+    eae6320::Math::sVector contactNormal;
 
     // Project the vertices of both boxes onto each axis and check for overlap
     for (int i = 0; i < 15; ++i)
@@ -343,19 +347,8 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCol
             // No overlap on this axis, so there is no collision
             return CollisionInfo(eae6320::Math::sVector(0.0f, 0.0f, 0.0f), 0.0f);
         }
-    }
-
-    // If there is no axis along which there is no overlap, then the boxes are colliding
-    // Calculate and return the CollisionInfo with the smallest penetration depth and corresponding normal
-    float penetrationDepth = FLT_MAX;
-    eae6320::Math::sVector contactNormal;
-
-    for (int i = 0; i < 15; ++i)
-    {
-        float minThis, maxThis, minOther, maxOther;
-        ProjectOntoAxis(axes[i], minThis, maxThis);
-        otherBox->ProjectOntoAxis(axes[i], minOther, maxOther);
-
+        
+        // Calculate the smallest penetration depth and corresponding contact normal
         float overlap = std::min(maxThis, maxOther) - std::max(minThis, minOther);
 
         if (overlap < penetrationDepth)
