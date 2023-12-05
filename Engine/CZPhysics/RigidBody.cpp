@@ -25,12 +25,23 @@ ChrisZ::Physics::RigidBody::RigidBody(eae6320::Assets::GameObject* i_gameObject)
 	ChrisZ::Physics::AddRigidBody(this);
 }
 
+ChrisZ::Physics::RigidBody::~RigidBody()
+{
+	// Remove this rigid body from the physics system
+	ChrisZ::Physics::RemoveRigidBody(this);
+
+	// Set the game object to null
+	gameObject = nullptr;
+}
+
 void ChrisZ::Physics::RigidBody::Update(const float i_secondCountToIntegrate)
 {
 	// Apply gravity if enabled
 	if (gravityEnabled)
 	{
 		force.y -= mass * g;
+		// Compansate for gravity because of drag
+		force.y -= mass * g * dragCoefficient / 10;
 	}
 	// Update acceleration
 	{

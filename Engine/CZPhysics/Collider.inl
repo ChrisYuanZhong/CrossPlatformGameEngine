@@ -62,3 +62,13 @@ inline bool ChrisZ::Physics::Collider::IsCollidingWith(Collider* other) const
 	// Check if the other collider exists in the hash set
 	return collidingColliders.find(other) != collidingColliders.end();
 }
+
+inline void ChrisZ::Physics::Collider::AddCollidingCollider(Collider* other)
+{
+	collidingColliders.insert(other);
+}
+
+inline void ChrisZ::Physics::Collider::RemoveCollidingCollider(Collider* other)
+{
+	collidingColliders.erase(other);
+}

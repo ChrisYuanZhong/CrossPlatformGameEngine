@@ -299,14 +299,14 @@ ChrisZ::Physics::CollisionInfo ChrisZ::Physics::BoxCollider::SATDetection(BoxCol
 
     // Get the forward vector of this box
     axes[2] = this->gameObject->GetOrientation().CalculateForwardDirection();
-    // Get the right vector of this box by crossing the forward vector with the world up vector
-    axes[0] = eae6320::Math::Cross(axes[2], eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
+    // Get the right vector of this box
+    axes[0] = this->gameObject->GetOrientation() * eae6320::Math::Cross(axes[2], eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
     // Get the up vector of this box by crossing the right vector with the forward vector
     axes[1] = eae6320::Math::Cross(axes[0], axes[2]);
     // Get the forward vector of the other box
     axes[5] = otherBox->GetGameObject()->GetOrientation().CalculateForwardDirection();
     // Get the right vector of the other box by crossing the forward vector with the world up vector
-    axes[3] = eae6320::Math::Cross(axes[5], eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
+    axes[3] = otherBox->GetGameObject()->GetOrientation() * eae6320::Math::Cross(axes[5], eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
     // Get the up vector of the other box by crossing the right vector with the forward vector
     axes[4] = eae6320::Math::Cross(axes[3], axes[5]);
 

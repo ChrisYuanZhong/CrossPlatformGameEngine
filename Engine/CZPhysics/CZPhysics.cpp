@@ -5,6 +5,7 @@
 #include <Engine/CZPhysics/BoxCollider.h>
 
 #include <vector>
+#include <algorithm>
 
 #include <Engine/Logging/Logging.h>
 
@@ -25,6 +26,16 @@ void ChrisZ::Physics::AddCollider(Collider* i_collider)
     colliders.push_back(i_collider);
 }
 
+void ChrisZ::Physics::RemoveRigidBody(RigidBody* i_rigidBody)
+{
+    rigidBodies.erase(std::remove(rigidBodies.begin(), rigidBodies.end(), i_rigidBody), rigidBodies.end());
+}
+
+void ChrisZ::Physics::RemoveCollider(Collider* i_collider)
+{
+	colliders.erase(std::remove(colliders.begin(), colliders.end(), i_collider), colliders.end());
+}
+
 void ChrisZ::Physics::Update(const float i_secondCountToIntegrate)
 {
     // Update rigid bodies
@@ -37,14 +48,14 @@ void ChrisZ::Physics::Update(const float i_secondCountToIntegrate)
 	// Check for collisions
 	{
 		// Iterate the colliders with an iterator
-		for (size_t i = 0; i < colliders.size() - 1; ++i)
-		{
-			for (size_t j = i + 1; j < colliders.size(); ++j)
-			{
-				Collider* collider = colliders[i];
-				Collider* other = colliders[j];
+        for (auto i = colliders.begin(); i != colliders.end(); ++i)
+        {
+            for (auto j = std::next(i); j != colliders.end(); ++j)
+            {
+				Collider* collider = *i;
+				Collider* other = *j;
 
-                if (collider != other)
+                if (collider != other && collider && other)
                 {
                     // Call Intersects to check for collision and get CollisionInfo
                     CollisionInfo collisionInfo = collider->Intersects(other);
@@ -57,17 +68,23 @@ void ChrisZ::Physics::Update(const float i_secondCountToIntegrate)
                         {
                             collider->AddCollidingCollider(other);
                             other->AddCollidingCollider(collider);
-                        }
 
-                        // Notify GameObjects about the collision
-                        collider->GetGameObject()->OnCollisionStay(other);
-                        other->GetGameObject()->OnCollisionStay(collider);
+                            // Notify GameObjects about the collision
+                            collider->GetGameObject()->OnCollisionEnter(other);
+							other->GetGameObject()->OnCollisionEnter(collider);
+						}
 
-                        // Handle collision if the two colliders are not triggers
-                        if (!(collider->IsTrigger() || other->IsTrigger()))
-                        {
-                            HandleCollision(collider, other, collisionInfo, i_secondCountToIntegrate);
-                        }
+						bool isValid1 = collider->GetGameObject() != nullptr;
+						bool isValid2 = other->GetGameObject() != nullptr;
+						// Notify GameObjects about the collision
+						collider->GetGameObject()->OnCollisionStay(other);
+						other->GetGameObject()->OnCollisionStay(collider);
+
+						// Handle collision if the two colliders are not triggers
+						if (!(collider->IsTrigger() || other->IsTrigger()))
+						{
+							HandleCollision(collider, other, collisionInfo, i_secondCountToIntegrate);
+						}
                     }
                     else
                     {
@@ -76,6 +93,10 @@ void ChrisZ::Physics::Update(const float i_secondCountToIntegrate)
                         {
                             collider->RemoveCollidingCollider(other);
                             other->RemoveCollidingCollider(collider);
+
+                            // Notify GameObjects about the collision
+                            collider->GetGameObject()->OnCollisionExit(other);
+                            other->GetGameObject()->OnCollisionExit(collider);
                         }
                     }
                 }

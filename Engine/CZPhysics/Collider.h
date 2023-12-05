@@ -48,6 +48,9 @@ namespace ChrisZ
 			// Constructor
 			Collider(eae6320::Math::sVector i_centerOffset, eae6320::Assets::GameObject* i_gameObject);
 
+			// Destructor
+			~Collider();
+
 			// A virtual method to check if this collider intersects with another collider
 			virtual CollisionInfo Intersects(Collider* other) = 0;
 
@@ -88,10 +91,10 @@ namespace ChrisZ
 			inline bool IsCollidingWith(Collider* other) const;
 
 			// Method to add a collider to the hash set of colliding colliders
-			void AddCollidingCollider(Collider* other);
+			inline void AddCollidingCollider(Collider* other);
 
 			// Method to remove a collider from the hash set of colliding colliders
-			void RemoveCollidingCollider(Collider* other);
+			inline void RemoveCollidingCollider(Collider* other);
 
 		protected:
 			// The center of the collider in world space

@@ -22,10 +22,11 @@ namespace ChrisZ
 		class RigidBody
 		{
 		public:
-			// Initialization
-			//===============
-
+			// Constructor
 			RigidBody(eae6320::Assets::GameObject* i_gameObject);
+
+			// Destructor
+			~RigidBody();
 
 			// Interface
 			//==========

@@ -11,25 +11,22 @@ ChrisZ::Physics::Collider::Collider(eae6320::Math::sVector i_centerOffset, eae63
 	ChrisZ::Physics::AddCollider(this);
 }
 
+ChrisZ::Physics::Collider::~Collider()
+{
+	// Remove this collider from the physics system
+	ChrisZ::Physics::RemoveCollider(this);
+
+	// Remove this collider from all colliding colliders
+	for (auto it = collidingColliders.begin(); it != collidingColliders.end(); ++it)
+	{
+		(*it)->RemoveCollidingCollider(this);
+	}
+
+	// Set the game object to null
+	this->gameObject = nullptr;
+}
+
 eae6320::Assets::GameObject* ChrisZ::Physics::Collider::GetGameObject()
 {
 	return this->gameObject;
-}
-
-void ChrisZ::Physics::Collider::AddCollidingCollider(Collider* other)
-{
-	collidingColliders.insert(other);
-
-	// Call collision enter
-	gameObject->OnCollisionEnter(other);
-	other->GetGameObject()->OnCollisionEnter(this);
-}
-
-void ChrisZ::Physics::Collider::RemoveCollidingCollider(Collider* other)
-{
-	collidingColliders.erase(other);
-
-	// Call collision exit
-	gameObject->OnCollisionExit(other);
-	other->GetGameObject()->OnCollisionExit(this);
 }

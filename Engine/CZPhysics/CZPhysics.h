@@ -34,6 +34,8 @@ namespace ChrisZ
 
 		void AddRigidBody(RigidBody* i_rigidBody);
 		void AddCollider(Collider* i_collider);
+		void RemoveRigidBody(RigidBody* i_rigidBody);
+		void RemoveCollider(Collider* i_collider);
 
 		void Update(const float i_secondCountToIntegrate);
 
