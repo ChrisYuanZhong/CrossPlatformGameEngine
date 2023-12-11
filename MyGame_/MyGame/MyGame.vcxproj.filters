@@ -29,7 +29,7 @@
     <ClInclude Include="Resource Files\targetver.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="cMyGame.h" />
+    <ClInclude Include="SideScrollingPlatformer.h" />
     <ClInclude Include="Cube.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -39,9 +39,24 @@
     <ClInclude Include="RotatingCube.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="MainCamera.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformerGameObject.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spike.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Floor.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Checkpoint.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cMyGame.cpp" />
+    <ClCompile Include="SideScrollingPlatformer.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Cube.cpp">
       <Filter>Resource Files</Filter>
@@ -50,6 +65,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.h">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCamera.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

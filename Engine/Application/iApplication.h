@@ -126,8 +126,8 @@ namespace eae6320
 
 			virtual void GetDefaultInitialResolution( uint16_t& o_width, uint16_t& o_height ) const
 			{
-				o_width = 512;
-				o_height = 512;
+				o_width = 1280;
+				o_height = 720;
 			}
 
 			// The application's simulation is always updated in fixed increments of time
@@ -137,7 +137,7 @@ namespace eae6320
 			// The default value is a relatively large amount of time;
 			// you may want to experiement with smaller values in your application
 			// and observe the change in responsiveness or simulation accuracy.
-			virtual float GetSimulationUpdatePeriod_inSeconds() const { return 1.0f / 240.0f; }
+			virtual float GetSimulationUpdatePeriod_inSeconds() const { return 1.0f / 60.0f; }
 
 			// Run
 			//----

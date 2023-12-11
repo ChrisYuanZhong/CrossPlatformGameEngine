@@ -15,6 +15,7 @@
 #include "Effect.h"
 
 #include <cstdint>
+#include <vector>
 #include <Engine/Results/Results.h>
 
 #if defined( EAE6320_PLATFORM_WINDOWS )
@@ -83,7 +84,7 @@ namespace eae6320
 		cResult CleanUp();
 
 		void SetClearColor(unsigned int i_hexColor);
-		void SubmitMeshEffectLocationTrios(MeshEffectLocationTrio i_meshEffectLocationTrios[], const unsigned int numPairs);
+		void SubmitMeshEffectLocationTrios(std::vector<MeshEffectLocationTrio> i_meshEffectLocationTrios);
 		void SubmitCameraData(Math::cMatrix_transformation i_worldToCamera, Math::cMatrix_transformation i_cameraToProjected);
 	}
 }

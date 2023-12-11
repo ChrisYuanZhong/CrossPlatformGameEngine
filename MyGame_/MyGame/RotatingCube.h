@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Engine/Assets/GameObject.h>
+#include "PlatformerGameObject.h"
 
 #include <Engine/CZPhysics/BoxCollider.h>
 
-class RotatingCube : public eae6320::Assets::GameObject
+class RotatingCube : public PlatformerGameObject
 {
 	public:
 	RotatingCube()
@@ -15,7 +15,8 @@ class RotatingCube : public eae6320::Assets::GameObject
 		eae6320::Graphics::Mesh::LoadFromFile(m_mesh, "data/Meshes/Cube.mesh");
 		eae6320::Graphics::Effect::Load(m_effect, "data/Shaders/Vertex/standard.shader", "data/Shaders/Fragment/animatedcolor2.shader");
 
-		m_rigidBody->SetAngularVelocity(eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
+		m_rigidBody->SetAngularVelocity(eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
+		//m_transform->SetOrientation(eae6320::Math::cQuaternion(0.785398163f, eae6320::Math::sVector(0.0f, 0.0f, 1.0f)));
 
 		m_collider->SetIsTrigger(true);
 	}

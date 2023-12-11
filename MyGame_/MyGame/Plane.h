@@ -5,9 +5,9 @@
 
 #include <Engine/CZPhysics/BoxCollider.h>
 
-#include <Engine/Assets/GameObject.h>
+#include "PlatformerGameObject.h"
 
-class Plane : public eae6320::Assets::GameObject
+class Plane : public PlatformerGameObject
 {
 public:
 	Plane();

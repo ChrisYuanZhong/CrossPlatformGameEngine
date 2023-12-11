@@ -16,10 +16,21 @@ return
 
 	meshes =
 	{
+		"Meshes/Floor.mesh",
+		"Meshes/Player.mesh",
+		"Meshes/Spike.mesh",
 		"Meshes/ThinLongCube.mesh",
 		"Meshes/Cube.mesh",
 		"Meshes/Plane.mesh",
 		"Meshes/Helix.mesh",
 		"Meshes/Snowman.mesh",
 	},
+
+	audio =
+	{
+		"Audio/IWBTGBGM.wav",
+		"Audio/Death.wav",
+		"Audio/Jump1.wav",
+		"Audio/Jump2.wav",
+	}
 }

@@ -21,6 +21,7 @@ namespace eae6320
 			GameObject();
 			GameObject(Graphics::Mesh* i_mesh, Graphics::Effect* i_effect);
 			virtual ~GameObject();
+			inline void Destroy(GameObject* gameObjectToDestroy);
 			
 			// Virtual collision callback methods
 			virtual void OnCollisionEnter(ChrisZ::Physics::Collider* other) {}
@@ -30,6 +31,9 @@ namespace eae6320
 			// Virtual update method
 			virtual void Update(const float i_secondCountToIntegrate) {}
 
+			// Getters and setters
+			inline bool IsValid() const;
+			inline void SetIsValid(const bool i_isValid);
 			inline Math::sVector GetPosition() const;
 			inline void SetPosition(const Math::sVector& i_position);
 			inline Math::cQuaternion GetOrientation() const;
@@ -47,6 +51,7 @@ namespace eae6320
 			inline Math::cMatrix_transformation GetLocalToWorldTransformPrediction(const float i_secondCountToExtrapolate) const;
 
 		protected:
+			bool m_isValid = false;
 			Transform* m_transform = nullptr;
 			ChrisZ::Physics::RigidBody* m_rigidBody = nullptr;
 			ChrisZ::Physics::Collider* m_collider = nullptr;

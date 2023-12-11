@@ -20,7 +20,7 @@
 #include <Engine/UserOutput/UserOutput.h>
 #include <utility>
 
-#define BUDGET 10
+#define BUDGET 100
 
 // Submission Data
 	//----------------
@@ -293,16 +293,16 @@ void eae6320::Graphics::SetClearColor(unsigned int i_hexColor)
 	s_dataBeingSubmittedByApplicationThread->hexColor = i_hexColor;
 }
 
-void eae6320::Graphics::SubmitMeshEffectLocationTrios(MeshEffectLocationTrio i_meshEffectLocationTrios[], const unsigned int numToDraw)
+void eae6320::Graphics::SubmitMeshEffectLocationTrios(std::vector<MeshEffectLocationTrio> i_meshEffectLocationTrios)
 {
 	EAE6320_ASSERT(s_dataBeingSubmittedByApplicationThread);
 
-	for (unsigned int i = 0; i < numToDraw; i++)
+	for (auto it = i_meshEffectLocationTrios.begin(); it != i_meshEffectLocationTrios.end(); it++)
 	{
-		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[i] = i_meshEffectLocationTrios[i];
+		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[it - i_meshEffectLocationTrios.begin()] = *it;
 
-		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[i].mesh->IncrementReferenceCount();
-		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[i].effect->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[it - i_meshEffectLocationTrios.begin()].mesh->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectLocationTrios[it - i_meshEffectLocationTrios.begin()].effect->IncrementReferenceCount();
 	}
 }
 

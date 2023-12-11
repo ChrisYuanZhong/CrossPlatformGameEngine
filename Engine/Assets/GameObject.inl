@@ -2,6 +2,22 @@
 
 #include "GameObject.h"
 
+inline void eae6320::Assets::GameObject::Destroy(GameObject* gameObjectToDestroy)
+{
+	if (gameObjectToDestroy)
+		gameObjectToDestroy->SetIsValid(false);
+}
+
+inline bool eae6320::Assets::GameObject::IsValid() const
+{
+	return m_isValid;
+}
+
+inline void eae6320::Assets::GameObject::SetIsValid(bool i_isValid)
+{
+	m_isValid = i_isValid;
+}
+
 inline eae6320::Math::sVector eae6320::Assets::GameObject::GetPosition() const
 {
 	return m_transform->GetPosition();
@@ -10,6 +26,12 @@ inline eae6320::Math::sVector eae6320::Assets::GameObject::GetPosition() const
 inline void eae6320::Assets::GameObject::SetPosition(const Math::sVector& i_position)
 {
 	m_transform->SetPosition(i_position);
+
+	// Update the position of the collider
+	if (m_collider)
+	{
+		m_collider->SetCenter(GetPosition() + m_collider->GetCenterOffset());
+	}
 }
 
 inline eae6320::Math::cQuaternion eae6320::Assets::GameObject::GetOrientation() const

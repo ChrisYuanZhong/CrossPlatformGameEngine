@@ -28,17 +28,23 @@
     <ResourceCompile Include="Resource Files\ExampleGame.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cMyGame.h" />
+    <ClInclude Include="Checkpoint.h" />
+    <ClInclude Include="SideScrollingPlatformer.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Floor.h" />
+    <ClInclude Include="MainCamera.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="PlatformerGameObject.h" />
     <ClInclude Include="Resource Files\Resource.h" />
     <ClInclude Include="Resource Files\targetver.h" />
     <ClInclude Include="RotatingCube.h" />
+    <ClInclude Include="Spike.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cMyGame.cpp" />
+    <ClCompile Include="SideScrollingPlatformer.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="MainCamera.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Player.h" />
   </ItemGroup>
@@ -48,6 +54,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Engine\Asserts\Asserts.vcxproj">
       <Project>{464a6551-fca9-4027-bd9e-2b26914782ab}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engine\Audio\Audio.vcxproj">
+      <Project>{3b273976-2dc8-465c-85ac-15b64a505d99}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\Engine\Graphics\Graphics.vcxproj">
       <Project>{e8ba17d4-2443-478e-b48b-3f82e8f18897}</Project>
@@ -71,6 +80,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MyGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>SideScrollingPlatformer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

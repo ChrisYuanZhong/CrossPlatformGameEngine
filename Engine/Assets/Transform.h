@@ -29,6 +29,10 @@ namespace eae6320
 
 			}
 
+			// Destructor
+			//-----------
+			~Transform() = default;
+
 			// Data
 			//=====
 

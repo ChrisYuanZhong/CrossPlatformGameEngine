@@ -2,6 +2,7 @@
 
 eae6320::Assets::GameObject::GameObject()
 {
+	m_isValid = true;
 	m_transform = new Transform();
 	m_rigidBody = nullptr;
 	m_collider = nullptr;
@@ -12,6 +13,7 @@ eae6320::Assets::GameObject::GameObject()
 
 eae6320::Assets::GameObject::GameObject(Graphics::Mesh* i_mesh, Graphics::Effect* i_effect)
 {
+	m_isValid = true;
 	m_transform = new Transform();
 	m_rigidBody = nullptr;
 	m_collider = nullptr;
@@ -22,8 +24,10 @@ eae6320::Assets::GameObject::GameObject(Graphics::Mesh* i_mesh, Graphics::Effect
 
 eae6320::Assets::GameObject::~GameObject()
 {
-	m_mesh->DecrementReferenceCount();
-	m_effect->DecrementReferenceCount();
+	if (m_mesh)
+		m_mesh->DecrementReferenceCount();
+	if (m_effect)
+		m_effect->DecrementReferenceCount();
 
 	if (m_transform)
 		delete m_transform;
